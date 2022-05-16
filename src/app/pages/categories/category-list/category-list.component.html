@@ -1,1 +1,57 @@
-<p>category-list works!</p>
+<nav aria-label="breadcrumb" class="mb-4" >
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item active">Categorias</li>
+    </ol>
+</nav>
+
+<div class="row bd-callout bd-callout-info mb-5">
+    <div class="col-auto me-auto">
+        <h3 class="pt-2">Categorias</h3>
+    </div>
+    <div class="col-auto pt-1">
+        <a routerLink="new" class="btn btn-primary">+ Nova Categoria</a>
+    </div>
+</div>
+
+<table class="table table-bordered table-hover caption-top">
+    <caption>Lista de categorias</caption>
+    <thead class="table-light">
+    <tr>
+        <th scope="col">Categoria</th>
+        <th scope="col" class="w-25 p-2 text-center">Ações</th>
+    </tr>
+    </thead>
+    <tbody>
+        <tr>
+            <td>
+                <strong>Lazer</strong><br>
+                <small>Cinema, parque, praia, etc</small>
+            </td>
+            <td class="w-25 p-2 text-center">
+                <a [routerLink]="[12, 'edit']" class="btn btn-outline-info btn-sm m-2">Editar</a>
+                <button  class="btn btn-outline-danger btn-sm">Editar</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <strong>Lazer</strong><br>
+                <small>Cinema, parque, praia, etc</small>
+            </td>
+            <td class="w-25 p-2 text-center">
+                <a [routerLink]="[12, 'edit']" class="btn btn-outline-info btn-sm m-2">Editar</a>
+                <button  class="btn btn-outline-danger btn-sm">Editar</button>
+            </td>
+        </tr>
+        <tr>
+            <td>
+                <strong>Lazer</strong><br>
+                <small>Cinema, parque, praia, etc</small>
+            </td>
+            <td class="w-25 p-2 text-center">
+                <a [routerLink]="[12, 'edit']" class="btn btn-outline-info btn-sm m-2">Editar</a>
+                <button  class="btn btn-outline-danger btn-sm">Editar</button>
+            </td>
+        </tr>
+    </tbody>
+</table>

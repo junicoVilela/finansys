@@ -1,1 +1,11 @@
-/* You can add global styles to this file, and also import other style files */
+.bd-callout-info {
+  border-left-color: #5bc0de !important;
+}
+
+.bd-callout {
+  padding: 0.5rem;
+  margin-bottom: 1.25rem;
+  border: 1px solid #e9ecef;
+  border-left-width: 0.25rem;
+  border-radius: 0.25rem;
+}
