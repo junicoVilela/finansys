@@ -23,34 +23,14 @@
     </tr>
     </thead>
     <tbody>
-        <tr>
+        <tr *ngFor="let cat of categories">
             <td>
-                <strong>Lazer</strong><br>
-                <small>Cinema, parque, praia, etc</small>
+                <strong>{{ cat.name }}</strong><br>
+                <small>{{ cat.description }}</small>
             </td>
             <td class="w-25 p-2 text-center">
-                <a [routerLink]="[12, 'edit']" class="btn btn-outline-info btn-sm m-2">Editar</a>
-                <button  class="btn btn-outline-danger btn-sm">Editar</button>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <strong>Lazer</strong><br>
-                <small>Cinema, parque, praia, etc</small>
-            </td>
-            <td class="w-25 p-2 text-center">
-                <a [routerLink]="[12, 'edit']" class="btn btn-outline-info btn-sm m-2">Editar</a>
-                <button  class="btn btn-outline-danger btn-sm">Editar</button>
-            </td>
-        </tr>
-        <tr>
-            <td>
-                <strong>Lazer</strong><br>
-                <small>Cinema, parque, praia, etc</small>
-            </td>
-            <td class="w-25 p-2 text-center">
-                <a [routerLink]="[12, 'edit']" class="btn btn-outline-info btn-sm m-2">Editar</a>
-                <button  class="btn btn-outline-danger btn-sm">Editar</button>
+                <a [routerLink]="[cat.id, 'edit']" class="btn btn-outline-info btn-sm m-2">Editar</a>
+                <button (click)="deleteCategory(cat)" class="btn btn-outline-danger btn-sm">Deletar</button>
             </td>
         </tr>
     </tbody>
