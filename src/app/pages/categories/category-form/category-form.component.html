@@ -1,1 +1,38 @@
-<p>category-form works!</p>
+<nav aria-label="breadcrumb" class="mb-4" >
+    <ol class="breadcrumb">
+        <li class="breadcrumb-item"><a href="#">Home</a></li>
+        <li class="breadcrumb-item active">Categorias</li>
+        <li class="breadcrumb-item active">Formulário de Categoria</li>
+    </ol>
+</nav>
+
+<div class="bd-callout bd-callout-info row m-0">
+    <div class="col-auto me-auto">
+        <h3 class="pt-2 text-black-50">Categorias</h3>
+    </div>
+    <div class="col-auto pt-1">
+        <a routerLink="new" class="btn btn-primary">+ Nova Categoria</a>
+    </div>
+</div>
+
+<div class="card mt-3 rounded-3 shadow-sm">
+    <div class="card-header py-3 mb-3">
+        <h4 class="my-0 fw-normal">Informações sobre a categoria</h4>
+    </div>
+    <div class="row m-1">
+        <div class="col-md-6">
+            <label for="nome" class="form-label">Nome</label>
+            <input type="text" class="form-control" id="nome" placeholder="" required>
+            <small class="text-muted">Exemplo: Moradia</small>
+        </div>
+
+        <div class="col-md-6">
+            <label for="descricao" class="form-label">Descrição</label>
+            <input type="text" class="form-control" id="descricao" placeholder="" required>
+            <small class="text-muted">Exemplo: Pagamentos de conta da casa</small>
+        </div>
+        <div class="col-12">
+        <button class="w-25 btn btn-primary btn-lg mt-3 mb-3 float-end" type="submit">Salvar</button>
+        </div>
+    </div>
+</div>

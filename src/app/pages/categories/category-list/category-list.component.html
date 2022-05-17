@@ -5,33 +5,35 @@
     </ol>
 </nav>
 
-<div class="row bd-callout bd-callout-info mb-5">
+<div class="bd-callout bd-callout-info row m-0">
     <div class="col-auto me-auto">
-        <h3 class="pt-2">Categorias</h3>
+        <h3 class="pt-2 text-black-50">Categorias</h3>
     </div>
     <div class="col-auto pt-1">
         <a routerLink="new" class="btn btn-primary">+ Nova Categoria</a>
     </div>
 </div>
 
-<table class="table table-bordered table-hover caption-top">
-    <caption>Lista de categorias</caption>
-    <thead class="table-light">
-    <tr>
-        <th scope="col">Categoria</th>
-        <th scope="col" class="w-25 p-2 text-center">Ações</th>
-    </tr>
-    </thead>
-    <tbody>
-        <tr *ngFor="let cat of categories">
-            <td>
-                <strong>{{ cat.name }}</strong><br>
-                <small>{{ cat.description }}</small>
-            </td>
-            <td class="w-25 p-2 text-center">
-                <a [routerLink]="[cat.id, 'edit']" class="btn btn-outline-info btn-sm m-2">Editar</a>
-                <button (click)="deleteCategory(cat)" class="btn btn-outline-danger btn-sm">Deletar</button>
-            </td>
+<div class="my-3 p-3 bg-body rounded shadow-sm">
+    <h4 class="pb-4 text-opacity-25">Lista de categorias</h4>
+    <table class="table table-bordered table-hover caption-top">
+        <thead class="table-light">
+        <tr>
+            <th scope="col">Categoria</th>
+            <th scope="col" class="w-25 p-2 text-center">Ações</th>
         </tr>
-    </tbody>
-</table>
+        </thead>
+        <tbody>
+            <tr *ngFor="let cat of categories">
+                <td>
+                    <strong>{{ cat.name }}</strong><br>
+                    <small>{{ cat.description }}</small>
+                </td>
+                <td class="w-25 p-2 text-center">
+                    <a [routerLink]="[cat.id, 'edit']" class="btn btn-outline-info btn-sm m-2">Editar</a>
+                    <button (click)="deleteCategory(cat)" class="btn btn-outline-danger btn-sm">Deletar</button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
