@@ -24,10 +24,10 @@
     "chart.js": "^3.7.1",
     "currency-formatter": "^1.5.9",
     "moment": "^2.29.3",
+    "ngx-toastr": "^14.3.0",
     "primeicons": "^5.0.0",
     "primeng": "^13.4.0",
     "rxjs": "~7.5.0",
-    "toastr": "^2.1.4",
     "tslib": "^2.3.0",
     "zone.js": "~0.11.4"
   },
