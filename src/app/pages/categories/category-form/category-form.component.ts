@@ -1,5 +1,5 @@
 import { Component, OnInit, AfterContentChecked } from '@angular/core';
-import { FormBuilder, FormControl, FormGroup, Validators} from "@angular/forms";
+import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 
 import { Category } from "../shared/category.model";
@@ -17,19 +17,23 @@ import { ToastrService } from 'ngx-toastr';
 export class CategoryFormComponent implements OnInit, AfterContentChecked {
 
   currentAction!: string;
-  categoryForm!: FormGroup;
   pageTitle!: string;
-  serverErrorMessages: string[] = [];
+  serverErrorMessages: any = null;
   submittingForm: boolean = false;
   category: Category = new Category();
+  categoryForm!: FormGroup;
+
 
   constructor(
       private categoryService: CategoryService,
       private toastrService: ToastrService,
       private route: ActivatedRoute,
-      private router: Router,
-      private formBuilder: FormBuilder
+      private router: Router
   ) { }
+
+  get f(){
+    return this.categoryForm.controls;
+  }
 
   ngOnInit(): void {
     this.setCurrentAction();
@@ -39,8 +43,6 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
 
   ngAfterContentChecked() {
     this.setPageTitle();
-
-
   }
 
   submitForm() {
@@ -62,11 +64,10 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
   }
 
   private buildCategoryForm() {
-    this.categoryForm = this.formBuilder.group({
-      id: [null],
-      name: [null, [Validators.required, Validators.minLength(2)]],
-      description: [null]
-    })
+    this.categoryForm = new FormGroup({
+      name: new FormControl('', [Validators.required, Validators.minLength(3)]),
+      description: new FormControl('')
+    });
   }
 
   private loadCategory() {
@@ -130,7 +131,6 @@ export class CategoryFormComponent implements OnInit, AfterContentChecked {
     } else {
       this.serverErrorMessages = ["Falha na comunicação com o servidor. Por favor, tente novamente mais tarde"];
     }
-
   }
 
 }

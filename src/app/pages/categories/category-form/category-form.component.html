@@ -6,6 +6,14 @@
     </ol>
 </nav>
 
+<div class="alert alert-danger alert-dismissible fade show" role="alert" *ngIf="serverErrorMessages">
+    <strong>Erro no servidor:</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <ul>
+        <li *ngFor="let error of serverErrorMessages">{{error}}</li>
+    </ul>
+</div>
+
 <div class="bd-callout bd-callout-info row m-0">
     <div class="col-auto me-auto">
         <h3 class="pt-2 text-black-50">Categorias</h3>
@@ -15,6 +23,8 @@
     </div>
 </div>
 
+
+
 <form [formGroup]="categoryForm" (submit)="submitForm()">
     <div class="card mt-3 rounded-3 shadow-sm">
         <div class="card-header py-3 mb-3">
@@ -23,14 +33,13 @@
         <div class="row m-1">
             <div class="col-md-6">
                 <label for="nome" class="form-label">Nome</label>
-                <input type="text" class="form-control" id="nome" formControlName="name">
+                <input type="text" class="form-control" id="nome" formControlName="name" [ngClass]="{'is-invalid': f['name'].touched && f['name'].invalid}" >
                 <small class="text-muted">Exemplo: Moradia</small>
 
-                <!--<div *ngIf="categoryForm['name'].touched && categoryForm['name'].invalid" class="alert alert-danger">
-                    <div *ngIf="categoryForm['name'].errors && categoryForm['name'].errors['required']">Name is required.</div>
-                    <div *ngIf="categoryForm['name'].errors && categoryForm['name'].errors['minlength']">Name should be 3 character.</div>
-                </div>-->
-
+                <div *ngIf="f['name'].touched && f['name'].invalid" class="text-danger">
+                    <div *ngIf="f['name'].errors && f['name'].errors['required']">O Campo nome é obrigatório.</div>
+                    <div *ngIf="f['name'].errors && f['name'].errors['minlength']">Deve conter no mínimo 3 caracteres.</div>
+                </div>
             </div>
 
             <div class="col-md-6">
