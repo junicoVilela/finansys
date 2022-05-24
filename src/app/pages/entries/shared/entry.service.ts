@@ -8,7 +8,7 @@ import { Entry } from "./entry.model";
 @Injectable({
     providedIn: 'root'
 })
-export class CategoryService {
+export class EntryService {
 
     private apiPath: string = "api/entries"
 
@@ -56,13 +56,16 @@ export class CategoryService {
     }
 
     private jsonDataToEntries(jsonData: any[]): Entry[] {
-        const entry: Entry[] = [];
-        jsonData.forEach(element => entry.push(element as Entry));
-        return entry;
+        const entries: Entry[] = [];
+        jsonData.forEach(element => {
+            const entry = Object.assign(new Entry(), element);
+            entries.push(entry);
+        });
+        return entries;
     }
 
     private jsonDataToEntry(jsonData: any): Entry {
-        return jsonData as Entry;
+        return Object.assign(new Entry(), jsonData);
     }
 
     private handleError(error: any): Observable<any> {
