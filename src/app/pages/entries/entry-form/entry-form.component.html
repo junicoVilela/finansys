@@ -1,7 +1,7 @@
 <nav aria-label="breadcrumb" class="mb-4" >
     <ol class="breadcrumb">
         <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
-        <li class="breadcrumb-item"><a routerLink="/categories">Categorias</a></li>
+        <li class="breadcrumb-item"><a routerLink="/entries">Lançamento</a></li>
         <li class="breadcrumb-item active">{{pageTitle}}</li>
     </ol>
 </nav>
@@ -19,16 +19,14 @@
         <h3 class="pt-2 text-black-50">{{pageTitle}}</h3>
     </div>
     <div class="col-auto pt-1">
-        <a routerLink="../../new" class="btn btn-primary">+ Nova Categoria</a>
+        <a routerLink="../../new" class="btn btn-primary">+ Novo Lançamento</a>
     </div>
 </div>
 
-
-
-<form [formGroup]="categoryForm" (submit)="submitForm()">
+<form [formGroup]="entryForm" (submit)="submitForm()">
     <div class="card mt-3 rounded-3 shadow-sm">
         <div class="card-header py-3 mb-3">
-            <h4 class="my-0 fw-normal">Informações sobre a categoria</h4>
+            <h4 class="my-0 fw-normal">Informações sobre o lançamento</h4>
         </div>
         <div class="row m-1">
             <div class="col-md-6">
@@ -48,7 +46,7 @@
                 <small class="text-muted">Exemplo: Pagamentos de conta da casa</small>
             </div>
             <div class="col-12">
-            <button [disabled]="submittingForm || categoryForm.invalid" class="w-25 btn btn-primary btn-lg mt-3 mb-3 float-end" type="submit">Salvar</button>
+            <button [disabled]="submittingForm || entryForm.invalid" class="w-25 btn btn-primary btn-lg mt-3 mb-3 float-end" type="submit">Salvar</button>
             </div>
         </div>
     </div>
