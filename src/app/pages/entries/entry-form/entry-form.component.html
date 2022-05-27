@@ -19,7 +19,7 @@
         <h3 class="pt-2 text-black-50">{{pageTitle}}</h3>
     </div>
     <div class="col-auto pt-1">
-        <a routerLink="../../new" class="btn btn-primary">+ Novo Lançamento</a>
+        <a routerLink="../../new" class="btn btn-success">+ Novo Lançamento</a>
     </div>
 </div>
 
@@ -28,11 +28,20 @@
         <div class="card-header py-3 mb-3">
             <h4 class="my-0 fw-normal">Informações sobre o lançamento</h4>
         </div>
+
         <div class="row m-1">
-            <div class="col-md-6">
-                <label for="nome" class="form-label">Nome</label>
-                <input type="text" class="form-control" id="nome" formControlName="name" [ngClass]="{'is-invalid': f['name'].touched && f['name'].invalid}" >
-                <small class="text-muted">Exemplo: Moradia</small>
+            <!-- type -->
+            <div class="col-md-3">
+                <label for="nome" class="form-label">Tipo</label>
+                <select id="type" name="type" class="form-select form-select mb-3" formControlName="type">
+                    <option *ngFor="let option of typeOptions" [value]="option.value">{{ option.text }}</option>
+                </select>
+            </div>
+
+            <!-- name -->
+            <div class="col-md-5">
+                <label for="nome" class="form-label">Lançamento</label>
+                <input id="nome" type="text" class="form-control" formControlName="name" [ngClass]="{'is-invalid': f['name'].touched && f['name'].invalid}">
 
                 <div *ngIf="f['name'].touched && f['name'].invalid" class="text-danger">
                     <div *ngIf="f['name'].errors && f['name'].errors['required']">O Campo nome é obrigatório.</div>
@@ -40,14 +49,71 @@
                 </div>
             </div>
 
-            <div class="col-md-6">
-                <label for="descricao" class="form-label">Descrição</label>
-                <input type="text" class="form-control" id="descricao" formControlName="description">
-                <small class="text-muted">Exemplo: Pagamentos de conta da casa</small>
+            <!-- amount -->
+            <div class="col-md-2">
+                <label for="amount" class="form-label">Valor</label>
+
+                <div class="input-group mb-3">
+                    <span class="input-group-text">R$</span>
+                    <input id="amount" type="text" class="form-control text-end" formControlName="amount" [imask]="imaskConfig" [ngClass]="{'is-invalid': f['amount'].touched && f['amount'].invalid}">
+                </div>
+
+                <div *ngIf="f['amount'].touched && f['amount'].invalid" class="text-danger">
+                    <div *ngIf="f['amount'].errors && f['amount'].errors['required']">O Campo valor é obrigatório.</div>
+                </div>
             </div>
+
+            <div class="col-md-2">
+                <label for="date" class="form-label">Data</label>
+                <p-calendar
+                        id="date"
+                        formControlName="date"
+                        inputStyleClass="form-control"
+                        dataType="string"
+                        dateFormat="dd/mm/yy"
+                        [locale]="ptBR"
+                        [showButtonBar]="true"
+                        [showIcon]="true"></p-calendar>
+
+            </div>
+
+            <div class="col-md-2">
+                <label class="form-label">Pago</label><br>
+                <div class="btn-group" role="group">
+                    <input type="checkbox" class="btn-check" id="pago">
+                    <label class="btn btn-outline-success" for="pago" [class.active]="entryForm.get('paid')?.value == true" (click)="entryForm.get('paid')?.setValue(true)">Pago</label>
+
+                    <input type="checkbox" class="btn-check" id="pendente">
+                    <label class="btn btn-outline-success" for="pendente" [class.active]="entryForm.get('paid')?.value == false" (click)="entryForm.get('paid')?.setValue(false)">Pendente</label>
+                </div>
+
+                <div *ngIf="f['paid'].touched && f['paid'].invalid" class="text-danger">
+                    <div *ngIf="f['paid'].errors && f['paid'].errors['required']">O Campo valor é obrigatório.</div>
+                </div>
+            </div>
+
+            <div class="col-md-2">
+                <label for="categoryId" class="form-label">Categoria</label>
+                <select id="categoryId" name="categoryId" class="form-select form-select mb-3" formControlName="categoryId" [ngClass]="{'is-invalid': f['categoryId'].touched && f['categoryId'].invalid}">
+                    <option value="">Selecione</option>
+                    <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
+                </select>
+
+                <div *ngIf="f['categoryId'].touched && f['categoryId'].invalid" class="text-danger">
+                    <div *ngIf="f['categoryId'].errors && f['categoryId'].errors['required']">O Campo categoria é obrigatório.</div>
+                </div>
+            </div>
+
+            <div class="col-md-8">
+                <label for="description" class="form-label">Descrição</label>
+                <input id="description" type="text" class="form-control" formControlName="description">
+            </div>
+
             <div class="col-12">
-            <button [disabled]="submittingForm || entryForm.invalid" class="w-25 btn btn-primary btn-lg mt-3 mb-3 float-end" type="submit">Salvar</button>
+                <button [disabled]="submittingForm || entryForm.invalid" class="w-25 btn btn-primary btn-lg mt-3 mb-3 float-end" type="submit">Salvar</button>
             </div>
         </div>
     </div>
+
+    <pre>{{entryForm.value | json}}</pre>
 </form>
