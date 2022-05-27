@@ -32,10 +32,24 @@
         <div class="row m-1">
             <!-- type -->
             <div class="col-md-3">
-                <label for="nome" class="form-label">Tipo</label>
-                <select id="type" name="type" class="form-select form-select mb-3" formControlName="type">
+                <label class="form-label">Tipo</label><br>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="despesa" formControlName="type" value="expense" >
+                    <label class="form-check-label" for="despesa">Pago</label>
+                </div>
+                <div class="form-check form-check-inline">
+                    <input class="form-check-input" type="radio" id="receita" formControlName="type" value="revenue">
+                    <label class="form-check-label" for="receita">Pendente</label>
+                </div>
+                <!--<select id="type" name="type" class="form-select mb-3" formControlName="type" [ngClass]="{'is-invalid': f['type'].touched && f['type'].invalid}">
+                    <option value="">Selecione</option>
                     <option *ngFor="let option of typeOptions" [value]="option.value">{{ option.text }}</option>
-                </select>
+                </select>-->
+
+
+                <div *ngIf="f['type'].touched && f['type'].invalid" class="text-danger">
+                    <div *ngIf="f['type'].errors && f['type'].errors['required']">O Campo categoria é obrigatório.</div>
+                </div>
             </div>
 
             <!-- name -->
@@ -94,7 +108,7 @@
 
             <div class="col-md-2">
                 <label for="categoryId" class="form-label">Categoria</label>
-                <select id="categoryId" name="categoryId" class="form-select form-select mb-3" formControlName="categoryId" [ngClass]="{'is-invalid': f['categoryId'].touched && f['categoryId'].invalid}">
+                <select id="categoryId" name="categoryId" class="form-select mb-3" formControlName="categoryId" [ngClass]="{'is-invalid': f['categoryId'].touched && f['categoryId'].invalid}">
                     <option value="">Selecione</option>
                     <option *ngFor="let category of categories" [value]="category.id">{{ category.name }}</option>
                 </select>

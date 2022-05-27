@@ -82,7 +82,8 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
     }
   }
 
-  get typeOptions(): Array<any> {
+  //utilizado para buscar combo select
+  /*get typeOptions(): Array<any> {
     return Object.entries(Entry.types).map(
         ([value, text]) => {
           return {
@@ -91,7 +92,7 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
           }
         }
     )
-  }
+  }*/
 
   private setCurrentAction() {
     if (this.route.snapshot.url[0].path == 'new') {
@@ -103,7 +104,7 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
 
   private buildEntryForm() {
     this.entryForm = new FormGroup({
-      id: new FormControl(''),
+      id: new FormControl(null),
       name: new FormControl('', [Validators.required, Validators.minLength(3)]),
       description: new FormControl(''),
       type: new FormControl('expense', [Validators.required]),
