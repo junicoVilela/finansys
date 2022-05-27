@@ -35,21 +35,16 @@
                 <label class="form-label">Tipo</label><br>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" id="despesa" formControlName="type" value="expense" >
-                    <label class="form-check-label" for="despesa">Pago</label>
+                    <label class="form-check-label" for="despesa">Despesa</label>
                 </div>
                 <div class="form-check form-check-inline">
                     <input class="form-check-input" type="radio" id="receita" formControlName="type" value="revenue">
-                    <label class="form-check-label" for="receita">Pendente</label>
+                    <label class="form-check-label" for="receita">Receira</label>
                 </div>
                 <!--<select id="type" name="type" class="form-select mb-3" formControlName="type" [ngClass]="{'is-invalid': f['type'].touched && f['type'].invalid}">
                     <option value="">Selecione</option>
                     <option *ngFor="let option of typeOptions" [value]="option.value">{{ option.text }}</option>
                 </select>-->
-
-
-                <div *ngIf="f['type'].touched && f['type'].invalid" class="text-danger">
-                    <div *ngIf="f['type'].errors && f['type'].errors['required']">O Campo categoria é obrigatório.</div>
-                </div>
             </div>
 
             <!-- name -->
