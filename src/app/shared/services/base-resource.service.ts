@@ -1,7 +1,8 @@
 import { HttpClient } from "@angular/common/http";
+import { Injector } from "@angular/core";
+
 import { Observable, throwError } from "rxjs";
 import { map, catchError } from "rxjs/operators";
-import { Injector } from "@angular/core";
 
 import { BaseResourceModel } from "../models/base-resource.model";
 
