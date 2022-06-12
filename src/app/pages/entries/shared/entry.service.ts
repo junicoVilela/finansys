@@ -1,10 +1,10 @@
 import { Injectable, Injector } from '@angular/core';
 
-import {flatMap, Observable, throwError} from "rxjs";
+import {flatMap, Observable} from "rxjs";
 
 import { BaseResourceService } from "../../../shared/services/base-resource.service";
-import { Entry } from "./entry.model";
 import { CategoryService } from "../../categories/shared/category.service";
+import { Entry } from "./entry.model";
 
 @Injectable({
     providedIn: 'root'
@@ -12,7 +12,7 @@ import { CategoryService } from "../../categories/shared/category.service";
 export class EntryService extends BaseResourceService<Entry>{
 
     constructor(protected override injector: Injector, private categoryService: CategoryService) {
-        super("api/entries", injector)
+        super("api/entries", injector, Entry.fromJson);
     }
 
     override create(entry: Entry): Observable<Entry> {
@@ -35,17 +35,4 @@ export class EntryService extends BaseResourceService<Entry>{
         )
     }
 
-    protected override jsonDataToResources(jsonData: any[]): Entry[] {
-        const entries: Entry[] = [];
-
-        jsonData.forEach(element => {
-            const entry = Entry.fromJson(element);
-            entries.push(entry);
-        });
-        return entries;
-    }
-
-    protected override jsonDataToResource(jsonData: any): Entry {
-        return Entry.fromJson(jsonData);
-    }
 }
