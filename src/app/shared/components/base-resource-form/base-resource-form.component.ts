@@ -1,5 +1,5 @@
-import {OnInit, AfterContentChecked, Injector} from '@angular/core';
-import {FormBuilder, FormGroup, Validators} from "@angular/forms";
+import {Component, OnInit, AfterContentChecked, Injector, Directive, Injectable} from '@angular/core';
+import { FormGroup } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 
 import { BaseResourceModel } from "../../models/base-resource.model";
@@ -9,6 +9,9 @@ import { switchMap } from "rxjs/operators";
 
 import { ToastrService } from 'ngx-toastr';
 
+@Component({
+    template: ''
+})
 export abstract class BaseResourceFormComponent<T extends BaseResourceModel> implements OnInit, AfterContentChecked {
 
     currentAction!: string;
@@ -19,17 +22,16 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel> imp
 
     protected route: ActivatedRoute;
     protected router: Router;
+    protected toastrService!: ToastrService
 
-    constructor(
+    protected constructor(
         protected injector: Injector,
         public resource: T,
         protected resourceService: BaseResourceService<T>,
-        protected jsonDataToResourceFn: (jsonData: any) => T,
-        protected toastrService: ToastrService
+        protected jsonDataToResourceFn: (jsonData: any) => T
     ) {
         this.route = this.injector.get(ActivatedRoute);
         this.router = this.injector.get(Router);
-
     }
 
     get f(){
