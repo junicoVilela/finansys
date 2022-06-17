@@ -1,4 +1,4 @@
-import {Component, Inject, Injector} from '@angular/core';
+import {Component, Injector} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 
 import { BaseResourceFormComponent } from "../../../shared/components/base-resource-form/base-resource-form.component";

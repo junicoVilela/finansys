@@ -1,31 +1,19 @@
-import { Component, OnInit, AfterContentChecked } from '@angular/core';
-import { FormControl, FormGroup, Validators } from "@angular/forms";
-import { ActivatedRoute, Router } from "@angular/router";
+import {Component, Injector, OnInit} from '@angular/core';
+import {FormControl, FormGroup, Validators} from "@angular/forms";
 
 import { Entry } from "../shared/entry.model";
 import { EntryService } from "../shared/entry.service";
-
-import { Category } from "../../categories/shared/category.model"
-import { CategoryService } from "../../categories/shared/category.service"
-
-import { switchMap } from "rxjs/operators";
-
-import { ToastrService } from 'ngx-toastr';
+import { BaseResourceFormComponent } from "../../../shared/components/base-resource-form/base-resource-form.component";
+import { Category } from "../../categories/shared/category.model";
+import { CategoryService } from "../../categories/shared/category.service";
 
 @Component({
   selector: 'app-entry-form',
   templateUrl: './entry-form.component.html',
   styleUrls: ['./entry-form.component.scss']
 })
-export class EntryFormComponent implements OnInit, AfterContentChecked {
+export class EntryFormComponent extends BaseResourceFormComponent<Entry> implements OnInit {
 
-  currentAction!: string;
-  pageTitle!: string;
-  serverErrorMessages: any = null;
-  submittingForm: boolean = false;
-  entry: Entry = new Entry();
-  entryForm!: FormGroup;
-  ptBR: any;
   categories!: Array<Category>;
 
   imaskConfig = {
@@ -37,73 +25,34 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
     radix: ','
   };
 
+  ptBR = {
+    firstDayOfWeek: 0,
+    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
+    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
+    dayNamesMin: ['Do', 'Se', 'Te', 'Qu', 'Qu', 'Se', 'Sa'],
+    monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho',
+      'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+    today: 'Hoje',
+    clear: 'Limpar'
+  };
+
   constructor(
-      private entryService: EntryService,
-      private toastrService: ToastrService,
-      private route: ActivatedRoute,
-      private router: Router,
-      private categoryService: CategoryService
-  ) { }
-
-  get f(){
-    return this.entryForm.controls;
+      protected entryService: EntryService,
+      protected categoryService: CategoryService,
+      protected override injector: Injector,
+      protected entry: Entry
+  ) {
+    super(injector, entry, entryService, Entry.fromJson)
   }
 
-  ngOnInit(): void {
-    this.setCurrentAction();
-    this.buildEntryForm();
-    this.loadEntry();
+  override ngOnInit(): void {
     this.loadCategories();
-
-    this.ptBR = {
-      firstDayOfWeek: 0,
-      dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
-      dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
-      dayNamesMin: ['Do', 'Se', 'Te', 'Qu', 'Qu', 'Se', 'Sa'],
-      monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho',
-        'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-      monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-      today: 'Hoje',
-      clear: 'Limpar'
-    };
+    super.ngOnInit();
   }
 
-  ngAfterContentChecked() {
-    this.setPageTitle();
-  }
-
-  submitForm() {
-    this.submittingForm = true;
-
-    if(this.currentAction == "new") {
-      this.createEntry();
-    } else {
-      this.updateEntry();
-    }
-  }
-
-  //utilizado para buscar combo select
-  /*get typeOptions(): Array<any> {
-    return Object.entries(Entry.types).map(
-        ([value, text]) => {
-          return {
-            text: text,
-            value: value
-          }
-        }
-    )
-  }*/
-
-  private setCurrentAction() {
-    if (this.route.snapshot.url[0].path == 'new') {
-      this.currentAction = "new";
-    } else {
-      this.currentAction = "edit";
-    }
-  }
-
-  private buildEntryForm() {
-    this.entryForm = new FormGroup({
+  protected buildResourceForm() {
+    this.resourceForm = new FormGroup({
       id: new FormControl(null),
       name: new FormControl('', [Validators.required, Validators.minLength(3)]),
       description: new FormControl(''),
@@ -115,73 +64,19 @@ export class EntryFormComponent implements OnInit, AfterContentChecked {
     });
   }
 
-  private loadEntry() {
-    if (this.currentAction == 'edit') {
-
-      this.route.paramMap.pipe(
-        switchMap(params => this.entryService.getById(+params.get("id")!))
-      ).subscribe(
-          (entry) => {
-            this.entry = entry;
-            this.entryForm.patchValue(entry)
-          },
-          (error) => alert('Ocorreu um erro no servidor, tente mais tarde.')
-      )
-    }
-  }
-
   private loadCategories() {
     this.categoryService.getAll().subscribe(
         categories => this.categories = categories
     );
   }
 
-  private setPageTitle() {
-    if (this.currentAction == 'new') {
-      this.pageTitle = "Cadastro de Novo Lançamento";
-    } else {
-      const entryName = this.entry.name || "";
-      this.pageTitle = "Editando Lançamento: " + entryName;
-    }
+  protected override creationPageTitle(): string {
+    return "Cadastro de Novo Lançamento";
   }
 
-  private createEntry() {
-    const entry: Entry = Entry.fromJson(this.entryForm.value);
-
-    this.entryService.create(entry)
-        .subscribe(
-            entry => this.actionsForSuccess(entry),
-            error => this.actionsForError(error)
-        )
-  }
-
-  private updateEntry() {
-    const entry: Entry = Entry.fromJson(this.entryForm.value);
-
-    this.entryService.update(entry).subscribe(
-        entry => this.actionsForSuccess(entry),
-        error => this.actionsForError(error)
-    )
-  }
-
-  private actionsForSuccess(entry: Entry) {
-    this.toastrService.success("Solicitação processada com sucesso!");
-
-    this.router.navigateByUrl("entries", {skipLocationChange: true}).then(
-        () => this.router.navigate(["entries", entry.id, "edit"])
-    )
-  }
-
-  private actionsForError(error: any) {
-    this.toastrService.error("Ocorreu um erro ao processar a sua solicitação!");
-
-    this.submittingForm = false;
-
-    if(error.status === 422) {
-      this.serverErrorMessages = JSON.parse(error._body).errors;
-    } else {
-      this.serverErrorMessages = ["Falha na comunicação com o servidor. Por favor, tente novamente mais tarde"];
-    }
+  protected override updateResource() {
+    const resourceName = this.resource.name || "";
+    return "Editando Lançamento: " + resourceName;
   }
 
 }
