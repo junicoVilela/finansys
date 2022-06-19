@@ -1,4 +1,4 @@
-import {Component, Inject, Injector} from '@angular/core';
+import {Component, Injector} from '@angular/core';
 import {FormControl, FormGroup, Validators} from "@angular/forms";
 
 import { BaseResourceFormComponent } from "../../../shared/components/base-resource-form/base-resource-form.component";
@@ -12,8 +12,6 @@ import { CategoryService } from "../shared/category.service";
   styleUrls: ['./category-form.component.scss']
 })
 export class CategoryFormComponent extends BaseResourceFormComponent<Category> {
-
-  category: Category = new Category();
 
   constructor(
       protected categoryService: CategoryService,

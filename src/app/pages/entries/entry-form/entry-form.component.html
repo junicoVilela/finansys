@@ -23,7 +23,7 @@
     </div>
 </div>
 
-<form [formGroup]="entryForm" (submit)="submitForm()">
+<form [formGroup]="resourceForm" (submit)="submitForm()">
     <div class="card mt-3 rounded-3 shadow-sm">
         <div class="card-header py-3 mb-3">
             <h4 class="my-0 fw-normal">Informações sobre o lançamento</h4>
@@ -90,10 +90,10 @@
                 <label class="form-label">Pago</label><br>
                 <div class="btn-group" role="group">
                     <input type="checkbox" class="btn-check" id="pago">
-                    <label class="btn btn-outline-success" for="pago" [class.active]="entryForm.get('paid')?.value == true" (click)="entryForm.get('paid')?.setValue(true)">Pago</label>
+                    <label class="btn btn-outline-success" for="pago" [class.active]="resourceForm.get('paid')?.value == true" (click)="resourceForm.get('paid')?.setValue(true)">Pago</label>
 
                     <input type="checkbox" class="btn-check" id="pendente">
-                    <label class="btn btn-outline-success" for="pendente" [class.active]="entryForm.get('paid')?.value == false" (click)="entryForm.get('paid')?.setValue(false)">Pendente</label>
+                    <label class="btn btn-outline-success" for="pendente" [class.active]="resourceForm.get('paid')?.value == false" (click)="resourceForm.get('paid')?.setValue(false)">Pendente</label>
                 </div>
 
                 <div *ngIf="f['paid'].touched && f['paid'].invalid" class="text-danger">
@@ -119,10 +119,10 @@
             </div>
 
             <div class="col-12">
-                <button [disabled]="submittingForm || entryForm.invalid" class="w-25 btn btn-primary btn-lg mt-3 mb-3 float-end" type="submit">Salvar</button>
+                <button [disabled]="submittingForm || resourceForm.invalid" class="w-25 btn btn-primary btn-lg mt-3 mb-3 float-end" type="submit">Salvar</button>
             </div>
         </div>
     </div>
 
-    <pre>{{entryForm.value | json}}</pre>
+    <pre>{{resourceForm.value | json}}</pre>
 </form>

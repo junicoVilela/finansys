@@ -11,9 +11,9 @@ import { CategoryFormComponent } from './category-form/category-form.component';
     CategoryListComponent,
     CategoryFormComponent
   ],
-    imports: [
-     SharedModule,
-     CategoriesRoutingModule
+  imports: [
+   SharedModule,
+   CategoriesRoutingModule
   ]
 })
 export class CategoriesModule { }

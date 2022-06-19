@@ -5,7 +5,7 @@ import {flatMap, Observable} from "rxjs";
 import { BaseResourceService } from "../../../shared/services/base-resource.service";
 import { CategoryService } from "../../categories/shared/category.service";
 import { Entry } from "./entry.model";
-import {catchError} from "rxjs/operators";
+import { catchError } from "rxjs/operators";
 
 @Injectable({
     providedIn: 'root'
