@@ -20,7 +20,7 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel> imp
 
     protected route: ActivatedRoute;
     protected router: Router;
-    protected toastrService!: ToastrService
+    protected toastrService!: ToastrService;
 
     protected constructor(
         protected injector: Injector,
@@ -30,6 +30,7 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel> imp
     ) {
         this.route = this.injector.get(ActivatedRoute);
         this.router = this.injector.get(Router);
+        this.toastrService = this.injector.get(ToastrService);
     }
 
     get f(){

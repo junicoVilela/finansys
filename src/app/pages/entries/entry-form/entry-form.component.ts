@@ -41,10 +41,9 @@ export class EntryFormComponent extends BaseResourceFormComponent<Entry> impleme
   constructor(
       protected entryService: EntryService,
       protected categoryService: CategoryService,
-      protected override injector: Injector,
-      protected entry: Entry
+      protected override injector: Injector
   ) {
-    super(injector, entry, entryService, Entry.fromJson)
+    super(injector, new Entry(), entryService, Entry.fromJson)
   }
 
   override ngOnInit(): void {
@@ -76,6 +75,7 @@ export class EntryFormComponent extends BaseResourceFormComponent<Entry> impleme
   }
 
   protected override updateResource() {
+    super.updateResource();
     const resourceName = this.resource.name || "";
     return "Editando Lançamento: " + resourceName;
   }

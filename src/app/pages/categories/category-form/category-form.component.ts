@@ -15,10 +15,9 @@ export class CategoryFormComponent extends BaseResourceFormComponent<Category> {
 
   constructor(
       protected categoryService: CategoryService,
-      protected override injector: Injector,
-      protected categoty: Category
+      protected override injector: Injector
   ) {
-    super(injector, categoty, categoryService, Category.fromJson)
+    super(injector, new Category(), categoryService, Category.fromJson)
   }
 
   protected buildResourceForm() {
