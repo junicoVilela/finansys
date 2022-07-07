@@ -1,10 +1,6 @@
-<nav aria-label="breadcrumb" class="mb-4" >
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
-        <li class="breadcrumb-item"><a routerLink="/entries">Lançamento</a></li>
-        <li class="breadcrumb-item active">{{pageTitle}}</li>
-    </ol>
-</nav>
+<app-bread-crumb
+        [items]="[{text: 'Lançamentos', link: '/entries'}, {text: pageTitle}]"
+></app-bread-crumb>
 
 <div class="alert alert-danger alert-dismissible fade show" role="alert" *ngIf="serverErrorMessages">
     <strong>Erro no servidor:</strong>

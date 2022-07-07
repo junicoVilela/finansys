@@ -1,9 +1,6 @@
-<nav aria-label="breadcrumb" class="mb-4" >
-    <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a routerLink="/">Home</a></li>
-        <li class="breadcrumb-item active">Lançamentos</li>
-    </ol>
-</nav>
+<app-bread-crumb
+        [items]="[{text: 'Lançamentos'}]"
+></app-bread-crumb>
 
 <div class="bd-callout bd-callout-info row m-0">
     <div class="col-auto me-auto">
