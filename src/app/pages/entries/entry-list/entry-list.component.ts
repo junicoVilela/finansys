@@ -3,7 +3,6 @@ import { Component, OnInit } from '@angular/core';
 import { Entry } from "../shared/entry.model";
 import { EntryService } from "../shared/entry.service";
 import {BaseResourceListComponent} from "../../../shared/components/base-resource-list/base-resource-list.component";
-import {Category} from "../../categories/shared/category.model";
 
 @Component({
   selector: 'app-entry-list',
