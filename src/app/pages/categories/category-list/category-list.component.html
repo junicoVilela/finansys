@@ -24,14 +24,14 @@
         </tr>
         </thead>
         <tbody>
-            <tr *ngFor="let cat of categories">
+            <tr *ngFor="let cat of resources">
                 <td>
                     <strong>{{ cat.name }}</strong><br>
                     <small>{{ cat.description }}</small>
                 </td>
                 <td class="w-25 p-2 text-center">
                     <a [routerLink]="[cat.id, 'edit']" class="btn btn-outline-info btn-sm m-2">Editar</a>
-                    <button (click)="deleteCategory(cat)" class="btn btn-outline-danger btn-sm">Deletar</button>
+                    <button (click)="deleteResource(cat)" class="btn btn-outline-danger btn-sm">Deletar</button>
                 </td>
             </tr>
         </tbody>
