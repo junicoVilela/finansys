@@ -2,14 +2,12 @@
         [items]="[{text: 'Categorias'}]"
 ></app-bread-crumb>
 
-<div class="bd-callout bd-callout-info row m-0">
-    <div class="col-auto me-auto">
-        <h3 class="pt-2 text-black-50">Categorias</h3>
-    </div>
-    <div class="col-auto pt-1">
-        <a routerLink="new" class="btn btn-success">+ Nova Categoria</a>
-    </div>
-</div>
+<app-page-header
+        page-title="Categorias"
+        button-text="+ Nova Categoria"
+        button-link="new"
+        button-class="btn-success"
+></app-page-header>
 
 <div class="my-3 p-3 bg-body rounded shadow-sm">
     <h4 class="pb-4 text-opacity-25">Lista de categorias</h4>

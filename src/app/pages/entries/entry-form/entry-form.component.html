@@ -10,14 +10,12 @@
     </ul>
 </div>
 
-<div class="bd-callout bd-callout-info row m-0">
-    <div class="col-auto me-auto">
-        <h3 class="pt-2 text-black-50">{{pageTitle}}</h3>
-    </div>
-    <div class="col-auto pt-1">
-        <a routerLink="../../new" class="btn btn-success">+ Novo Lançamento</a>
-    </div>
-</div>
+<app-page-header
+        [page-title]="pageTitle"
+        button-text="+ Novo Lançamento"
+        button-link="../../new"
+        button-class="btn-success"
+></app-page-header>
 
 <form [formGroup]="resourceForm" (submit)="submitForm()">
     <div class="card mt-3 rounded-3 shadow-sm">
