@@ -7,11 +7,15 @@ import { HttpClientModule } from '@angular/common/http';
 import { ToastrModule } from 'ngx-toastr';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { HttpClientInMemoryWebApiModule } from "angular-in-memory-web-api";
+import { RouterModule } from "@angular/router";
 
 import { InMemoryDatabase } from "../in-memory-database";
+import { NavbarComponent } from './components/navbar/navbar.component';
 
 @NgModule({
-  declarations: [],
+  declarations: [
+    NavbarComponent
+  ],
   imports: [
     CommonModule,
     BrowserModule,
@@ -21,12 +25,16 @@ import { InMemoryDatabase } from "../in-memory-database";
     FormsModule,
     ReactiveFormsModule,
     ToastrModule.forRoot(),
+    RouterModule
   ],
   exports:[
     //shared modules
     BrowserModule,
     BrowserAnimationsModule,
-    HttpClientModule
+    HttpClientModule,
+
+    //shared components
+    NavbarComponent
   ]
 })
 export class CoreModule { }
