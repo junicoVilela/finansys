@@ -1,0 +1,7 @@
+<div class="alert alert-danger alert-dismissible fade show" role="alert" *ngIf="serverErrorMessages">
+    <strong>Erro no servidor:</strong>
+    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    <ul>
+        <li *ngFor="let error of serverErrorMessages">{{error}}</li>
+    </ul>
+</div>

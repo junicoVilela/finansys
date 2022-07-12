@@ -1,14 +1,6 @@
-<app-bread-crumb
-    [items]="[{text: 'Categorias', link: '/categories'}, {text: pageTitle}]"
-></app-bread-crumb>
+<app-bread-crumb [items]="[{text: 'Categorias', link: '/categories'}, {text: pageTitle}]"></app-bread-crumb>
 
-<div class="alert alert-danger alert-dismissible fade show" role="alert" *ngIf="serverErrorMessages">
-    <strong>Erro no servidor:</strong>
-    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
-    <ul>
-        <li *ngFor="let error of serverErrorMessages">{{error}}</li>
-    </ul>
-</div>
+<app-server-error-messages [server-error-message]="serverErrorMessages"></app-server-error-messages>
 
 <app-page-header
     [page-title]="pageTitle"
