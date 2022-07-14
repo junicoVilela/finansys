@@ -1,80 +1,78 @@
 <app-bread-crumb [items]="[{text: 'Relatório de Receitas e Despesas'}]"></app-bread-crumb>
 
-<app-page-header
-        page-title="Relatório de Receitas e Despesas"
-></app-page-header>
+<app-page-header page-title="Relatório de Receitas e Despesas" [show-button]="false"></app-page-header>
 
 <div class="my-3 p-3 bg-body rounded shadow-sm">
-<div class="card mt-3 rounded-3 shadow-sm">
-    <div class="card-header py-3 mb-3">
-        <h4 class="my-0 fw-normal">Selecione o Mês e Ano para gerar os relatórios</h4>
-    </div>
-    <div class="card-body">
-        <div class="row m-2">
-            <div class="col-md-9">
-                <label for="month">Mês</label>
-                <select #month name="month" id="month" class="form-control">
-                    <option value="">Selecione um mês</option>
-                    <option value="1">Janeiro</option>
-                    <option value="2">Fevereiro</option>
-                    <option value="3">Março</option>
-                    <option value="4">Abril</option>
-                    <option value="5">Maio</option>
-                    <option value="6">Junho</option>
-                    <option value="7">Julho</option>
-                    <option value="8">Agosto</option>
-                    <option value="9">Setembro</option>
-                    <option value="10">Outubro</option>
-                    <option value="11">Novembro</option>
-                    <option value="12">Dezembro</option>
-                </select>
-            </div>
-            <div class="col-md-3">
-                <label for="year">Ano</label>
-                <select #year name="year" id="year" class="form-control">
-                    <option value="">Selecione um mês</option>
-                    <option value="2019">2019</option>
-                    <option value="2020">2020</option>
-                    <option value="2021">2021</option>
-                    <option value="2022">2022</option>
-                </select>
-            </div>
-            <div class="col-12">
-                <button  class="w-20 btn btn-primary btn-lg mt-3 mb-3 float-end" type="submit">Gerar Relatórios</button>
-            </div>
+    <div class="card mt-3 rounded-3 shadow-sm">
+        <div class="card-header py-3 mb-3">
+            <h4 class="my-0 fw-normal">Selecione o Mês e Ano para gerar os relatórios</h4>
         </div>
-    </div>
-</div>
-
-<div class="row row-cols-1 row-cols-md-3 mt-3">
-    <div class="col-4">
-    <div class="card text-center text-white bg-success mb-3 me-2">
-        <div class="card-header">TOTAL DE RECEITAS</div>
         <div class="card-body">
-            <h3 class="card-title">1500</h3>
+            <div class="row m-2">
+                <div class="col-md-9">
+                    <label for="month">Mês</label>
+                    <select #month name="month" id="month" class="form-control">
+                        <option value="">Selecione um mês</option>
+                        <option value="1">Janeiro</option>
+                        <option value="2">Fevereiro</option>
+                        <option value="3">Março</option>
+                        <option value="4">Abril</option>
+                        <option value="5">Maio</option>
+                        <option value="6">Junho</option>
+                        <option value="7">Julho</option>
+                        <option value="8">Agosto</option>
+                        <option value="9">Setembro</option>
+                        <option value="10">Outubro</option>
+                        <option value="11">Novembro</option>
+                        <option value="12">Dezembro</option>
+                    </select>
+                </div>
+                <div class="col-md-3">
+                    <label for="year">Ano</label>
+                    <select #year name="year" id="year" class="form-control">
+                        <option value="">Selecione um mês</option>
+                        <option value="2019">2019</option>
+                        <option value="2020">2020</option>
+                        <option value="2021">2021</option>
+                        <option value="2022">2022</option>
+                    </select>
+                </div>
+                <div class="col-12">
+                    <button  class="w-20 btn btn-primary btn-lg mt-3 mb-3 float-end" type="submit">Gerar Relatórios</button>
+                </div>
+            </div>
         </div>
     </div>
-    </div>
-    <div class="col-4">
-    <div class="card text-center text-white bg-danger mb-3 me-2" >
-        <div class="card-header">TOTAL DE DESPESAS</div>
-        <div class="card-body">
-            <h3 class="card-title">1500</h3>
-        </div>
-    </div>
-    </div>
-    <div class="col-4">
-    <div class="card text-center text-white bg-info mb-3" >
-        <div class="card-header">SALDO</div>
-        <div class="card-body">
-            <h3 class="card-title">1500</h3>
-        </div>
-    </div>
-    </div>
-</div>
 
-<hr>
+    <div class="row row-cols-1 row-cols-md-3 mt-3">
+        <div class="col-4">
+        <div class="card text-center text-white bg-success mb-3 me-2">
+            <div class="card-header">TOTAL DE RECEITAS</div>
+            <div class="card-body">
+                <h3 class="card-title">1500</h3>
+            </div>
+        </div>
+        </div>
+        <div class="col-4">
+        <div class="card text-center text-white bg-danger mb-3 me-2" >
+            <div class="card-header">TOTAL DE DESPESAS</div>
+            <div class="card-body">
+                <h3 class="card-title">1500</h3>
+            </div>
+        </div>
+        </div>
+        <div class="col-4">
+        <div class="card text-center text-white bg-info mb-3" >
+            <div class="card-header">SALDO</div>
+            <div class="card-body">
+                <h3 class="card-title">1500</h3>
+            </div>
+        </div>
+        </div>
+    </div>
 
-<div class="row row-cols-1 row-cols-md-3 mt-3"></div>
+    <hr>
+
+    <div class="row row-cols-1 row-cols-md-3 mt-3"></div>
 
 </div>
