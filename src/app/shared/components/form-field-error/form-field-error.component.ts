@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import { FormGroup } from '@angular/forms'
+import {AbstractControl, FormControl, FormGroup} from '@angular/forms'
 
 
 @Component({
@@ -13,7 +13,7 @@ import { FormGroup } from '@angular/forms'
 })
 export class FormFieldErrorComponent implements OnInit {
 
-  @Input("form-group") formGroup: FormGroup;
+  @Input("form-control") formControl:  FormControl;
 
   constructor() { }
 
@@ -28,12 +28,26 @@ export class FormFieldErrorComponent implements OnInit {
   }
 
   private mustShowErrorMessage(): boolean | undefined {
-    return this.formGroup.touched && this.formGroup.invalid;
+    return this.formControl.touched && this.formControl.invalid;
   }
 
   private getErrorMessage(): string | null {
-    if (this.formGroup.get('required')) {
-      return "Campo obrigatório";
+    if (!(this.formControl.errors) || this.formControl.errors['required']) {
+      return "Campo obrigatório!";
+    }
+
+    if (!(this.formControl.errors) || this.formControl.errors['email']) {
+      return "Formato de email inválido!";
+    }
+
+    if (!(this.formControl.errors) || this.formControl.errors['minlength']) {
+      const requiredLength = this.formControl.errors['minlength']?.['requiredLength']
+      return `Deve conter no mínimo ${requiredLength} caracteres` ;
+    }
+
+    if (!(this.formControl.errors) || this.formControl.errors['maxlength']) {
+      const requiredLength = this.formControl.errors['maxlength']?.['requiredLength']
+      return `Deve conter no máximo ${requiredLength} caracteres` ;
     }
 
     return null;

@@ -20,14 +20,7 @@
                 <input type="text" class="form-control" id="nome" formControlName="name" [ngClass]="{'is-invalid': f['name'].touched && f['name'].invalid}" >
                 <small class="text-muted">Exemplo: Moradia</small>
 
-                <!--<app-form-field-error
-                    [form-group]="resourceForm"
-                ></app-form-field-error>-->
-
-                <div *ngIf="f['name'].touched && f['name'].invalid" class="text-danger">
-                    <div *ngIf="f['name'].errors && f['name'].errors['required']">O Campo nome é obrigatório.</div>
-                    <div *ngIf="f['name'].errors && f['name'].errors['minlength']">Deve conter no mínimo 3 caracteres.</div>
-                </div>
+                <app-form-field-error [form-control]="$any(resourceForm.get('name'))"></app-form-field-error>
             </div>
 
             <div class="col-md-6">
