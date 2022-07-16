@@ -38,7 +38,7 @@
                     </select>
                 </div>
                 <div class="col-12">
-                    <button  class="w-20 btn btn-primary btn-lg mt-3 mb-3 float-end" type="submit">Gerar Relatórios</button>
+                    <button type="button" class="w-20 btn btn-primary btn-lg mt-3 mb-3 float-end" (click)="generateReports()">Gerar Relatórios</button>
                 </div>
             </div>
         </div>
@@ -46,26 +46,26 @@
 
     <div class="row row-cols-1 row-cols-md-3 mt-3">
         <div class="col-4">
-        <div class="card text-center text-white bg-success mb-3 me-2">
-            <div class="card-header">TOTAL DE RECEITAS</div>
-            <div class="card-body">
-                <h3 class="card-title">1500</h3>
+            <div class="card text-center text-white bg-success mb-3 me-2">
+                <div class="card-header">TOTAL DE RECEITAS</div>
+                <div class="card-body">
+                    <h3 class="card-title">{{revenueTotal}}</h3>
+                </div>
             </div>
-        </div>
         </div>
         <div class="col-4">
-        <div class="card text-center text-white bg-danger mb-3 me-2" >
-            <div class="card-header">TOTAL DE DESPESAS</div>
-            <div class="card-body">
-                <h3 class="card-title">1500</h3>
+            <div class="card text-center text-white bg-danger mb-3 me-2" >
+                <div class="card-header">TOTAL DE DESPESAS</div>
+                <div class="card-body">
+                    <h3 class="card-title">{{expenseTotal}}</h3>
+                </div>
             </div>
-        </div>
         </div>
         <div class="col-4">
         <div class="card text-center text-white bg-info mb-3" >
             <div class="card-header">SALDO</div>
             <div class="card-body">
-                <h3 class="card-title">1500</h3>
+                <h3 class="card-title">{{balance}}</h3>
             </div>
         </div>
         </div>
@@ -73,6 +73,13 @@
 
     <hr>
 
-    <div class="row row-cols-1 row-cols-md-3 mt-3"></div>
+    <div class="row row-cols-1 row-cols-md-3 mt-3">
+        <div class="col-6 w-50">
+            <p-chart type="bar" [data]="revenueChartData" [options]="basicOptions"></p-chart>
+        </div>
+        <div class="col-6 w-50">
+            <p-chart type="bar" [data]="expenseChartData" [options]="basicOptions"></p-chart>
+        </div>
+    </div>
 
 </div>
