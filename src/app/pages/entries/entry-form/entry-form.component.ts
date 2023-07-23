@@ -1,5 +1,5 @@
 import {Component, Inject, Injector, OnInit} from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {UntypedFormControl, UntypedFormGroup, Validators} from "@angular/forms";
 
 import { Entry } from "../shared/entry.model";
 import { EntryService } from "../shared/entry.service";
@@ -52,15 +52,15 @@ export class EntryFormComponent extends BaseResourceFormComponent<Entry> impleme
   }
 
   protected buildResourceForm() {
-    this.resourceForm = new FormGroup({
-      id: new FormControl(null),
-      name: new FormControl('', [Validators.required, Validators.minLength(3)]),
-      description: new FormControl(''),
-      type: new FormControl('expense', [Validators.required]),
-      amount: new FormControl('', [Validators.required]),
-      date: new FormControl('', [Validators.required]),
-      paid: new FormControl(true, [Validators.required]),
-      categoryId: new FormControl('', [Validators.required])
+    this.resourceForm = new UntypedFormGroup({
+      id: new UntypedFormControl(null),
+      name: new UntypedFormControl('', [Validators.required, Validators.minLength(3)]),
+      description: new UntypedFormControl(''),
+      type: new UntypedFormControl('expense', [Validators.required]),
+      amount: new UntypedFormControl('', [Validators.required]),
+      date: new UntypedFormControl('', [Validators.required]),
+      paid: new UntypedFormControl(true, [Validators.required]),
+      categoryId: new UntypedFormControl('', [Validators.required])
     });
   }
 

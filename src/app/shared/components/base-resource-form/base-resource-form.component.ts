@@ -1,5 +1,5 @@
 import { OnInit, AfterContentChecked, Injector, Directive } from '@angular/core';
-import {FormBuilder, FormControl, FormGroup} from "@angular/forms";
+import {UntypedFormBuilder, FormControl, UntypedFormGroup} from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
 
 import { BaseResourceModel } from "../../models/base-resource.model";
@@ -13,14 +13,14 @@ import { ToastrService } from 'ngx-toastr';
 export abstract class BaseResourceFormComponent<T extends BaseResourceModel> implements OnInit, AfterContentChecked {
 
     currentAction: string;
-    resourceForm: FormGroup;
+    resourceForm: UntypedFormGroup;
     pageTitle: string;
     serverErrorMessages: any = null;
     submittingForm: boolean = false;
 
     protected route: ActivatedRoute;
     protected router: Router;
-    protected formBuilder: FormBuilder;
+    protected formBuilder: UntypedFormBuilder;
     protected toastrService: ToastrService;
 
     protected constructor(
@@ -31,7 +31,7 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel> imp
     ) {
         this.route = this.injector.get(ActivatedRoute);
         this.router = this.injector.get(Router);
-        this.formBuilder = this.injector.get(FormBuilder);
+        this.formBuilder = this.injector.get(UntypedFormBuilder);
         this.toastrService = this.injector.get(ToastrService);
     }
 

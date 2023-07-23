@@ -1,5 +1,5 @@
 import { Component, OnInit, Input } from '@angular/core';
-import {AbstractControl, FormControl, FormGroup} from '@angular/forms'
+import {AbstractControl, UntypedFormControl, FormGroup} from '@angular/forms'
 
 
 @Component({
@@ -13,7 +13,7 @@ import {AbstractControl, FormControl, FormGroup} from '@angular/forms'
 })
 export class FormFieldErrorComponent implements OnInit {
 
-  @Input("form-control") formControl:  FormControl;
+  @Input("form-control") formControl:  UntypedFormControl;
 
   constructor() { }
 
