@@ -42,6 +42,10 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
+            "allowedCommonJsDependencies": [
+              "moment",
+              "currency-formatter"
+            ],
             "outputPath": "dist/finansys",
             "index": "src/index.html",
             "main": "src/main.ts",
