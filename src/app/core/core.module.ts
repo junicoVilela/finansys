@@ -11,10 +11,12 @@ import { RouterModule } from "@angular/router";
 
 import { InMemoryDatabase } from "../in-memory-database";
 import { NavbarComponent } from './components/navbar/navbar.component';
+import { SidebarComponent } from './components/sidebar/sidebar.component';
 
 @NgModule({
   declarations: [
-    NavbarComponent
+    NavbarComponent,
+    SidebarComponent
   ],
   imports: [
     CommonModule,
@@ -34,7 +36,8 @@ import { NavbarComponent } from './components/navbar/navbar.component';
     HttpClientModule,
 
     //shared components
-    NavbarComponent
+    NavbarComponent,
+    SidebarComponent
   ]
 })
 export class CoreModule { }

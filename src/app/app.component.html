@@ -1,5 +1,16 @@
 <app-navbar></app-navbar>
 
-<div class="container">
-    <router-outlet></router-outlet>
+<div id="layoutDrawer">
+
+    <app-sidebar></app-sidebar>
+
+    <div id="layoutDrawer_content">
+
+        <main>
+            <div class="container-xl px-5">
+                <router-outlet></router-outlet>
+            </div>
+        </main>
+
+    </div>
 </div>
