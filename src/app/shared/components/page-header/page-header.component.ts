@@ -1,9 +1,13 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { NgIf, NgClass } from '@angular/common';
 
 @Component({
   selector: 'app-page-header',
   templateUrl: './page-header.component.html',
-  styleUrls: ['./page-header.component.scss']
+  styleUrls: ['./page-header.component.scss'],
+  standalone: true,
+  imports: [RouterLink, NgIf, NgClass]
 })
 export class PageHeaderComponent implements OnInit {
 

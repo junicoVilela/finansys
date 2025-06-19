@@ -1,4 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
+import { RouterLink } from '@angular/router';
+import { NgFor, NgIf } from '@angular/common';
 
 interface BreadCrumbItem {
   text: string;
@@ -8,7 +10,9 @@ interface BreadCrumbItem {
 @Component({
   selector: 'app-bread-crumb',
   templateUrl: './bread-crumb.component.html',
-  styleUrls: ['./bread-crumb.component.scss']
+  styleUrls: ['./bread-crumb.component.scss'],
+  standalone: true,
+  imports: [RouterLink, NgFor, NgIf]
 })
 export class BreadCrumbComponent implements OnInit {
 

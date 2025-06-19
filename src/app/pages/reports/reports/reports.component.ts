@@ -8,10 +8,16 @@ import { EntryService } from "../../entries/shared/entry.service";
 
 import currencyFormatter from "currency-formatter";
 
+import { BreadCrumbComponent } from "../../../shared/components/bread-crumb/bread-crumb.component";
+import { PageHeaderComponent } from "../../../shared/components/page-header/page-header.component";
+import { ChartModule } from 'primeng/chart';
+
 @Component({
   selector: 'app-reports',
   templateUrl: './reports.component.html',
-  styleUrls: ['./reports.component.scss']
+  styleUrls: ['./reports.component.scss'],
+  standalone: true,
+  imports: [BreadCrumbComponent, PageHeaderComponent, ChartModule]
 })
 export class ReportsComponent implements OnInit {
 

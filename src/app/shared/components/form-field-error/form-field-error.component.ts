@@ -1,7 +1,6 @@
 import { Component, OnInit, Input } from '@angular/core';
 import {AbstractControl, UntypedFormControl, FormGroup} from '@angular/forms'
 
-
 @Component({
   selector: 'app-form-field-error',
   template: `
@@ -9,7 +8,9 @@ import {AbstractControl, UntypedFormControl, FormGroup} from '@angular/forms'
       {{errorMessage}}
     </p>
   `,
-  styleUrls: ['./form-field-error.component.scss']
+  styleUrls: ['./form-field-error.component.scss'],
+  standalone: true,
+  imports: []
 })
 export class FormFieldErrorComponent implements OnInit {
 

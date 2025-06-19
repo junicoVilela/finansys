@@ -1,15 +1,23 @@
 import {Component, Injector} from '@angular/core';
-import {FormControl, FormGroup, Validators} from "@angular/forms";
+import {FormControl, FormGroup, Validators, ReactiveFormsModule} from "@angular/forms";
 
 import { BaseResourceFormComponent } from "../../../shared/components/base-resource-form/base-resource-form.component";
 
 import { Category } from "../shared/category.model";
 import { CategoryService } from "../shared/category.service";
 
+import { BreadCrumbComponent } from "../../../shared/components/bread-crumb/bread-crumb.component";
+import { PageHeaderComponent } from "../../../shared/components/page-header/page-header.component";
+import { ServerErrorMessagesComponent } from "../../../shared/components/server-error-messages/server-error-messages.component";
+import { FormFieldErrorComponent } from "../../../shared/components/form-field-error/form-field-error.component";
+import { NgClass } from '@angular/common';
+
 @Component({
   selector: 'app-category-form',
   templateUrl: './category-form.component.html',
-  styleUrls: ['./category-form.component.scss']
+  styleUrls: ['./category-form.component.scss'],
+  standalone: true,
+  imports: [BreadCrumbComponent, PageHeaderComponent, ServerErrorMessagesComponent, FormFieldErrorComponent, ReactiveFormsModule, NgClass]
 })
 export class CategoryFormComponent extends BaseResourceFormComponent<Category> {
 
