@@ -1,27 +1,213 @@
-# Finansys
+# Finansys - Sistema de Controle Financeiro
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 13.3.4.
+Sistema de controle financeiro pessoal desenvolvido em Angular 17 com arquitetura modular e componentizada.
 
-## Development server
+## 📋 Sobre o Projeto
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+O Finansys é uma aplicação web para gerenciamento de finanças pessoais que permite:
+- Cadastro e gerenciamento de categorias
+- Registro de lançamentos (receitas e despesas)
+- Geração de relatórios com gráficos
+- Controle de pagamentos
+- Análise de balanço financeiro
 
-## Code scaffolding
+## 🏗️ Arquitetura do Sistema
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+### Estrutura de Pastas
 
-## Build
+```
+src/app/
+├── core/                    # Módulo principal da aplicação
+│   ├── components/          # Componentes globais (navbar, etc.)
+│   ├── guards/              # Guards de autenticação e autorização
+│   ├── interceptors/        # Interceptors HTTP
+│   └── services/            # Serviços globais
+├── shared/                  # Recursos compartilhados
+│   ├── components/          # Componentes reutilizáveis
+│   │   ├── base-resource-form/     # Formulário base para CRUD
+│   │   ├── base-resource-list/     # Lista base para CRUD
+│   │   ├── bread-crumb/            # Navegação breadcrumb
+│   │   ├── form-field-error/       # Exibição de erros de formulário
+│   │   ├── page-header/            # Cabeçalho de páginas
+│   │   └── server-error-messages/  # Mensagens de erro do servidor
+│   ├── models/              # Modelos base
+│   ├── services/            # Serviços base
+│   ├── utils/               # Utilitários
+│   └── constants/           # Constantes da aplicação
+├── pages/                   # Páginas da aplicação
+│   ├── categories/          # Módulo de categorias
+│   │   ├── category-form/   # Formulário de categoria
+│   │   ├── category-list/   # Lista de categorias
+│   │   └── shared/          # Serviços e modelos de categoria
+│   ├── entries/             # Módulo de lançamentos
+│   │   ├── entry-form/      # Formulário de lançamento
+│   │   ├── entry-list/      # Lista de lançamentos
+│   │   └── shared/          # Serviços e modelos de lançamento
+│   └── reports/             # Módulo de relatórios
+│       └── reports/         # Componente de relatórios
+├── app-routing.ts           # Configuração de rotas
+├── app.component.*          # Componente raiz
+└── in-memory-database.ts    # Base de dados em memória
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+### Padrões Arquiteturais Implementados
 
-## Running unit tests
+#### 1. **Arquitetura em Camadas**
+- **Apresentação**: Componentes Angular com templates e estilos
+- **Lógica de Negócio**: Services e Models
+- **Dados**: Angular In-Memory Web API
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+#### 2. **Padrão Repository**
+- `BaseResourceService`: Classe abstrata com operações CRUD básicas
+- `CategoryService` e `EntryService`: Implementações específicas
 
-## Running end-to-end tests
+#### 3. **Componentes Base Reutilizáveis**
+- `BaseResourceListComponent`: Lista genérica com funcionalidades de CRUD
+- `BaseResourceFormComponent`: Formulário genérico para criação/edição
+- Componentes especializados herdam e estendem a funcionalidade base
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+#### 4. **Injeção de Dependências**
+- Uso do sistema de DI do Angular
+- Services singleton para compartilhamento de estado
+- Injector pattern para flexibilidade na injeção
 
-## Further help
+#### 5. **Standalone Components**
+- Componentes independentes sem necessidade de NgModules
+- Imports diretos nos componentes
+- Melhor tree-shaking e performance
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+### Funcionalidades Técnicas
+
+#### **Gerenciamento de Estado**
+- Estado local nos componentes
+- Serviços para compartilhamento de dados
+- Notificações com Toastr
+
+#### **Validação de Formulários**
+- Reactive Forms com validações customizadas
+- Exibição de erros em tempo real
+- Componente dedicado para mensagens de erro
+
+#### **Tratamento de Erros**
+- Interceptor HTTP para captura global de erros
+- Componente para exibição de erros do servidor
+- Sistema de notificações para feedback ao usuário
+
+#### **Navegação e UX**
+- Breadcrumb para navegação contextual
+- Page headers padronizados
+- Loading states durante operações assíncronas
+
+#### **Relatórios e Visualização**
+- Integração com PrimeNG Charts
+- Gráficos de receitas e despesas por categoria
+- Cálculos de balanço em tempo real
+- Formatação de moeda brasileira
+
+## 🚀 Tecnologias Utilizadas
+
+- **Angular 17**: Framework principal
+- **TypeScript**: Linguagem de programação
+- **Bootstrap**: Framework CSS para styling
+- **PrimeNG**: Biblioteca de componentes UI
+- **Chart.js**: Biblioteca para gráficos
+- **Angular In-Memory Web API**: Simulação de backend
+- **ngx-toastr**: Sistema de notificações
+- **currency-formatter**: Formatação de valores monetários
+
+## 📦 Instalação e Execução
+
+### Pré-requisitos
+- Node.js (versão 18 ou superior)
+- npm ou yarn
+
+### Instalação
+```bash
+# Clone o repositório
+git clone [url-do-repositorio]
+
+# Navegue até o diretório
+cd finansys
+
+# Instale as dependências
+npm install
+```
+
+### Execução
+```bash
+# Servidor de desenvolvimento
+ng serve
+
+# Acesse http://localhost:4200
+```
+
+### Build
+```bash
+# Build para produção
+ng build
+
+# Os arquivos serão gerados em dist/
+```
+
+## 🧪 Testes
+
+```bash
+# Testes unitários
+ng test
+
+# Testes e2e
+ng e2e
+```
+
+## 📊 Funcionalidades
+
+### Categorias
+- ✅ Listagem de categorias
+- ✅ Criação de novas categorias
+- ✅ Edição de categorias existentes
+- ✅ Exclusão de categorias
+- ✅ Validação de formulários
+
+### Lançamentos
+- ✅ Listagem de lançamentos (receitas e despesas)
+- ✅ Criação de novos lançamentos
+- ✅ Edição de lançamentos existentes
+- ✅ Exclusão de lançamentos
+- ✅ Associação com categorias
+- ✅ Controle de status de pagamento
+- ✅ Formatação de valores monetários
+
+### Relatórios
+- ✅ Relatórios por mês/ano
+- ✅ Gráficos de receitas por categoria
+- ✅ Gráficos de despesas por categoria
+- ✅ Cálculo de balanço (receitas - despesas)
+- ✅ Totalizadores formatados em moeda
+
+## 🔧 Configuração
+
+### Ambiente de Desenvolvimento
+O projeto utiliza Angular In-Memory Web API para simular um backend. Os dados são definidos em `src/app/in-memory-database.ts`.
+
+### Proxy (Desabilitado)
+O arquivo `proxy.conf.json` está configurado mas desabilitado para permitir o funcionamento da API em memória.
+
+## 🤝 Contribuição
+
+1. Faça um fork do projeto
+2. Crie uma branch para sua feature (`git checkout -b feature/AmazingFeature`)
+3. Commit suas mudanças (`git commit -m 'Add some AmazingFeature'`)
+4. Push para a branch (`git push origin feature/AmazingFeature`)
+5. Abra um Pull Request
+
+## 📝 Licença
+
+Este projeto está sob a licença MIT. Veja o arquivo `LICENSE` para mais detalhes.
+
+## 📞 Suporte
+
+Para suporte, entre em contato através do [GitHub Issues](link-para-issues).
+
+---
+
+Desenvolvido com ❤️ usando Angular
