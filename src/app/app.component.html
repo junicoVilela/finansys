@@ -1,16 +1,15 @@
-<app-navbar></app-navbar>
+<div class="content">
+  <app-navbar></app-navbar>
 
-<div id="layoutDrawer">
-
-    <app-sidebar></app-sidebar>
-
-    <div id="layoutDrawer_content">
-
-        <main>
-            <div class="container-xl px-5">
-                <router-outlet></router-outlet>
-            </div>
-        </main>
-
+  <div class="row m-0">
+    <div class="col-md-3 p-0">
+      <app-sidebar></app-sidebar>
     </div>
+
+    <div class="col-md-9 p-4">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
 </div>
+
+<app-loading></app-loading>

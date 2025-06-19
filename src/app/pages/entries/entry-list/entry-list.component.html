@@ -11,13 +11,26 @@
 
 <div class="my-3 p-3 bg-body rounded shadow-sm">
     <h4 class="pb-4 text-opacity-25">Lista de lançamentos</h4>
-    <table class="table table-bordered table-hover caption-top">
+    
+    <div *ngIf="isLoading" class="text-center p-4">
+        <div class="spinner-border text-primary" role="status">
+            <span class="visually-hidden">Carregando...</span>
+        </div>
+        <p class="mt-2">Carregando lançamentos...</p>
+    </div>
+    
+    <div *ngIf="!isLoading && resources.length === 0" class="text-center p-4 text-muted">
+        <p>Nenhum lançamento encontrado.</p>
+        <a routerLink="new" class="btn btn-primary">Criar primeiro lançamento</a>
+    </div>
+    
+    <table *ngIf="!isLoading && resources.length > 0" class="table table-bordered table-hover caption-top">
         <thead class="table-light">
         <tr>
-            <th scope="col">Lançamento</th>
-            <th scope="col" class="text-center">Categoria</th>
-            <th scope="col" class="text-center">Valor R$</th>
-            <th scope="col" class="w-25 p-2 text-center">Ações</th>
+            <th scope="col" class="p-2">Lançamento</th>
+            <th scope="col" class="p-2">Categoria</th>
+            <th scope="col" class="p-2 text-end">Valor</th>
+            <th scope="col" class="p-2 text-center">Ações</th>
         </tr>
         </thead>
         <tbody>
@@ -27,19 +40,24 @@
                     <small class="text-success">{{ entry.date }}</small><br>
                     <small *ngIf="entry.description">{{ entry.description }}</small>
                 </td>
-                <td class="text-center">
+                <td>
                     {{ entry.category?.name }}
                 </td>
                 <td class="text-end">
-                    <strong [class.text-success]="entry.type == 'revenue'" [class.text-danger]="entry.type == 'expense'" >
-                    {{ entry.amount }}
-                    </strong>
-                    <br>
-                    <span class="badge rounded-pill" [class.bg-danger]="entry.paid == false" [class.bg-success]="entry.paid == true">{{entry.paidText}}</span>
+                    <strong
+                        [class.text-success]="entry.type === 'revenue'"
+                        [class.text-danger]="entry.type === 'expense'">
+                        {{ entry.amount | currency:'BRL' }}
+                    </strong><br>
+                    <span 
+                        class="badge"
+                        [ngClass]="entry.paid ? 'bg-success' : 'bg-danger'">
+                        {{ entry.paid ? 'Pago' : 'Pendente' }}
+                    </span>
                 </td>
-                <td class="w-25 p-2 text-center">
-                    <a [routerLink]="[entry.id, 'edit']" class="btn btn-outline-info btn-sm m-2">Editar</a>
-                    <button (click)="deleteResource(entry)" class="btn btn-outline-danger btn-sm">Deletar</button>
+                <td class="text-center">
+                    <a [routerLink]="[entry.id, 'edit']" class="btn btn-outline-info btn-sm m-1">Editar</a>
+                    <button (click)="deleteResource(entry)" class="btn btn-outline-danger btn-sm m-1">Deletar</button>
                 </td>
             </tr>
         </tbody>

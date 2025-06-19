@@ -93,11 +93,11 @@ export class ReportsComponent implements OnInit {
 
     this.entries.forEach(entry => {
       if(entry.type == 'revenue') {
-        revenueTotal += currencyFormatter.unformat(entry.amount!, {code: 'BRL'})
+        revenueTotal += entry.amount!;
       }
 
       if(entry.type == 'expense') {
-        expenseTotal += currencyFormatter.unformat(entry.amount!, {code: 'BRL'})
+        expenseTotal += entry.amount!;
       }
 
     });
@@ -120,7 +120,7 @@ export class ReportsComponent implements OnInit {
 
       if(filteredEntries.length > 0) {
         const totalAmount = filteredEntries.reduce(
-            (total, entry) => total + currencyFormatter.unformat(entry.amount!, { code: 'BRL'}), 0
+            (total, entry) => total + entry.amount!, 0
         )
 
         chartData.push({

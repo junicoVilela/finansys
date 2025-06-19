@@ -6,10 +6,9 @@ import { Category } from "./category.model";
 @Injectable({
   providedIn: 'root'
 })
-export class CategoryService extends BaseResourceService<Category>{
+export class CategoryService extends BaseResourceService<Category> {
 
   constructor(protected override injector: Injector) {
-    super("api/categories", injector, Category.fromJson)
+    super("categories", injector, Category.fromJson);
   }
-
 }

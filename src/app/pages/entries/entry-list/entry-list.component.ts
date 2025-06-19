@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, Injector } from '@angular/core';
 
 import { Entry } from "../shared/entry.model";
 import { EntryService } from "../shared/entry.service";
@@ -8,18 +8,22 @@ import { BreadCrumbComponent } from "../../../shared/components/bread-crumb/brea
 import { PageHeaderComponent } from "../../../shared/components/page-header/page-header.component";
 import { RouterLink } from '@angular/router';
 import { NgFor, NgIf, NgClass } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 
 @Component({
   selector: 'app-entry-list',
   templateUrl: './entry-list.component.html',
   styleUrls: ['./entry-list.component.scss'],
   standalone: true,
-  imports: [BreadCrumbComponent, PageHeaderComponent, RouterLink, NgFor, NgIf, NgClass]
+  imports: [BreadCrumbComponent, PageHeaderComponent, RouterLink, NgFor, NgIf, NgClass, CurrencyPipe]
 })
 export class EntryListComponent extends BaseResourceListComponent<Entry>{
 
-  constructor(private entryService: EntryService) {
-    super(entryService)
+  constructor(
+    private entryService: EntryService,
+    protected override injector: Injector
+  ) {
+    super(entryService, injector)
   }
 
 }

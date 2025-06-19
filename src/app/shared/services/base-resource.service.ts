@@ -1,13 +1,14 @@
-import { HttpClient } from "@angular/common/http";
+import { HttpClient, HttpErrorResponse } from "@angular/common/http";
 import { Injector } from "@angular/core";
 
 import { Observable, throwError } from "rxjs";
 import { map, catchError } from "rxjs/operators";
 
 import { BaseResourceModel } from "../models/base-resource.model";
+import { environment } from "../../../environments/environment";
 
 
-export abstract  class BaseResourceService<T extends BaseResourceModel> {
+export abstract class BaseResourceService<T extends BaseResourceModel> {
 
     protected http: HttpClient;
 
@@ -16,56 +17,58 @@ export abstract  class BaseResourceService<T extends BaseResourceModel> {
         protected injector: Injector,
         protected jsonDataToResourceFn: (jsonData: any) => T
     ) {
-        this.http = injector.get(HttpClient)
+        this.http = injector.get(HttpClient);
     }
 
     getAll(): Observable<T[]> {
-        return this.http.get(this.apiPath).pipe(
-            map((x: any) => this.jsonDataToResources(x)),
-            catchError(this.handleError))
+        const url = `${environment.apiUrl}/${this.apiPath}`;
+        return this.http.get<any[]>(url).pipe(
+            map((jsonData: any[]) => this.jsonDataToResources(jsonData)),
+            catchError(this.handleError)
+        );
     }
 
     getById(id: number): Observable<T> {
-        const url = `${this.apiPath}/${id}`;
+        const url = `${environment.apiUrl}/${this.apiPath}/${id}`;
 
-        return this.http.get(url).pipe(
-            map(x => this.jsonDataToResource(x)),
+        return this.http.get<any>(url).pipe(
+            map((jsonData: any) => this.jsonDataToResource(jsonData)),
             catchError(this.handleError)
-
-        )
+        );
     }
 
     create(resource: T): Observable<T> {
-        return this.http.post(this.apiPath, resource).pipe(
-            map(x => this.jsonDataToResource(x)),
+        const url = `${environment.apiUrl}/${this.apiPath}`;
+        return this.http.post<any>(url, resource).pipe(
+            map((jsonData: any) => this.jsonDataToResource(jsonData)),
             catchError(this.handleError)
-        )
+        );
     }
 
     update(resource: T): Observable<T> {
-        const url = `${this.apiPath}/${resource.id}`;
+        const url = `${environment.apiUrl}/${this.apiPath}/${resource.id}`;
 
-        return this.http.put(url, resource).pipe(
-            map(() => resource),
+        return this.http.put<any>(url, resource).pipe(
+            map((jsonData: any) => this.jsonDataToResource(jsonData)),
             catchError(this.handleError)
-        )
+        );
     }
 
-    delete(id: number): Observable<any> {
-        const url = `${this.apiPath}/${id}`;
+    delete(id: number): Observable<void> {
+        const url = `${environment.apiUrl}/${this.apiPath}/${id}`;
 
-        return this.http.delete(url).pipe(
-            map(() => null),
+        return this.http.delete<void>(url).pipe(
             catchError(this.handleError)
-        )
+        );
     }
 
     protected jsonDataToResources(jsonData: any[]): T[] {
-        console.log(this);
-        const resources:  T[] = [];
-        jsonData.forEach(element =>
-            resources.push(this.jsonDataToResourceFn(element))
-        );
+        const resources: T[] = [];
+        if (Array.isArray(jsonData)) {
+            jsonData.forEach(element =>
+                resources.push(this.jsonDataToResourceFn(element))
+            );
+        }
         return resources;
     }
 
@@ -73,10 +76,18 @@ export abstract  class BaseResourceService<T extends BaseResourceModel> {
         return this.jsonDataToResourceFn(jsonData);
     }
 
-    protected handleError(error: any): Observable<any> {
-        console.log("ERRO NA REQUISIÇÃO ==> ", error);
+    protected handleError = (error: HttpErrorResponse): Observable<never> => {
+        if (environment.enableLogs) {
+            console.error("Erro na requisição:", {
+                status: error.status,
+                message: error.message,
+                url: error.url,
+                error: error.error
+            });
+        }
 
-        return throwError(error);
+        // Deixa o ErrorInterceptor lidar com a maioria dos erros
+        // Mas ainda registra para debugging se necessário
+        return throwError(() => error);
     }
-
 }

@@ -1,17 +1,11 @@
-import {Component, Inject, Injector, OnInit} from '@angular/core';
+import {Component, Injector, OnInit} from '@angular/core';
 import {UntypedFormControl, UntypedFormGroup, Validators, ReactiveFormsModule} from "@angular/forms";
 import { NgFor, NgClass, JsonPipe } from "@angular/common";
-
-// Imports de componentes standalone
 import { BreadCrumbComponent } from "../../../shared/components/bread-crumb/bread-crumb.component";
 import { PageHeaderComponent } from "../../../shared/components/page-header/page-header.component";
 import { ServerErrorMessagesComponent } from "../../../shared/components/server-error-messages/server-error-messages.component";
 import { FormFieldErrorComponent } from "../../../shared/components/form-field-error/form-field-error.component";
-
-// Imports do PrimeNG
 import { CalendarModule } from 'primeng/calendar';
-
-// Imports do IMask
 import { IMaskModule } from 'angular-imask';
 
 import { Entry } from "../shared/entry.model";

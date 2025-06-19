@@ -15,7 +15,7 @@ import * as moment from "moment";
 export class EntryService extends BaseResourceService<Entry>{
 
     constructor(protected override injector: Injector, private categoryService: CategoryService) {
-        super("api/entries", injector, Entry.fromJson);
+        super("entries", injector, Entry.fromJson);
     }
 
     override create(entry: Entry): Observable<Entry> {

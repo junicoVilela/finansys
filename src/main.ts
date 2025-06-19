@@ -7,10 +7,15 @@ import { AppComponent } from './app/app.component';
 import { PreloadAllModules, provideRouter, withPreloading } from "@angular/router";
 import { APP_ROUTES } from "./app/app-routing";
 import { provideAnimations } from "@angular/platform-browser/animations";
-import { provideHttpClient, withFetch, withInterceptors } from "@angular/common/http";
+import { provideHttpClient, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { MatToolbarModule } from "@angular/material/toolbar";
 import { ToastrModule } from "ngx-toastr";
 import { provideNgxMask } from "ngx-mask";
+import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
+import { InMemoryDatabase } from './app/in-memory-database';
+
+import { ErrorInterceptor } from './app/core/interceptors/error.interceptor';
+import { LoadingInterceptor } from './app/core/interceptors/loading.interceptor';
 
 if (environment.production) {
   enableProdMode();
@@ -18,12 +23,37 @@ if (environment.production) {
 
 bootstrapApplication(AppComponent, {
     providers: [
-        importProvidersFrom(BrowserModule, MatToolbarModule, ToastrModule.forRoot()),
+        // HttpClient deve vir primeiro
+        provideHttpClient(),
+        
+        // Depois os módulos importados
+        importProvidersFrom(
+            BrowserModule, 
+            MatToolbarModule, 
+            ToastrModule.forRoot(),
+            HttpClientInMemoryWebApiModule.forRoot(InMemoryDatabase, { 
+                delay: 500,
+                passThruUnknownUrl: true 
+            })
+        ),
+        
+        // Outros providers
         provideNgxMask(),
         provideAnimations(),
-        provideHttpClient(
-            withFetch()
-        ),
+        
+        // Interceptors
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: LoadingInterceptor,
+            multi: true
+        },
+        {
+            provide: HTTP_INTERCEPTORS,
+            useClass: ErrorInterceptor,
+            multi: true
+        },
+        
+        // Router por último
         provideRouter(APP_ROUTES, withPreloading(PreloadAllModules))
     ]
 })
