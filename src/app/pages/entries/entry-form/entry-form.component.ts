@@ -1,6 +1,6 @@
 import {Component, Injector, OnInit} from '@angular/core';
 import {UntypedFormControl, UntypedFormGroup, Validators, ReactiveFormsModule} from "@angular/forms";
-import { NgFor, NgClass, JsonPipe } from "@angular/common";
+import { NgFor, NgClass } from "@angular/common";
 import { BreadCrumbComponent } from "../../../shared/components/bread-crumb/bread-crumb.component";
 import { PageHeaderComponent } from "../../../shared/components/page-header/page-header.component";
 import { ServerErrorMessagesComponent } from "../../../shared/components/server-error-messages/server-error-messages.component";
@@ -8,7 +8,6 @@ import { FormFieldErrorComponent } from "../../../shared/components/form-field-e
 import { CalendarModule } from 'primeng/calendar';
 import { NgxMaskDirective } from 'ngx-mask';
 import { PrimeNGConfig } from 'primeng/api';
-import { switchMap } from 'rxjs/operators';
 
 import { Entry } from "../shared/entry.model";
 import { EntryService } from "../shared/entry.service";
