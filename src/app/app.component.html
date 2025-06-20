@@ -2,11 +2,13 @@
   <app-navbar></app-navbar>
 
   <div class="row m-0">
-    <div class="col-md-3 p-0">
+    <!-- Sidebar - só aparece se estiver logado -->
+    <div class="col-md-3 p-0" *ngIf="isAuthenticated$ | async">
       <app-sidebar></app-sidebar>
     </div>
 
-    <div class="col-md-9 p-4">
+    <!-- Conteúdo principal - ajusta baseado se sidebar está visível -->
+    <div [ngClass]="(isAuthenticated$ | async) ? 'col-md-9' : 'col-12'" class="p-4">
       <router-outlet></router-outlet>
     </div>
   </div>

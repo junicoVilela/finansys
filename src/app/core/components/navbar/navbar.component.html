@@ -1,17 +1,15 @@
 <nav class="top-app-bar navbar navbar-expand navbar-dark bg-dark">
     <div class="container-fluid px-4">
-        <!-- Drawer toggle button-->
-        <button class="btn btn-lg btn-icon order-1 order-lg-0" id="drawerToggle" href="javascript:void(0);"><i
-
-            class="material-icons">menu</i></button>
+        <!-- Drawer toggle button - só aparece se estiver logado -->
+        <button class="btn btn-lg btn-icon order-1 order-lg-0" id="drawerToggle" href="javascript:void(0);" *ngIf="isAuthenticated$ | async">
+            <i class="material-icons">menu</i>
+        </button>
         <!-- Navbar brand-->
         <a class="navbar-brand me-auto" href="index.html">
-
             <div class="text-uppercase font-monospace">Insight Sales</div>
-
         </a>
         <!-- Navbar items-->
-        <div class="d-flex align-items-center mx-3 me-lg-0">
+        <div class="d-flex align-items-center mx-3 me-lg-0" *ngIf="isAuthenticated$ | async">
             <!-- Navbar-->
             <ul class="navbar-nav d-none d-lg-flex">
                 <li class="nav-item" routerLinkActive="active">
@@ -157,42 +155,79 @@
                         </li>
                     </ul>
                 </div>
-                <!-- User profile dropdown-->
-                <div class="dropdown">
-                    <button class="btn btn-lg btn-icon dropdown-toggle" id="dropdownMenuProfile" type="button" data-bs-toggle="dropdown" aria-expanded="false">
-                        <i class="material-icons">person</i>
+                <!-- User info and logout when authenticated -->
+                <div class="d-flex align-items-center mx-3 me-lg-0" *ngIf="isAuthenticated$ | async">
+                    <!-- User greeting -->
+                    <div class="user-greeting me-3 d-none d-md-block" *ngIf="currentUser$ | async as user">
+                        <span class="text-white small">Olá, {{ (user.name?.split(' ') || [])[0] || 'Usuário' }}!</span>
+                    </div>
+                    
+                    <!-- Quick logout button -->
+                    <button 
+                        class="btn btn-outline-light btn-sm me-2 logout-btn" 
+                        (click)="onLogout()"
+                        title="Sair do sistema"
+                    >
+                        <i class="material-icons">logout</i>
+                        <span class="d-none d-lg-inline ms-1">Sair</span>
                     </button>
-                    <ul class="dropdown-menu dropdown-menu-end mt-3" aria-labelledby="dropdownMenuProfile">
-                        <li>
-                            <a class="dropdown-item" href="#!">
-                                <i class="material-icons leading-icon">person</i>
-                                <div class="me-3">Profile</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#!">
-                                <i class="material-icons leading-icon">settings</i>
-                                <div class="me-3">Settings</div>
-                            </a>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#!">
-                                <i class="material-icons leading-icon">help</i>
-                                <div class="me-3">Help</div>
-                            </a>
-                        </li>
-                        <li>
-                            <hr class="dropdown-divider"/>
-                        </li>
-                        <li>
-                            <a class="dropdown-item" href="#!">
-                                <i class="material-icons leading-icon">logout</i>
-                                <div class="me-3">Logout</div>
-                            </a>
-                        </li>
-                    </ul>
+
+                    <div class="navbar-vertical-divider d-none d-md-flex"></div>
+                    <div class="ms-3 d-none d-md-flex">
+                        <!-- User profile dropdown-->
+                        <div class="dropdown" *ngIf="currentUser$ | async as user">
+                            <button class="btn btn-lg btn-icon dropdown-toggle d-flex align-items-center" id="dropdownMenuProfile" type="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                <i class="material-icons me-1">person</i>
+                                <span class="d-none d-md-inline text-white">{{ user.name || 'Usuário' }}</span>
+                            </button>
+                            <ul class="dropdown-menu dropdown-menu-end mt-3" aria-labelledby="dropdownMenuProfile">
+                                <li class="dropdown-header">
+                                    <div class="text-muted small">Logado como</div>
+                                    <div>{{ user.name || 'Usuário' }}</div>
+                                    <div class="text-muted small">{{ user.email || 'email@exemplo.com' }}</div>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider"/>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#!">
+                                        <i class="material-icons leading-icon">person</i>
+                                        <div class="me-3">Perfil</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#!">
+                                        <i class="material-icons leading-icon">settings</i>
+                                        <div class="me-3">Configurações</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item" href="#!">
+                                        <i class="material-icons leading-icon">help</i>
+                                        <div class="me-3">Ajuda</div>
+                                    </a>
+                                </li>
+                                <li>
+                                    <hr class="dropdown-divider"/>
+                                </li>
+                                <li>
+                                    <a class="dropdown-item logout-dropdown" href="#!" (click)="onLogout()">
+                                        <i class="material-icons leading-icon">logout</i>
+                                        <div class="me-3">Sair</div>
+                                    </a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
                 </div>
             </div>
+        </div>
+        <!-- Login button for non-authenticated users -->
+        <div class="d-flex align-items-center" *ngIf="!(isAuthenticated$ | async)">
+            <a class="btn btn-primary" routerLink="/auth/login">
+                <i class="material-icons me-1">login</i>
+                Entrar
+            </a>
         </div>
     </div>
 </nav>

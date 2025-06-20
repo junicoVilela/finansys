@@ -1,0 +1,86 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h1>Criar Conta</h1>
+      <p>Preencha os dados para criar sua conta</p>
+    </div>
+
+    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form" novalidate>
+      <div class="form-group">
+        <label for="name" class="form-label">Nome Completo</label>
+        <input
+          id="name"
+          type="text"
+          formControlName="name"
+          class="form-control"
+          [ngClass]="{'is-invalid': f['name'].invalid && f['name'].touched}"
+          placeholder="Digite seu nome completo"
+          autocomplete="name"
+        />
+        <app-form-field-error [form-control]="f['name']"></app-form-field-error>
+      </div>
+
+      <div class="form-group">
+        <label for="email" class="form-label">Email</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          class="form-control"
+          [ngClass]="{'is-invalid': f['email'].invalid && f['email'].touched}"
+          placeholder="Digite seu email"
+          autocomplete="email"
+        />
+        <app-form-field-error [form-control]="f['email']"></app-form-field-error>
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="form-label">Senha</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          class="form-control"
+          [ngClass]="{'is-invalid': f['password'].invalid && f['password'].touched}"
+          placeholder="Digite sua senha (mínimo 6 caracteres)"
+          autocomplete="new-password"
+        />
+        <app-form-field-error [form-control]="f['password']"></app-form-field-error>
+      </div>
+
+      <div class="form-group">
+        <label for="confirmPassword" class="form-label">Confirmar Senha</label>
+        <input
+          id="confirmPassword"
+          type="password"
+          formControlName="confirmPassword"
+          class="form-control"
+          [ngClass]="{'is-invalid': (f['confirmPassword'].invalid && f['confirmPassword'].touched) || passwordMismatch}"
+          placeholder="Confirme sua senha"
+          autocomplete="new-password"
+        />
+        <app-form-field-error [form-control]="f['confirmPassword']"></app-form-field-error>
+        <p *ngIf="passwordMismatch" class="text-danger">As senhas não coincidem</p>
+      </div>
+
+      <div class="form-actions">
+        <button 
+          type="submit" 
+          class="btn btn-primary btn-auth"
+          [disabled]="registerForm.invalid || submittingForm"
+        >
+          <span *ngIf="submittingForm" class="spinner"></span>
+          <span *ngIf="!submittingForm">Criar Conta</span>
+          <span *ngIf="submittingForm">Criando...</span>
+        </button>
+      </div>
+
+      <div class="auth-links">
+        <p>
+          Já tem uma conta? 
+          <a routerLink="/auth/login" class="auth-link">Faça login</a>
+        </p>
+      </div>
+    </form>
+  </div>
+</div> 

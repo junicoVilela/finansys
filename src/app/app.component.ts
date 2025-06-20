@@ -1,16 +1,24 @@
 import { Component } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
+import { CommonModule } from '@angular/common';
+import { Observable } from 'rxjs';
 import { SidebarComponent } from './core/components/sidebar/sidebar.component';
 import { NavbarComponent } from './core/components/navbar/navbar.component';
 import { LoadingComponent } from './shared/components/loading/loading.component';
+import { AuthService } from './core/services/auth.service';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
   styleUrls: ['./app.component.scss'],
   standalone: true,
-  imports: [NavbarComponent, SidebarComponent, RouterOutlet, LoadingComponent]
+  imports: [CommonModule, NavbarComponent, SidebarComponent, RouterOutlet, LoadingComponent]
 })
 export class AppComponent {
   title = 'finansys';
+  isAuthenticated$: Observable<boolean>;
+
+  constructor(private authService: AuthService) {
+    this.isAuthenticated$ = this.authService.isAuthenticated$;
+  }
 }

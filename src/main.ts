@@ -5,7 +5,7 @@ import {bootstrapApplication, BrowserModule} from '@angular/platform-browser';
 import { AppComponent } from './app/app.component';
 
 import { PreloadAllModules, provideRouter, withPreloading } from "@angular/router";
-import { APP_ROUTES } from "./app/app-routing";
+import { routes } from "./app/app-routing";
 import { provideAnimations } from "@angular/platform-browser/animations";
 import { provideHttpClient, HTTP_INTERCEPTORS } from "@angular/common/http";
 import { ToastrModule } from "ngx-toastr";
@@ -31,7 +31,8 @@ bootstrapApplication(AppComponent, {
             ToastrModule.forRoot(),
             HttpClientInMemoryWebApiModule.forRoot(InMemoryDatabase, { 
                 delay: 500,
-                passThruUnknownUrl: true 
+                passThruUnknownUrl: true,
+                dataEncapsulation: false
             })
         ),
         
@@ -52,7 +53,7 @@ bootstrapApplication(AppComponent, {
         },
         
         // Router por último
-        provideRouter(APP_ROUTES, withPreloading(PreloadAllModules))
+        provideRouter(routes, withPreloading(PreloadAllModules))
     ]
 })
   .catch(err => console.error(err));

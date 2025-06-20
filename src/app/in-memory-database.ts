@@ -66,6 +66,194 @@ export class InMemoryDatabase implements InMemoryDbService {
             { id: 30, name: 'Freelance Mobile', categoryId: 5, category: categories[4], paid: true, date: "28/10/2024", amount: 900.00, type: "revenue", description: "App mobile" } as Entry
         ];
 
-        return { categories, entries }
+        const users = [
+            {
+                id: 1,
+                name: "Admin Finansys",
+                email: "admin@finansys.com",
+                password: "123456",
+                avatar: null,
+                isActive: true,
+                createdAt: "2024-01-01T00:00:00Z",
+                updatedAt: "2024-01-01T00:00:00Z"
+            },
+            {
+                id: 2,
+                name: "João Silva",
+                email: "joao@teste.com",
+                password: "123456",
+                avatar: null,
+                isActive: true,
+                createdAt: "2024-01-15T00:00:00Z",
+                updatedAt: "2024-01-15T00:00:00Z"
+            },
+            {
+                id: 3,
+                name: "Maria Santos",
+                email: "maria@teste.com",
+                password: "123456",
+                avatar: null,
+                isActive: true,
+                createdAt: "2024-02-01T00:00:00Z",
+                updatedAt: "2024-02-01T00:00:00Z"
+            }
+        ];
+
+        return { categories, entries, users };
+    }
+
+    // Intercepta requisições de autenticação
+    post(reqInfo: any) {
+        const { url, body } = reqInfo;
+        console.log('InMemoryDatabase POST:', { 
+            url, 
+            body, 
+            reqInfo: reqInfo,
+            hasBody: !!reqInfo.body,
+            requestBody: reqInfo.req?.body,
+            req: reqInfo.req
+        });
+
+        // Login
+        if (url.includes('auth/login')) {
+            console.log('Matching login URL');
+            return this.handleLogin(reqInfo);
+        }
+
+        // Registro
+        if (url.includes('auth/register')) {
+            console.log('Matching register URL');
+            return this.handleRegister(reqInfo);
+        }
+
+        // Esqueci senha
+        if (url.includes('auth/forgot-password')) {
+            console.log('Matching forgot password URL');
+            return this.handleForgotPassword(reqInfo);
+        }
+
+        // Delega para o comportamento padrão da InMemoryWebApi
+        return undefined;
+    }
+
+    private handleLogin(reqInfo: any) {
+        console.log('handleLogin called with:', reqInfo);
+        
+        // Tenta acessar o body de diferentes formas
+        let requestBody = reqInfo.body || reqInfo.req?.body || reqInfo.utils.getJsonBody(reqInfo.req);
+        
+        console.log('Request body extracted:', requestBody);
+        
+        if (!requestBody) {
+            console.log('No body found in reqInfo');
+            return reqInfo.utils.createResponse$(() => ({
+                status: 400,
+                body: { message: 'Dados de login não fornecidos' }
+            }));
+        }
+
+        const { email, password } = requestBody;
+        console.log('Login attempt:', { email, password });
+        
+        const users = this.createDb().users;
+        
+        const user = users.find(u => u.email === email && u.password === password);
+        
+        if (user) {
+            const { password: _, ...userWithoutPassword } = user;
+            return reqInfo.utils.createResponse$(() => ({
+                status: 200,
+                body: {
+                    user: userWithoutPassword,
+                    token: `fake-jwt-token-${user.id}-${Date.now()}`,
+                    message: 'Login realizado com sucesso!'
+                }
+            }));
+        } else {
+            return reqInfo.utils.createResponse$(() => ({
+                status: 401,
+                body: { message: 'Credenciais inválidas' }
+            }));
+        }
+    }
+
+    private handleRegister(reqInfo: any) {
+        if (!reqInfo.body) {
+            return reqInfo.utils.createResponse$(() => ({
+                status: 400,
+                body: { message: 'Dados de registro não fornecidos' }
+            }));
+        }
+
+        const { name, email, password, confirmPassword } = reqInfo.body;
+        const users = this.createDb().users;
+
+        // Validações
+        if (password !== confirmPassword) {
+            return reqInfo.utils.createResponse$(() => ({
+                status: 400,
+                body: { message: 'As senhas não coincidem' }
+            }));
+        }
+
+        const existingUser = users.find(u => u.email === email);
+        if (existingUser) {
+            return reqInfo.utils.createResponse$(() => ({
+                status: 409,
+                body: { message: 'Este email já está em uso' }
+            }));
+        }
+
+        // Criar novo usuário
+        const newUser = {
+            id: Math.max(...users.map(u => u.id)) + 1,
+            name,
+            email,
+            password,
+            avatar: null,
+            isActive: true,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+        };
+
+        users.push(newUser);
+
+        const { password: _, ...userWithoutPassword } = newUser;
+        return reqInfo.utils.createResponse$(() => ({
+            status: 201,
+            body: {
+                user: userWithoutPassword,
+                token: `fake-jwt-token-${newUser.id}-${Date.now()}`,
+                message: 'Cadastro realizado com sucesso!'
+            }
+        }));
+    }
+
+    private handleForgotPassword(reqInfo: any) {
+        if (!reqInfo.body) {
+            return reqInfo.utils.createResponse$(() => ({
+                status: 400,
+                body: { message: 'Email não fornecido' }
+            }));
+        }
+
+        const { email } = reqInfo.body;
+        const users = this.createDb().users;
+        
+        const user = users.find(u => u.email === email);
+        
+        if (user) {
+            return reqInfo.utils.createResponse$(() => ({
+                status: 200,
+                body: {
+                    message: 'Instruções para redefinir sua senha foram enviadas para seu email!'
+                }
+            }));
+        } else {
+            return reqInfo.utils.createResponse$(() => ({
+                status: 404,
+                body: { message: 'Email não encontrado' }
+            }));
+        }
     }
 }

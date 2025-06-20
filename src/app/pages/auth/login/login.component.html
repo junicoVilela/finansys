@@ -1,0 +1,66 @@
+<div class="login-container">
+  <div class="login-card">
+    <div class="login-header">
+      <h1 class="login-title">Finansys</h1>
+      <p class="login-subtitle">Faça login para continuar</p>
+    </div>
+
+    <form [formGroup]="loginForm" (ngSubmit)="onSubmit()" class="login-form">
+      <div class="form-group">
+        <label for="email" class="form-label">Email</label>
+        <input
+          id="email"
+          type="email"
+          formControlName="email"
+          class="form-control"
+          [ngClass]="{'is-invalid': f['email'].invalid && f['email'].touched}"
+          placeholder="Digite seu email"
+          autocomplete="email"
+        />
+        <app-form-field-error [form-control]="f['email']"></app-form-field-error>
+      </div>
+
+      <div class="form-group">
+        <label for="password" class="form-label">Senha</label>
+        <input
+          id="password"
+          type="password"
+          formControlName="password"
+          class="form-control"
+          [ngClass]="{'is-invalid': f['password'].invalid && f['password'].touched}"
+          placeholder="Digite sua senha"
+          autocomplete="current-password"
+        />
+        <app-form-field-error [form-control]="f['password']"></app-form-field-error>
+      </div>
+
+      <div class="form-actions">
+        <button
+          type="submit"
+          class="btn btn-primary btn-block"
+          [disabled]="submittingForm"
+        >
+          <span *ngIf="submittingForm" class="spinner"></span>
+          {{ submittingForm ? 'Entrando...' : 'Entrar' }}
+        </button>
+      </div>
+    </form>
+
+    <div class="login-footer">
+      <p class="forgot-password">
+        <a routerLink="/auth/forgot-password">Esqueci minha senha</a>
+      </p>
+      
+      <div class="register-link">
+        <span>Não tem uma conta? </span>
+        <a routerLink="/auth/register">Cadastre-se</a>
+      </div>
+    </div>
+
+    <div class="demo-credentials">
+      <h4>Credenciais de Teste:</h4>
+      <p><strong>Email:</strong> admin&#64;finansys.com</p>
+      <p><strong>Senha:</strong> 123456</p>
+    </div>
+  </div>
+</div> 
