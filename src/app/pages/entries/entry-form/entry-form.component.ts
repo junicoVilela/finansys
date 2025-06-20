@@ -7,6 +7,7 @@ import { ServerErrorMessagesComponent } from "../../../shared/components/server-
 import { FormFieldErrorComponent } from "../../../shared/components/form-field-error/form-field-error.component";
 import { CalendarModule } from 'primeng/calendar';
 import { NgxMaskDirective } from 'ngx-mask';
+import { PrimeNGConfig } from 'primeng/api';
 
 import { Entry } from "../shared/entry.model";
 import { EntryService } from "../shared/entry.service";
@@ -37,29 +38,35 @@ export class EntryFormComponent extends BaseResourceFormComponent<Entry> impleme
 
   categories!: Array<Category>;
 
-  ptBR = {
-    firstDayOfWeek: 0,
-    dayNames: ['Domingo', 'Segunda', 'Terça', 'Quarta', 'Quinta', 'Sexta', 'Sábado'],
-    dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sab'],
-    dayNamesMin: ['Do', 'Se', 'Te', 'Qu', 'Qu', 'Se', 'Sa'],
-    monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho',
-      'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-    monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-    today: 'Hoje',
-    clear: 'Limpar'
-  };
-
   constructor(
       protected entryService: EntryService,
       protected categoryService: CategoryService,
-      protected override injector: Injector
+      protected override injector: Injector,
+      private primengConfig: PrimeNGConfig
   ) {
     super(injector, new Entry(), entryService, Entry.fromJson)
   }
 
   override ngOnInit(): void {
+    this.configurePrimeNGLocale();
     this.loadCategories();
     super.ngOnInit();
+  }
+
+  private configurePrimeNGLocale(): void {
+    this.primengConfig.setTranslation({
+      firstDayOfWeek: 0,
+      dayNames: ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'],
+      dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
+      dayNamesMin: ['Do', 'Se', 'Te', 'Qu', 'Qu', 'Se', 'Sa'],
+      monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho',
+          'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
+      monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
+      today: 'Hoje',
+      clear: 'Limpar',
+      dateFormat: 'dd/mm/yy',
+      weekHeader: 'Sm'
+    });
   }
 
   protected buildResourceForm() {
@@ -69,7 +76,7 @@ export class EntryFormComponent extends BaseResourceFormComponent<Entry> impleme
       description: new UntypedFormControl(''),
       type: new UntypedFormControl('expense', [Validators.required]),
       amount: new UntypedFormControl('', [Validators.required]),
-      date: new UntypedFormControl('', [Validators.required]),
+      date: new UntypedFormControl(new Date(), [Validators.required]),
       paid: new UntypedFormControl(true, [Validators.required]),
       categoryId: new UntypedFormControl('', [Validators.required])
     });
@@ -90,8 +97,7 @@ export class EntryFormComponent extends BaseResourceFormComponent<Entry> impleme
     return "Cadastro de Novo Lançamento";
   }
 
-  protected override updateResource() {
-    super.updateResource();
+  protected override editionPageTitle(): string {
     const resourceName = this.resource.name || "";
     return "Editando Lançamento: " + resourceName;
   }

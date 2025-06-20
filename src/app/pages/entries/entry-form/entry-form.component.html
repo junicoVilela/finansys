@@ -5,7 +5,7 @@
 <app-page-header
         [page-title]="pageTitle"
         button-text="+ Novo Lançamento"
-        button-link="../../new"
+        button-link="/entries/new"
         button-class="btn-success"
 ></app-page-header>
 
@@ -62,7 +62,6 @@
                         inputStyleClass="form-control"
                         dataType="string"
                         dateFormat="dd/mm/yy"
-                        [locale]="ptBR"
                         [showButtonBar]="true"
                         [showIcon]="true"></p-calendar>
 

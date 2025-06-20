@@ -9,13 +9,14 @@ import { PageHeaderComponent } from "../../../shared/components/page-header/page
 import { RouterLink } from '@angular/router';
 import { NgFor, NgIf, NgClass } from '@angular/common';
 import { CurrencyPipe } from '@angular/common';
+import { DateFormatPipe } from "../../../shared/pipes/date-format.pipe";
 
 @Component({
   selector: 'app-entry-list',
   templateUrl: './entry-list.component.html',
   styleUrls: ['./entry-list.component.scss'],
   standalone: true,
-  imports: [BreadCrumbComponent, PageHeaderComponent, RouterLink, NgFor, NgIf, NgClass, CurrencyPipe]
+  imports: [BreadCrumbComponent, PageHeaderComponent, RouterLink, NgFor, NgIf, NgClass, CurrencyPipe, DateFormatPipe]
 })
 export class EntryListComponent extends BaseResourceListComponent<Entry>{
 

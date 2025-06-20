@@ -1,4 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { NgFor } from '@angular/common';
 
 import { Category } from "../../categories/shared/category.model";
 import { CategoryService } from "../../categories/shared/category.service";
@@ -7,6 +8,7 @@ import { Entry } from "../../entries/shared/entry.model";
 import { EntryService } from "../../entries/shared/entry.service";
 
 import currencyFormatter from "currency-formatter";
+import { DateUtils } from "../../../shared/utils/date.utils";
 
 import { BreadCrumbComponent } from "../../../shared/components/bread-crumb/bread-crumb.component";
 import { PageHeaderComponent } from "../../../shared/components/page-header/page-header.component";
@@ -17,7 +19,7 @@ import { ChartModule } from 'primeng/chart';
   templateUrl: './reports.component.html',
   styleUrls: ['./reports.component.scss'],
   standalone: true,
-  imports: [BreadCrumbComponent, PageHeaderComponent, ChartModule]
+  imports: [BreadCrumbComponent, PageHeaderComponent, ChartModule, NgFor]
 })
 export class ReportsComponent implements OnInit {
 
@@ -59,6 +61,10 @@ export class ReportsComponent implements OnInit {
   categories: Category[] = [];
   entries: Entry[] = [];
 
+  // Usando DateUtils para gerar listas de meses e anos
+  months = DateUtils.getMonthsOptions();
+  years = DateUtils.getYearsRange(2020, 2030);
+
   @ViewChild('month') month: ElementRef | any = null;
   @ViewChild('year') year: ElementRef | any = null;
 
@@ -77,7 +83,7 @@ export class ReportsComponent implements OnInit {
     if(!month || !year) {
       alert('Você precisa selecionar o Mês e o Ano para gerar os relatórios')
     } else {
-      this.entryService.getByMonthAndYear(month, year).subscribe(this.setValues.bind(this));
+      this.entryService.filterByMonthAndYear(month, year).subscribe(this.setValues.bind(this));
     }
   }
 

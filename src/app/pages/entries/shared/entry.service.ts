@@ -1,18 +1,23 @@
 import { Injectable, Injector } from '@angular/core';
+import { Observable } from 'rxjs';
+import { catchError, map, switchMap } from 'rxjs/operators';
 
-import {flatMap, Observable} from "rxjs";
+import { Entry } from './entry.model';
+import { Category } from '../../categories/shared/category.model';
+import { CategoryService } from '../../categories/shared/category.service';
 
-import { BaseResourceService } from "../../../shared/services/base-resource.service";
-import { CategoryService } from "../../categories/shared/category.service";
-import { Entry } from "./entry.model";
-import {catchError, map} from "rxjs/operators";
+import { BaseResourceService } from '../../../shared/services/base-resource.service';
+import { DateUtils } from '../../../shared/utils/date.utils';
 
 @Injectable({
     providedIn: 'root'
 })
-export class EntryService extends BaseResourceService<Entry>{
+export class EntryService extends BaseResourceService<Entry> {
 
-    constructor(protected override injector: Injector, private categoryService: CategoryService) {
+    constructor(
+        protected override injector: Injector,
+        private categoryService: CategoryService
+    ) {
         super("entries", injector, Entry.fromJson);
     }
 
@@ -20,47 +25,46 @@ export class EntryService extends BaseResourceService<Entry>{
         return this.setCategoryAndSendToServer(entry, super.create.bind(this));
     }
 
-    //fazer dessa forma somente em caso de utilizar angular-in-memory
     override update(entry: Entry): Observable<Entry> {
         return this.setCategoryAndSendToServer(entry, super.update.bind(this));
     }
 
-    getByMonthAndYear(month: number, year: number): Observable<Entry[]> {
+    // Método para filtrar lançamentos por mês e ano usando date-fns
+    filterByMonthAndYear(month: number, year: number): Observable<Entry[]> {
         return this.getAll().pipe(
-            map(entries => this.filterByMonthAndYear(entries, month, year))
-        );
-    }
-
-    private setCategoryAndSendToServer(entry: Entry, sendFn: any): Observable<any> {
-        return this.categoryService.getById(entry.categoryId!).pipe(
-            flatMap(category => {
-                entry.category = category;
-                return sendFn(entry);
-            }),
+            map(entries => entries.filter(entry => {
+                if (!entry.date) return false;
+                
+                const entryMonthYear = DateUtils.extractMonthYear(entry.date);
+                return entryMonthYear && 
+                       entryMonthYear.month === month && 
+                       entryMonthYear.year === year;
+            })),
             catchError(this.handleError)
         );
     }
 
-    private filterByMonthAndYear(entries: Entry[], month: number, year: number) {
-        return entries.filter(entry => {
-            if (!entry.date) return false;
-            
-            const entryDate = this.parseDate(entry.date);
-
-            const monthMatches = entryDate.getMonth() + 1 === month;
-            const yearMatches = entryDate.getFullYear() === year;
-
-            return monthMatches && yearMatches;
-        });
+    // Método para formatar data para exibição
+    formatEntryDate(date: string): string {
+        return DateUtils.dateToString(DateUtils.stringToDate(date));
     }
 
-    private parseDate(dateString: string): Date {
-        // Assume formato DD/MM/YYYY
-        const parts = dateString.split('/');
-        const day = parseInt(parts[0], 10);
-        const month = parseInt(parts[1], 10) - 1; // Mês em JavaScript é 0-indexed
-        const year = parseInt(parts[2], 10);
-        
-        return new Date(year, month, day);
+    // Método para validar formato de data
+    isValidDate(dateString: string): boolean {
+        return DateUtils.isValidDateString(dateString);
+    }
+
+    // PRIVATE METHODS
+
+    private setCategoryAndSendToServer(entry: Entry, sendFn: (entry: Entry) => Observable<Entry>): Observable<Entry> {
+        return this.categoryService.getById(entry.categoryId!).pipe(
+            catchError(this.handleError),
+            map(category => {
+                entry.category = category;
+                return entry;
+            }),
+            switchMap((entry: Entry) => sendFn(entry)),
+            catchError(this.handleError)
+        );
     }
 }
