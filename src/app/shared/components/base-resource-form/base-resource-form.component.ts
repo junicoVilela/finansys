@@ -170,14 +170,47 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel>
         this.submittingForm = false;
         this.serverErrorMessages = []; // Limpa mensagens de erro
 
-        const baseComponentPath: string = this.route.snapshot.parent?.url[0]?.path || '';
+        // Extrai o path base dinamicamente da rota atual
+        const baseComponentPath: string = this.extractBasePathFromRoute();
 
         // Marca o formulário como pristine para evitar o aviso de saída
         this.resourceForm.markAsPristine();
 
-        this.router.navigateByUrl(baseComponentPath, { skipLocationChange: true }).then(
-            () => this.router.navigate([baseComponentPath, resource.id, "edit"])
-        );
+        // Se for uma criação (new), navega para a edição do recurso criado
+        if (this.currentAction === 'new' && resource.id) {
+            // Usa navigateByUrl com skipLocationChange para forçar reload e depois navega para edit
+            this.router.navigateByUrl('/', { skipLocationChange: true }).then(
+                () => this.router.navigate([baseComponentPath, resource.id, "edit"])
+            );
+        } else {
+            // Se for uma edição, volta para a lista
+            this.router.navigateByUrl('/', { skipLocationChange: true }).then(
+                () => this.router.navigate([baseComponentPath])
+            );
+        }
+    }
+
+    /**
+     * Extrai o path base dinamicamente da estrutura da rota atual
+     * Funciona para qualquer estrutura de rota seguindo o padrão /{base}/new ou /{base}/{id}/edit
+     */
+    private extractBasePathFromRoute(): string {
+        // Primeiro tenta obter do parent route (método mais confiável)
+        const parentPath = this.route.snapshot.parent?.url[0]?.path;
+        if (parentPath) {
+            return `/${parentPath}`;
+        }
+
+        // Fallback: extrai da URL atual
+        const currentUrl = this.router.url;
+        const segments = currentUrl.split('/').filter(segment => segment && segment !== 'new' && segment !== 'edit');
+        
+        // Remove o último segmento se for um ID numérico
+        if (segments.length > 1 && /^\d+$/.test(segments[segments.length - 1])) {
+            segments.pop();
+        }
+
+        return segments.length > 0 ? `/${segments[segments.length - 1]}` : '';
     }
 
     protected actionsForError(error: any) {
@@ -219,3 +252,4 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel>
 
     protected abstract buildResourceForm(): void;
 }
+

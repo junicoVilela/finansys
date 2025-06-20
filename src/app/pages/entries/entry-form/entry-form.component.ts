@@ -8,12 +8,14 @@ import { FormFieldErrorComponent } from "../../../shared/components/form-field-e
 import { CalendarModule } from 'primeng/calendar';
 import { NgxMaskDirective } from 'ngx-mask';
 import { PrimeNGConfig } from 'primeng/api';
+import { switchMap } from 'rxjs/operators';
 
 import { Entry } from "../shared/entry.model";
 import { EntryService } from "../shared/entry.service";
 import { BaseResourceFormComponent } from "../../../shared/components/base-resource-form/base-resource-form.component";
 import { Category } from "../../categories/shared/category.model";
 import { CategoryService } from "../../categories/shared/category.service";
+import { DateUtils } from "../../../shared/utils/date.utils";
 
 @Component({
   selector: 'app-entry-form',
@@ -24,7 +26,6 @@ import { CategoryService } from "../../categories/shared/category.service";
     ReactiveFormsModule,
     NgFor,
     NgClass,
-    JsonPipe,
     BreadCrumbComponent,
     PageHeaderComponent,
     ServerErrorMessagesComponent,
@@ -53,6 +54,8 @@ export class EntryFormComponent extends BaseResourceFormComponent<Entry> impleme
     super.ngOnInit();
   }
 
+
+
   private configurePrimeNGLocale(): void {
     this.primengConfig.setTranslation({
       firstDayOfWeek: 0,
@@ -69,7 +72,10 @@ export class EntryFormComponent extends BaseResourceFormComponent<Entry> impleme
     });
   }
 
-  protected buildResourceForm() {
+  /**
+   * Sobrescreve o patchValue do formulário para aplicar conversão de data automática
+   */
+  override buildResourceForm() {
     this.resourceForm = new UntypedFormGroup({
       id: new UntypedFormControl(null),
       name: new UntypedFormControl('', [Validators.required, Validators.minLength(3)]),
@@ -79,6 +85,36 @@ export class EntryFormComponent extends BaseResourceFormComponent<Entry> impleme
       date: new UntypedFormControl(new Date(), [Validators.required]),
       paid: new UntypedFormControl(true, [Validators.required]),
       categoryId: new UntypedFormControl('', [Validators.required])
+    });
+
+    // Intercepta o patchValue para conversão automática de data (carregamento)
+    const originalPatchValue = this.resourceForm.patchValue.bind(this.resourceForm);
+    this.resourceForm.patchValue = (value: any, options?: any) => {
+      if (value && value.date && typeof value.date === 'string') {
+        value = {
+          ...value,
+          date: DateUtils.stringToDate(value.date)
+        };
+      }
+      return originalPatchValue(value, options);
+    };
+
+    // Intercepta o value getter para conversão automática na submissão
+    const originalValueGetter = Object.getOwnPropertyDescriptor(this.resourceForm, 'value')?.get || 
+                               (() => this.resourceForm.getRawValue());
+    
+    Object.defineProperty(this.resourceForm, 'value', {
+      get: () => {
+        const formValue = originalValueGetter.call(this.resourceForm);
+        if (formValue.date instanceof Date) {
+          return {
+            ...formValue,
+            date: DateUtils.dateToString(formValue.date)
+          };
+        }
+        return formValue;
+      },
+      configurable: true
     });
   }
 
