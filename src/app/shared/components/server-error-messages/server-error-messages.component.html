@@ -1,4 +1,4 @@
-<div class="alert alert-danger alert-dismissible fade show" role="alert" *ngIf="serverErrorMessages">
+<div class="alert alert-danger alert-dismissible fade show" role="alert" *ngIf="serverErrorMessages && serverErrorMessages.length > 0">
     <strong>Erro no servidor:</strong>
     <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
     <ul>

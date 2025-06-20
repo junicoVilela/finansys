@@ -6,7 +6,7 @@ import { PageHeaderComponent } from "../../../shared/components/page-header/page
 import { ServerErrorMessagesComponent } from "../../../shared/components/server-error-messages/server-error-messages.component";
 import { FormFieldErrorComponent } from "../../../shared/components/form-field-error/form-field-error.component";
 import { CalendarModule } from 'primeng/calendar';
-import { IMaskModule } from 'angular-imask';
+import { NgxMaskDirective } from 'ngx-mask';
 
 import { Entry } from "../shared/entry.model";
 import { EntryService } from "../shared/entry.service";
@@ -29,22 +29,13 @@ import { CategoryService } from "../../categories/shared/category.service";
     ServerErrorMessagesComponent,
     FormFieldErrorComponent,
     CalendarModule,
-    IMaskModule
+    NgxMaskDirective
   ],
   providers:[CategoryService]
 })
 export class EntryFormComponent extends BaseResourceFormComponent<Entry> implements OnInit {
 
   categories!: Array<Category>;
-
-  imaskConfig = {
-    mask: Number,
-    scale: 2,
-    thousandsSeparator: '',
-    padFractionalZeros: true,
-    normalizeZeros: true,
-    radix: ','
-  };
 
   ptBR = {
     firstDayOfWeek: 0,
@@ -88,6 +79,11 @@ export class EntryFormComponent extends BaseResourceFormComponent<Entry> impleme
     this.categoryService.getAll().subscribe(
         categories => this.categories = categories
     );
+  }
+
+  setPaidStatus(isPaid: boolean) {
+    this.resourceForm.get('paid')?.setValue(isPaid);
+    this.resourceForm.get('paid')?.markAsTouched();
   }
 
   protected override creationPageTitle(): string {

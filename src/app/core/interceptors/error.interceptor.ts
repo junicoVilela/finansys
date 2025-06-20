@@ -17,7 +17,10 @@ export class ErrorInterceptor implements HttpInterceptor {
   intercept(request: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
     return next.handle(request).pipe(
       catchError((error: HttpErrorResponse) => {
-        this.handleError(error);
+        // Só trata erros reais (status >= 400)
+        if (error.status >= 400) {
+          this.handleError(error);
+        }
         return throwError(() => error);
       })
     );
@@ -59,8 +62,10 @@ export class ErrorInterceptor implements HttpInterceptor {
       case 503:
         errorMessage = 'Serviço temporariamente indisponível.';
         break;
+      default:
+        errorMessage = `Erro ${error.status}: ${error.message || 'Erro desconhecido'}`;
     }
 
-    this.toastr.error(errorMessage, 'Erro');
+    this.toastr.error(errorMessage, 'Erro no servidor');
   }
 } 

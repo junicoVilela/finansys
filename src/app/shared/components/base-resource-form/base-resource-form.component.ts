@@ -1,6 +1,7 @@
 import { OnInit, AfterContentChecked, Injector, Directive } from '@angular/core';
 import { UntypedFormBuilder, FormControl, UntypedFormGroup } from "@angular/forms";
 import { ActivatedRoute, Router } from "@angular/router";
+import { HttpErrorResponse } from "@angular/common/http";
 
 import { BaseResourceModel } from "../../models/base-resource.model";
 import { BaseResourceService } from "../../services/base-resource.service";
@@ -10,6 +11,7 @@ import { switchMap } from "rxjs/operators";
 import { Observable } from 'rxjs';
 
 import { ToastrService } from 'ngx-toastr';
+import { environment } from '../../../../environments/environment';
 
 @Directive()
 export abstract class BaseResourceFormComponent<T extends BaseResourceModel> 
@@ -129,8 +131,18 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel>
         const resource: T = this.jsonDataToResourceFn(this.resourceForm.value);
 
         this.resourceService.create(resource).subscribe({
-            next: (response) => this.actionsForSuccess(response),
-            error: (error) => this.actionsForError(error)
+            next: (response) => {
+                if (environment.enableLogs) {
+                    console.log('Create response:', response);
+                }
+                this.actionsForSuccess(response);
+            },
+            error: (error) => {
+                if (environment.enableLogs) {
+                    console.error('Create error:', error);
+                }
+                this.actionsForError(error);
+            }
         });
     }
 
@@ -138,14 +150,25 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel>
         const resource: T = Object.assign(this.resource, this.resourceForm.value);
 
         this.resourceService.update(resource).subscribe({
-            next: (response) => this.actionsForSuccess(response),
-            error: (error) => this.actionsForError(error)
+            next: (response) => {
+                if (environment.enableLogs) {
+                    console.log('Update response:', response);
+                }
+                this.actionsForSuccess(response);
+            },
+            error: (error) => {
+                if (environment.enableLogs) {
+                    console.error('Update error:', error);
+                }
+                this.actionsForError(error);
+            }
         });
     }
 
     protected actionsForSuccess(resource: T) {
         this.toastrService.success("Solicitação processada com sucesso!");
         this.submittingForm = false;
+        this.serverErrorMessages = []; // Limpa mensagens de erro
 
         const baseComponentPath: string = this.route.snapshot.parent?.url[0]?.path || '';
 
@@ -160,10 +183,19 @@ export abstract class BaseResourceFormComponent<T extends BaseResourceModel>
     protected actionsForError(error: any) {
         this.submittingForm = false;
 
-        if (error.status === 422 && error.error?.errors) {
-            this.serverErrorMessages = this.extractErrorMessages(error.error.errors);
+        if (environment.enableLogs) {
+            console.error('Form submission error:', error);
+        }
+
+        // Só trata como erro se for realmente um erro HTTP
+        if (error instanceof HttpErrorResponse && error.status >= 400) {
+            if (error.status === 422 && error.error?.errors) {
+                this.serverErrorMessages = this.extractErrorMessages(error.error.errors);
+            } else {
+                this.serverErrorMessages = [];
+            }
         } else {
-            // O ErrorInterceptor já mostrará o toast de erro genérico
+            // Se não for um erro HTTP real, limpa as mensagens de erro
             this.serverErrorMessages = [];
         }
     }

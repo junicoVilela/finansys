@@ -8,7 +8,6 @@ import { PreloadAllModules, provideRouter, withPreloading } from "@angular/route
 import { APP_ROUTES } from "./app/app-routing";
 import { provideAnimations } from "@angular/platform-browser/animations";
 import { provideHttpClient, HTTP_INTERCEPTORS } from "@angular/common/http";
-import { MatToolbarModule } from "@angular/material/toolbar";
 import { ToastrModule } from "ngx-toastr";
 import { provideNgxMask } from "ngx-mask";
 import { HttpClientInMemoryWebApiModule } from 'angular-in-memory-web-api';
@@ -29,7 +28,6 @@ bootstrapApplication(AppComponent, {
         // Depois os módulos importados
         importProvidersFrom(
             BrowserModule, 
-            MatToolbarModule, 
             ToastrModule.forRoot(),
             HttpClientInMemoryWebApiModule.forRoot(InMemoryDatabase, { 
                 delay: 500,

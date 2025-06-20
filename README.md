@@ -192,6 +192,29 @@ O projeto utiliza Angular In-Memory Web API para simular um backend. Os dados s�
 ### Proxy (Desabilitado)
 O arquivo `proxy.conf.json` está configurado mas desabilitado para permitir o funcionamento da API em memória.
 
+### Otimizações de Bibliotecas
+
+#### ✅ **Bibliotecas Otimizadas**
+- **Standalone Components**: Reduz o bundle size eliminando NgModules desnecessários
+- **Tree Shaking**: Importação seletiva de módulos do PrimeNG
+- **Lazy Loading**: Componentes carregados sob demanda
+
+#### 🚀 **Melhorias Implementadas**
+- Remoção do Angular Material (conflito com Bootstrap + PrimeNG)
+- Atualização do Chart.js para versão 4.x
+- Remoção de bibliotecas não utilizadas (moment, angular-imask)
+- Otimização de imports para reduzir bundle size
+
+#### 📦 **Bundle Size**
+- **Inicial**: ~2MB (otimizado)
+- **Lazy Chunks**: Carregamento sob demanda
+- **Vendor Chunk**: Separado para melhor cache
+
+#### 🎨 **Design System**
+- **Bootstrap 5**: Layout e grid system
+- **PrimeNG**: Componentes específicos (charts, calendar)
+- **Consistência Visual**: Tema unificado sem conflitos
+
 ## 🤝 Contribuição
 
 1. Faça um fork do projeto

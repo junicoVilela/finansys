@@ -7,8 +7,6 @@ import { CategoryService } from "../../categories/shared/category.service";
 import { Entry } from "./entry.model";
 import {catchError, map} from "rxjs/operators";
 
-import * as moment from "moment";
-
 @Injectable({
     providedIn: 'root'
 })
@@ -45,13 +43,24 @@ export class EntryService extends BaseResourceService<Entry>{
 
     private filterByMonthAndYear(entries: Entry[], month: number, year: number) {
         return entries.filter(entry => {
-            const entryDate = moment(entry.date, "DD/MM/YYYY");
+            if (!entry.date) return false;
+            
+            const entryDate = this.parseDate(entry.date);
 
-            const monthMatches = entryDate.month() + 1 == month;
-            const yearMatches = entryDate.year() == year;
+            const monthMatches = entryDate.getMonth() + 1 === month;
+            const yearMatches = entryDate.getFullYear() === year;
 
-            if (monthMatches && yearMatches) return entry;
+            return monthMatches && yearMatches;
         });
     }
 
+    private parseDate(dateString: string): Date {
+        // Assume formato DD/MM/YYYY
+        const parts = dateString.split('/');
+        const day = parseInt(parts[0], 10);
+        const month = parseInt(parts[1], 10) - 1; // Mês em JavaScript é 0-indexed
+        const year = parseInt(parts[2], 10);
+        
+        return new Date(year, month, day);
+    }
 }

@@ -30,11 +30,13 @@
                 <div class="col-md-3">
                     <label for="year">Ano</label>
                     <select #year name="year" id="year" class="form-control">
-                        <option value="">Selecione um mês</option>
-                        <option value="2019">2019</option>
+                        <option value="">Selecione um ano</option>
                         <option value="2020">2020</option>
                         <option value="2021">2021</option>
                         <option value="2022">2022</option>
+                        <option value="2023">2023</option>
+                        <option value="2024">2024</option>
+                        <option value="2025">2025</option>
                     </select>
                 </div>
                 <div class="col-12">
@@ -45,40 +47,54 @@
     </div>
 
     <div class="row row-cols-1 row-cols-md-3 mt-3">
-        <div class="col-4">
-            <div class="card text-center text-white bg-success mb-3 me-2">
+        <div class="col-md-4 col-sm-12 mb-3">
+            <div class="card text-center text-white bg-success mb-3">
                 <div class="card-header">TOTAL DE RECEITAS</div>
                 <div class="card-body">
                     <h3 class="card-title">{{revenueTotal}}</h3>
                 </div>
             </div>
         </div>
-        <div class="col-4">
-            <div class="card text-center text-white bg-danger mb-3 me-2" >
+        <div class="col-md-4 col-sm-12 mb-3">
+            <div class="card text-center text-white bg-danger mb-3">
                 <div class="card-header">TOTAL DE DESPESAS</div>
                 <div class="card-body">
                     <h3 class="card-title">{{expenseTotal}}</h3>
                 </div>
             </div>
         </div>
-        <div class="col-4">
-        <div class="card text-center text-white bg-info mb-3" >
-            <div class="card-header">SALDO</div>
-            <div class="card-body">
-                <h3 class="card-title">{{balance}}</h3>
+        <div class="col-md-4 col-sm-12 mb-3">
+            <div class="card text-center text-white bg-info mb-3">
+                <div class="card-header">SALDO</div>
+                <div class="card-body">
+                    <h3 class="card-title">{{balance}}</h3>
+                </div>
             </div>
-        </div>
         </div>
     </div>
 
     <hr>
 
-    <div class="row row-cols-1 row-cols-md-3 mt-3">
-        <div class="col-6 w-50">
-            <p-chart type="bar" [data]="revenueChartData" [options]="basicOptions"></p-chart>
+    <div class="row mt-3">
+        <div class="col-lg-6 col-md-12 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Receitas por Categoria</h5>
+                </div>
+                <div class="card-body">
+                    <p-chart type="bar" [data]="revenueChartData" [options]="basicOptions"></p-chart>
+                </div>
+            </div>
         </div>
-        <div class="col-6 w-50">
-            <p-chart type="bar" [data]="expenseChartData" [options]="basicOptions"></p-chart>
+        <div class="col-lg-6 col-md-12 mb-4">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="card-title mb-0">Despesas por Categoria</h5>
+                </div>
+                <div class="card-body">
+                    <p-chart type="bar" [data]="expenseChartData" [options]="basicOptions"></p-chart>
+                </div>
+            </div>
         </div>
     </div>
 
