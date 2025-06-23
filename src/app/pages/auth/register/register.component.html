@@ -1,86 +1,157 @@
 <div class="auth-container">
-  <div class="auth-card">
-    <div class="auth-header">
-      <h1>Criar Conta</h1>
-      <p>Preencha os dados para criar sua conta</p>
+  <!-- Left Panel - Brand & Info -->
+  <div class="auth-brand-panel">
+    <div class="brand-content">
+      <div class="company-logo">
+        <i class="material-icons logo-icon">trending_up</i>
+        <h1 class="company-name">Finansys</h1>
+      </div>
+      
+      <div class="brand-message">
+        <h2>Junte-se à Nossa Plataforma</h2>
+        <p>Comece a gerenciar suas finanças de forma profissional. Tenha controle total sobre receitas, despesas e planejamento financeiro.</p>
+        
+        <div class="features-list">
+          <div class="feature-item">
+            <i class="material-icons">dashboard</i>
+            <span>Dashboard Executivo</span>
+          </div>
+          <div class="feature-item">
+            <i class="material-icons">analytics</i>
+            <span>Análises Detalhadas</span>
+          </div>
+          <div class="feature-item">
+            <i class="material-icons">schedule</i>
+            <span>Relatórios em Tempo Real</span>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 
-    <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form" novalidate>
-      <div class="form-group">
-        <label for="name" class="form-label">Nome Completo</label>
-        <input
-          id="name"
-          type="text"
-          formControlName="name"
-          class="form-control"
-          [ngClass]="{'is-invalid': f['name'].invalid && f['name'].touched}"
-          placeholder="Digite seu nome completo"
-          autocomplete="name"
-        />
-        <app-form-field-error [form-control]="f['name']"></app-form-field-error>
+  <!-- Right Panel - Register Form -->
+  <div class="auth-form-panel">
+    <div class="form-container">
+      <div class="form-header">
+        <h3>Criar Nova Conta</h3>
+        <p>Preencha os dados para acessar a plataforma</p>
       </div>
 
-      <div class="form-group">
-        <label for="email" class="form-label">Email</label>
-        <input
-          id="email"
-          type="email"
-          formControlName="email"
-          class="form-control"
-          [ngClass]="{'is-invalid': f['email'].invalid && f['email'].touched}"
-          placeholder="Digite seu email"
-          autocomplete="email"
-        />
-        <app-form-field-error [form-control]="f['email']"></app-form-field-error>
-      </div>
+      <form [formGroup]="registerForm" (ngSubmit)="onSubmit()" class="auth-form" novalidate>
+        <!-- Nome Field -->
+        <div class="field-group">
+          <label for="name" class="field-label">Nome Completo</label>
+          <div class="field-container">
+            <span class="field-icon">
+              <i class="material-icons">person</i>
+            </span>
+            <input
+              id="name"
+              type="text"
+              formControlName="name"
+              class="field-input"
+              [class.error]="f['name'].invalid && f['name'].touched"
+              placeholder="Digite seu nome completo"
+              autocomplete="name"
+            />
+          </div>
+          <app-form-field-error [form-control]="f['name']"></app-form-field-error>
+        </div>
 
-      <div class="form-group">
-        <label for="password" class="form-label">Senha</label>
-        <input
-          id="password"
-          type="password"
-          formControlName="password"
-          class="form-control"
-          [ngClass]="{'is-invalid': f['password'].invalid && f['password'].touched}"
-          placeholder="Digite sua senha (mínimo 6 caracteres)"
-          autocomplete="new-password"
-        />
-        <app-form-field-error [form-control]="f['password']"></app-form-field-error>
-      </div>
+        <!-- Email Field -->
+        <div class="field-group">
+          <label for="email" class="field-label">Email Corporativo</label>
+          <div class="field-container">
+            <span class="field-icon">
+              <i class="material-icons">email</i>
+            </span>
+            <input
+              id="email"
+              type="email"
+              formControlName="email"
+              class="field-input"
+              [class.error]="f['email'].invalid && f['email'].touched"
+              placeholder="seu.email@empresa.com"
+              autocomplete="email"
+            />
+          </div>
+          <app-form-field-error [form-control]="f['email']"></app-form-field-error>
+        </div>
 
-      <div class="form-group">
-        <label for="confirmPassword" class="form-label">Confirmar Senha</label>
-        <input
-          id="confirmPassword"
-          type="password"
-          formControlName="confirmPassword"
-          class="form-control"
-          [ngClass]="{'is-invalid': (f['confirmPassword'].invalid && f['confirmPassword'].touched) || passwordMismatch}"
-          placeholder="Confirme sua senha"
-          autocomplete="new-password"
-        />
-        <app-form-field-error [form-control]="f['confirmPassword']"></app-form-field-error>
-        <p *ngIf="passwordMismatch" class="text-danger">As senhas não coincidem</p>
-      </div>
+        <!-- Password Field -->
+        <div class="field-group">
+          <label for="password" class="field-label">Senha</label>
+          <div class="field-container">
+            <span class="field-icon">
+              <i class="material-icons">lock</i>
+            </span>
+            <input
+              id="password"
+              type="password"
+              formControlName="password"
+              class="field-input"
+              [class.error]="f['password'].invalid && f['password'].touched"
+              placeholder="Mínimo 6 caracteres"
+              autocomplete="new-password"
+            />
+          </div>
+          <app-form-field-error [form-control]="f['password']"></app-form-field-error>
+        </div>
 
-      <div class="form-actions">
+        <!-- Confirm Password Field -->
+        <div class="field-group">
+          <label for="confirmPassword" class="field-label">Confirmar Senha</label>
+          <div class="field-container">
+            <span class="field-icon">
+              <i class="material-icons">lock_outline</i>
+            </span>
+            <input
+              id="confirmPassword"
+              type="password"
+              formControlName="confirmPassword"
+              class="field-input"
+              [class.error]="(f['confirmPassword'].invalid && f['confirmPassword'].touched) || passwordMismatch"
+              placeholder="Confirme sua senha"
+              autocomplete="new-password"
+            />
+          </div>
+          <app-form-field-error [form-control]="f['confirmPassword']"></app-form-field-error>
+          <p *ngIf="passwordMismatch" class="error-message">As senhas não coincidem</p>
+        </div>
+
+        <div class="form-terms">
+          <label class="checkbox-wrapper">
+            <input type="checkbox" class="checkbox-input" required>
+            <span class="checkbox-label">
+              Concordo com os 
+              <a href="#" class="terms-link">Termos de Uso</a> 
+              e 
+              <a href="#" class="terms-link">Política de Privacidade</a>
+            </span>
+          </label>
+        </div>
+
         <button 
           type="submit" 
-          class="btn btn-primary btn-auth"
+          class="btn-primary btn-register"
           [disabled]="registerForm.invalid || submittingForm"
         >
-          <span *ngIf="submittingForm" class="spinner"></span>
-          <span *ngIf="!submittingForm">Criar Conta</span>
-          <span *ngIf="submittingForm">Criando...</span>
+          <span *ngIf="submittingForm" class="btn-spinner"></span>
+          <i class="material-icons" *ngIf="!submittingForm">person_add</i>
+          {{ submittingForm ? 'Criando Conta...' : 'Criar Conta' }}
         </button>
-      </div>
+      </form>
 
-      <div class="auth-links">
-        <p>
-          Já tem uma conta? 
-          <a routerLink="/auth/login" class="auth-link">Faça login</a>
+      <div class="form-footer">
+        <div class="divider">
+          <span>ou</span>
+        </div>
+        
+        <p class="login-text">
+          Já possui uma conta? 
+          <a routerLink="/auth/login" class="login-link">Fazer Login</a>
         </p>
       </div>
-    </form>
+    </div>
   </div>
 </div> 

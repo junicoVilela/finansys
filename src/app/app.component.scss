@@ -1,0 +1,12 @@
+// Remove gutter (bordas laterais) do Bootstrap nas páginas de autenticação
+.content .row.auth-layout {
+  // Remove as margens laterais negativas do Bootstrap
+  margin-right: 0 !important;
+  margin-left: 0 !important;
+  
+  // Remove padding lateral das colunas
+  .col-12 {
+    padding-right: 0 !important;
+    padding-left: 0 !important;
+  }
+}

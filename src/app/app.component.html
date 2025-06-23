@@ -1,14 +1,15 @@
 <div class="content">
-  <app-navbar></app-navbar>
+  <!-- Navbar - só aparece se estiver logado -->
+  <app-navbar *ngIf="isAuthenticated$ | async"></app-navbar>
 
-  <div class="row m-0">
+  <div class="row m-0" [ngClass]="{'auth-layout': !(isAuthenticated$ | async)}">
     <!-- Sidebar - só aparece se estiver logado -->
     <div class="col-md-3 p-0" *ngIf="isAuthenticated$ | async">
       <app-sidebar></app-sidebar>
     </div>
 
     <!-- Conteúdo principal - ajusta baseado se sidebar está visível -->
-    <div [ngClass]="(isAuthenticated$ | async) ? 'col-md-9' : 'col-12'" class="p-4">
+    <div [ngClass]="(isAuthenticated$ | async) ? 'col-md-9 p-4' : 'col-12'">
       <router-outlet></router-outlet>
     </div>
   </div>
