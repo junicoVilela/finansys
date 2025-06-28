@@ -66,7 +66,7 @@ export class EntryListComponent extends BaseResourceListComponent<Entry> {
     showItemsPerPage: true,
     showInfo: true,
     iconClass: 'bi-cash-stack',
-    iconColor: 'success',
+    iconColor: 'primary',
     itemType: 'lançamentos'
   };
 
