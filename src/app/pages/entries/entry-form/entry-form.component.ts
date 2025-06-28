@@ -1,13 +1,12 @@
-import {Component, Injector, OnInit} from '@angular/core';
+import {Component, Injector, OnInit, ChangeDetectorRef} from '@angular/core';
 import {UntypedFormControl, UntypedFormGroup, Validators, ReactiveFormsModule} from "@angular/forms";
-import { NgFor, NgClass } from "@angular/common";
+import { NgFor, NgClass, NgIf, CommonModule, CurrencyPipe, DatePipe } from "@angular/common";
+import { RouterModule } from "@angular/router";
 import { BreadCrumbComponent } from "../../../shared/components/bread-crumb/bread-crumb.component";
 import { PageHeaderComponent } from "../../../shared/components/page-header/page-header.component";
 import { ServerErrorMessagesComponent } from "../../../shared/components/server-error-messages/server-error-messages.component";
 import { FormFieldErrorComponent } from "../../../shared/components/form-field-error/form-field-error.component";
-import { CalendarModule } from 'primeng/calendar';
 import { NgxMaskDirective } from 'ngx-mask';
-import { PrimeNGConfig } from 'primeng/api';
 
 import { Entry } from "../shared/entry.model";
 import { EntryService } from "../shared/entry.service";
@@ -25,11 +24,15 @@ import { DateUtils } from "../../../shared/utils/date.utils";
     ReactiveFormsModule,
     NgFor,
     NgClass,
+    NgIf,
+    CommonModule,
+    CurrencyPipe,
+    DatePipe,
+    RouterModule,
     BreadCrumbComponent,
     PageHeaderComponent,
     ServerErrorMessagesComponent,
     FormFieldErrorComponent,
-    CalendarModule,
     NgxMaskDirective
   ],
   providers:[CategoryService]
@@ -37,38 +40,31 @@ import { DateUtils } from "../../../shared/utils/date.utils";
 export class EntryFormComponent extends BaseResourceFormComponent<Entry> implements OnInit {
 
   categories!: Array<Category>;
+  private cd: ChangeDetectorRef;
+
+  // Propriedade para verificar se está em modo de edição
+  get isEditMode(): boolean {
+    return this.resource.id !== null && this.resource.id !== undefined;
+  }
 
   constructor(
       protected entryService: EntryService,
       protected categoryService: CategoryService,
-      protected override injector: Injector,
-      private primengConfig: PrimeNGConfig
+      protected override injector: Injector
   ) {
     super(injector, new Entry(), entryService, Entry.fromJson)
+    this.cd = injector.get(ChangeDetectorRef);
   }
 
   override ngOnInit(): void {
-    this.configurePrimeNGLocale();
     this.loadCategories();
     super.ngOnInit();
-  }
-
-
-
-  private configurePrimeNGLocale(): void {
-    this.primengConfig.setTranslation({
-      firstDayOfWeek: 0,
-      dayNames: ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'],
-      dayNamesShort: ['Dom', 'Seg', 'Ter', 'Qua', 'Qui', 'Sex', 'Sáb'],
-      dayNamesMin: ['Do', 'Se', 'Te', 'Qu', 'Qu', 'Se', 'Sa'],
-      monthNames: ['Janeiro', 'Fevereiro', 'Março', 'Abril', 'Maio', 'Junho', 'Julho',
-          'Agosto', 'Setembro', 'Outubro', 'Novembro', 'Dezembro'],
-      monthNamesShort: ['Jan', 'Fev', 'Mar', 'Abr', 'Mai', 'Jun', 'Jul', 'Ago', 'Set', 'Out', 'Nov', 'Dez'],
-      today: 'Hoje',
-      clear: 'Limpar',
-      dateFormat: 'dd/mm/yy',
-      weekHeader: 'Sm'
-    });
+    
+    // Garantir que o título seja definido
+    this.setPageTitle();
+    
+    // Forçar detecção de mudanças
+    this.cd.detectChanges();
   }
 
   /**
@@ -81,7 +77,7 @@ export class EntryFormComponent extends BaseResourceFormComponent<Entry> impleme
       description: new UntypedFormControl(''),
       type: new UntypedFormControl('expense', [Validators.required]),
       amount: new UntypedFormControl('', [Validators.required]),
-      date: new UntypedFormControl(new Date(), [Validators.required]),
+      date: new UntypedFormControl(DateUtils.dateToInputString(new Date()), [Validators.required]),
       paid: new UntypedFormControl(true, [Validators.required]),
       categoryId: new UntypedFormControl('', [Validators.required])
     });
@@ -92,29 +88,11 @@ export class EntryFormComponent extends BaseResourceFormComponent<Entry> impleme
       if (value && value.date && typeof value.date === 'string') {
         value = {
           ...value,
-          date: DateUtils.stringToDate(value.date)
+          date: DateUtils.dateToInputString(value.date)
         };
       }
       return originalPatchValue(value, options);
     };
-
-    // Intercepta o value getter para conversão automática na submissão
-    const originalValueGetter = Object.getOwnPropertyDescriptor(this.resourceForm, 'value')?.get || 
-                               (() => this.resourceForm.getRawValue());
-    
-    Object.defineProperty(this.resourceForm, 'value', {
-      get: () => {
-        const formValue = originalValueGetter.call(this.resourceForm);
-        if (formValue.date instanceof Date) {
-          return {
-            ...formValue,
-            date: DateUtils.dateToString(formValue.date)
-          };
-        }
-        return formValue;
-      },
-      configurable: true
-    });
   }
 
   private loadCategories() {
@@ -126,6 +104,34 @@ export class EntryFormComponent extends BaseResourceFormComponent<Entry> impleme
   setPaidStatus(isPaid: boolean) {
     this.resourceForm.get('paid')?.setValue(isPaid);
     this.resourceForm.get('paid')?.markAsTouched();
+  }
+
+  setType(type: string) {
+    this.resourceForm.get('type')?.setValue(type);
+    this.resourceForm.get('type')?.markAsTouched();
+  }
+
+  override submitForm() {
+    if (this.resourceForm.valid) {
+      // Converter a data antes da submissão
+      const formValue = this.resourceForm.getRawValue();
+      if (formValue.date) {
+        const convertedValue = {
+          ...formValue,
+          date: DateUtils.inputStringToDateString(formValue.date)
+        };
+        this.resourceForm.patchValue(convertedValue);
+      }
+      
+      super.submitForm();
+    } else {
+      Object.keys(this.resourceForm.controls).forEach(key => {
+        const control = this.resourceForm.get(key);
+        if (control) {
+          control.markAsTouched();
+        }
+      });
+    }
   }
 
   protected override creationPageTitle(): string {

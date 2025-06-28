@@ -7,6 +7,7 @@ export class DateUtils {
     static readonly CALENDAR_FORMAT = 'dd/mm/yy'; // Para p-calendar
     static readonly MONTH_YEAR_FORMAT = 'MMMM yyyy';
     static readonly FULL_DATE_FORMAT = "d 'de' MMMM 'de' yyyy";
+    static readonly INPUT_DATE_FORMAT = 'yyyy-MM-dd'; // Para input HTML
     
     /**
      * Converte Date para string no formato brasileiro
@@ -26,6 +27,37 @@ export class DateUtils {
             return isValid(parsedDate) ? parsedDate : new Date();
         } catch {
             return new Date();
+        }
+    }
+    
+    /**
+     * Converte Date para formato de input HTML (YYYY-MM-DD)
+     */
+    static dateToInputString(date: Date | string): string {
+        if (!date) return '';
+        let dateObj: Date;
+        
+        if (typeof date === 'string') {
+            dateObj = DateUtils.stringToDate(date);
+        } else {
+            dateObj = date;
+        }
+        
+        if (!isValid(dateObj)) return '';
+        return format(dateObj, DateUtils.INPUT_DATE_FORMAT);
+    }
+    
+    /**
+     * Converte string de input HTML (YYYY-MM-DD) para formato brasileiro (DD/MM/YYYY)
+     */
+    static inputStringToDateString(inputDateString: string): string {
+        if (!inputDateString) return '';
+        try {
+            const date = parse(inputDateString, DateUtils.INPUT_DATE_FORMAT, new Date());
+            if (!isValid(date)) return '';
+            return DateUtils.dateToString(date);
+        } catch {
+            return '';
         }
     }
     
