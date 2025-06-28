@@ -126,9 +126,9 @@
           <div class="bg-primary bg-gradient rounded-circle d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
             <i class="bi text-white" [class]="getCategoryIcon(category)"></i>
           </div>
-          <div class="btn-group btn-group-sm">
+          <div class="d-flex gap-1">
             <button 
-              class="btn btn-outline-primary rounded-circle"
+              class="btn btn-outline-primary rounded-circle d-flex align-items-center justify-content-center"
               [routerLink]="[category.id, 'edit']"
               title="Editar categoria"
               style="width: 35px; height: 35px;"
@@ -136,7 +136,7 @@
               <i class="bi bi-pencil"></i>
             </button>
             <button 
-              class="btn btn-outline-danger rounded-circle"
+              class="btn btn-outline-danger rounded-circle d-flex align-items-center justify-content-center"
               (click)="deleteResource(category)"
               title="Excluir categoria"
               style="width: 35px; height: 35px;"
