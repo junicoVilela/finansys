@@ -5,7 +5,7 @@
 <app-page-header
     [page-title]="pageTitle"
     [show-button]="false"
-    [subtitle]="isEditMode ? 'Edite as informações do lançamento' : 'Registre uma nova receita ou despesa'"
+    [subtitle]="pageSubtitle"
 ></app-page-header>
 
 <form [formGroup]="resourceForm" (submit)="submitForm()" class="entry-form">

@@ -47,6 +47,13 @@ export class EntryFormComponent extends BaseResourceFormComponent<Entry> impleme
     return this.resource.id !== null && this.resource.id !== undefined;
   }
 
+  // Propriedade para o subtítulo da página
+  get pageSubtitle(): string {
+    return this.isEditMode 
+      ? 'Edite as informações do lançamento' 
+      : 'Registre uma nova receita ou despesa';
+  }
+
   constructor(
       protected entryService: EntryService,
       protected categoryService: CategoryService,

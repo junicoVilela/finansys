@@ -48,8 +48,8 @@ export class EntryListComponent extends BaseResourceListComponent<Entry> {
   isDeleting: boolean = false;
   modalData: ConfirmDeleteData | null = null;
 
-  // Propriedade para usar Math no template
-  Math = Math;
+  // Propriedade para o subtítulo da página
+  pageSubtitle: string = 'Gerencie suas receitas e despesas de forma organizada';
 
   // Propriedades para o componente de paginação
   paginationData: PaginationData = {

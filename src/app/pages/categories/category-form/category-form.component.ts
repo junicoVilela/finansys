@@ -36,6 +36,13 @@ export class CategoryFormComponent extends BaseResourceFormComponent<Category> {
     return this.resource.id !== null && this.resource.id !== undefined;
   }
 
+  // Propriedade para o subtítulo da página
+  get pageSubtitle(): string {
+    return this.isEditMode 
+      ? 'Edite as informações da categoria' 
+      : 'Crie uma nova categoria para organizar suas finanças';
+  }
+
   // Propriedades para seleção de ícones
   selectedIcon: string | null = null;
   showIconSelector: boolean = false;

@@ -45,8 +45,8 @@ export class CategoryListComponent extends BaseResourceListComponent<Category> {
   isDeleting: boolean = false;
   modalData: ConfirmDeleteData | null = null;
 
-  // Propriedade para usar Math no template
-  Math = Math;
+  // Propriedade para o subtítulo da página
+  pageSubtitle: string = 'Gerencie suas categorias de receitas e despesas';
 
   // Propriedades para o componente de paginação
   paginationData: PaginationData = {

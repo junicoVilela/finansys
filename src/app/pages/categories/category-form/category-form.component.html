@@ -5,7 +5,7 @@
 <app-page-header
     [page-title]="pageTitle"
     [show-button]="false"
-    [subtitle]="isEditMode ? 'Edite as informações da categoria' : 'Crie uma nova categoria para organizar suas finanças'"
+    [subtitle]="pageSubtitle"
 ></app-page-header>
 
 <form [formGroup]="resourceForm" (submit)="submitForm()" class="category-form">

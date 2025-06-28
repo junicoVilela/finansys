@@ -30,6 +30,9 @@ export class ReportsComponent implements OnInit {
   expenseChartData: any;
   revenueChartData: any;
 
+  // Propriedade para o subtítulo da página
+  pageSubtitle: string = 'Visualize seus dados financeiros com gráficos e análises';
+
   basicOptions = {
     plugins: {
       legend: {
