@@ -137,7 +137,7 @@
             </button>
             <button 
               class="btn btn-outline-danger rounded-circle d-flex align-items-center justify-content-center"
-              (click)="deleteResource(category)"
+              (click)="openDeleteModal(category)"
               title="Excluir categoria"
               style="width: 35px; height: 35px;"
             >
@@ -216,7 +216,7 @@
                 </button>
                 <button 
                   class="btn btn-outline-danger"
-                  (click)="deleteResource(category)"
+                  (click)="openDeleteModal(category)"
                   title="Excluir categoria"
                 >
                   <i class="bi bi-trash"></i>
@@ -251,3 +251,14 @@
     </nav>
   </div>
 </div>
+
+<!-- Modal de Confirmação de Exclusão Reutilizável -->
+<app-confirm-delete-modal
+  modalId="deleteModal"
+  [data]="modalData"
+  [isDeleting]="isDeleting"
+  itemType="categoria"
+  deleteButtonText="Excluir Categoria"
+  (confirm)="confirmDelete()"
+  (cancel)="cancelDelete()"
+></app-confirm-delete-modal>

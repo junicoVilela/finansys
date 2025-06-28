@@ -10,6 +10,8 @@ import { IconService } from "../../../shared/services/icon.service";
 
 import { BreadCrumbComponent } from "../../../shared/components/bread-crumb/bread-crumb.component";
 import { PageHeaderComponent } from "../../../shared/components/page-header/page-header.component";
+import { ConfirmDeleteModalComponent, ConfirmDeleteData } from "../../../shared/components/confirm-delete-modal/confirm-delete-modal.component";
+import { ConfirmDeleteService } from "../../../shared/services/confirm-delete.service";
 
 @Component({
   selector: 'app-category-list',
@@ -21,7 +23,8 @@ import { PageHeaderComponent } from "../../../shared/components/page-header/page
     FormsModule,
     BreadCrumbComponent, 
     PageHeaderComponent, 
-    RouterLink
+    RouterLink,
+    ConfirmDeleteModalComponent
   ]
 })
 export class CategoryListComponent extends BaseResourceListComponent<Category> {
@@ -29,11 +32,16 @@ export class CategoryListComponent extends BaseResourceListComponent<Category> {
   searchTerm: string = '';
   viewMode: 'grid' | 'list' = 'grid';
   filteredResources: Category[] = [];
+  
+  categoryToDelete: Category | null = null;
+  isDeleting: boolean = false;
+  modalData: ConfirmDeleteData | null = null;
 
   constructor(
     private categoryService: CategoryService,
     protected override injector: Injector,
-    private iconService: IconService
+    private iconService: IconService,
+    private confirmDeleteService: ConfirmDeleteService
   ) {
     super(categoryService, injector);
   }
@@ -122,24 +130,96 @@ export class CategoryListComponent extends BaseResourceListComponent<Category> {
   override deleteResource(category: Category): void {
     const message = `Tem certeza que deseja excluir a categoria "${category.name}"?`;
     if (confirm(message)) {
+      console.log('Iniciando exclusão da categoria:', category.id, category.name);
       this.isLoading = true;
       
       this.categoryService.delete(category.id!).subscribe({
         next: () => {
+          console.log('Categoria excluída com sucesso no servidor');
+          
+          // Remover da lista principal
           const initialLength = this.resources.length;
           this.resources = this.resources.filter(element => element.id !== category.id);
-
+          console.log(`Removido da lista principal: ${initialLength} -> ${this.resources.length}`);
+          
+          // Atualizar lista filtrada imediatamente
           this.updateFilteredResources();
           this.filterCategories();
           
           this.isLoading = false;
           this.toastrService.success('Categoria excluída com sucesso!');
+          
+          console.log('Estado final - resources:', this.resources.length, 'filteredResources:', this.filteredResources.length);
         },
         error: (error) => {
+          console.error('Erro ao excluir categoria:', error);
           this.isLoading = false;
           this.toastrService.error('Erro ao excluir a categoria');
         }
       });
     }
+  }
+
+  // Método para abrir o modal de exclusão
+  openDeleteModal(category: Category): void {
+    this.categoryToDelete = category;
+    this.modalData = {
+      title: 'Confirmar Exclusão',
+      message: 'Tem certeza que deseja excluir a categoria',
+      itemName: category.name || '',
+      warningMessage: 'Todos os lançamentos associados a esta categoria também serão afetados.',
+      icon: 'bi-exclamation-triangle'
+    };
+    
+    // Usar Bootstrap Modal API
+    const modal = new (window as any).bootstrap.Modal(document.getElementById('deleteModal'));
+    modal.show();
+  }
+
+  // Método para confirmar a exclusão via modal
+  confirmDelete(): void {
+    if (!this.categoryToDelete) return;
+    
+    this.isDeleting = true;
+    console.log('Iniciando exclusão da categoria:', this.categoryToDelete.id, this.categoryToDelete.name);
+    
+    this.categoryService.delete(this.categoryToDelete.id!).subscribe({
+      next: () => {
+        console.log('Categoria excluída com sucesso no servidor');
+        
+        // Remover da lista principal
+        const initialLength = this.resources.length;
+        this.resources = this.resources.filter(element => element.id !== this.categoryToDelete!.id);
+        console.log(`Removido da lista principal: ${initialLength} -> ${this.resources.length}`);
+        
+        // Atualizar lista filtrada imediatamente
+        this.updateFilteredResources();
+        this.filterCategories();
+        
+        this.isDeleting = false;
+        this.categoryToDelete = null;
+        this.modalData = null;
+        
+        // Fechar o modal
+        const modal = (window as any).bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
+        modal.hide();
+        
+        this.toastrService.success('Categoria excluída com sucesso!');
+        
+        console.log('Estado final - resources:', this.resources.length, 'filteredResources:', this.filteredResources.length);
+      },
+      error: (error) => {
+        console.error('Erro ao excluir categoria:', error);
+        this.isDeleting = false;
+        this.toastrService.error('Erro ao excluir a categoria');
+      }
+    });
+  }
+
+  // Método para cancelar a exclusão
+  cancelDelete(): void {
+    this.categoryToDelete = null;
+    this.modalData = null;
+    this.isDeleting = false;
   }
 }
