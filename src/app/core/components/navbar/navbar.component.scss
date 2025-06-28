@@ -1,0 +1,142 @@
+/* Estilos para alinhar os itens de navegação à esquerda */
+.navbar-nav-left {
+  display: flex !important;
+  align-items: center !important;
+  margin-left: 0rem !important; /* Espaçamento após a marca Insight Sales */
+  padding-left: 0rem !important;
+}
+
+.navbar-nav-left .navbar-nav {
+  flex-direction: row !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  margin-left: 2rem !important; /* Margem adicional nos itens */
+}
+
+.navbar-nav-left .nav-item {
+  margin-right: 1rem !important;
+  margin-left: 1rem !important; /* Margem à esquerda de cada item */
+}
+
+.navbar-nav-left .nav-item:first-child {
+  margin-left: 3rem !important; /* Margem extra no primeiro item */
+}
+
+.navbar-nav-left .nav-item:last-child {
+  margin-right: 0 !important;
+}
+
+.navbar-nav-left .nav-link {
+  color: rgba(255, 255, 255, 0.8) !important;
+  font-weight: 500 !important;
+  padding: 0.5rem 0.75rem !important;
+  border-radius: 0.375rem !important;
+  transition: all 0.2s ease !important;
+}
+
+.navbar-nav-left .nav-link:hover {
+  color: #fff !important;
+  background-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+.navbar-nav-left .nav-item.active .nav-link {
+  color: #fff !important;
+  background-color: rgba(255, 255, 255, 0.15) !important;
+}
+
+/* Elemento de espaçamento para alinhar com o sidebar */
+.navbar-spacer {
+  width: 4rem;
+  flex-shrink: 0;
+}
+
+.logout-btn {
+  border-radius: 50px;
+  font-weight: 500;
+  transition: all 0.2s ease;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+}
+
+.logout-btn:hover {
+  background: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255, 255, 255, 0.5);
+  color: #fff;
+  transform: translateY(-1px);
+}
+
+.logout-btn:focus {
+  box-shadow: 0 0 0 0.2rem rgba(255, 255, 255, 0.25);
+}
+
+.logout-dropdown {
+  color: #dc3545;
+}
+
+.logout-dropdown:hover {
+  background-color: #f8d7da;
+  color: #721c24;
+}
+
+.user-greeting {
+  font-style: italic;
+  opacity: 0.9;
+}
+
+.navbar-vertical-divider {
+  width: 1px;
+  height: 30px;
+  background: rgba(255, 255, 255, 0.2);
+  margin: 0 15px;
+}
+
+.dropdown-header {
+  padding: 0.75rem 1rem;
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
+}
+
+.dropdown-header .text-muted {
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  padding: 0.75rem 1rem;
+  transition: all 0.15s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+  color: #495057;
+}
+
+.dropdown-item .material-icons {
+  font-size: 18px;
+  margin-right: 0.75rem;
+  opacity: 0.7;
+}
+
+/* Responsividade para dispositivos móveis */
+@media (max-width: 991.98px) {
+  .navbar-nav-left {
+    display: none !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .logout-btn {
+    padding: 0.25rem 0.5rem;
+  }
+  
+  .logout-btn .material-icons {
+    font-size: 18px;
+  }
+  
+  .user-greeting {
+    font-size: 0.75rem;
+  }
+}
