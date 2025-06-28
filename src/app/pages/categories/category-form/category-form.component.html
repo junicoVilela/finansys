@@ -4,33 +4,258 @@
 
 <app-page-header
     [page-title]="pageTitle"
-    button-text="+ Nova Categoria"
-    button-link="/categories/new"
-    button-class="btn-success"
+    [show-button]="false"
+    [subtitle]="isEditMode ? 'Edite as informações da categoria' : 'Crie uma nova categoria para organizar suas finanças'"
 ></app-page-header>
 
-<form [formGroup]="resourceForm" (submit)="submitForm()">
-    <div class="card mt-3 rounded-3 shadow-sm">
-        <div class="card-header py-3 mb-3">
-            <h4 class="my-0 fw-normal">Informações sobre a categoria</h4>
+<form [formGroup]="resourceForm" (submit)="submitForm()" class="category-form">
+  <div class="row justify-content-center">
+    <div class="col-lg-12">
+      <div class="card border-0 shadow-sm mb-4">
+        <div class="card-header bg-light border-0 py-3">
+          <div class="d-flex align-items-center">
+            <div class="bg-primary bg-gradient rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+              <i class="bi bi-collection text-white fs-5"></i>
+            </div>
+            <div>
+              <h3 class="fw-bold text-dark mb-1">Informações da Categoria</h3>
+              <p class="text-muted mb-0 small">Preencha os dados básicos da categoria</p>
+            </div>
+          </div>
         </div>
-        <div class="row m-1">
-            <div class="col-md-6">
-                <label for="nome" class="form-label">Nome</label>
-                <input type="text" class="form-control" id="nome" formControlName="name" [ngClass]="{'is-invalid': f['name'].touched && f['name'].invalid}" >
-                <small class="text-muted">Exemplo: Moradia</small>
-
+        
+        <div class="card-body p-4">
+          <div class="row">
+            <div class="col-lg-6 mb-4">
+              <div class="form-group">
+                <label for="name" class="form-label fw-semibold">
+                  <i class="bi bi-tag me-2 text-primary"></i>
+                  Nome da Categoria *
+                </label>
+                <div class="position-relative">
+                  <input 
+                    type="text" 
+                    class="form-control form-control-lg" 
+                    id="name" 
+                    formControlName="name"
+                    placeholder="Ex: Moradia, Alimentação, Transporte..."
+                    [ngClass]="{'is-invalid': f['name'].touched && f['name'].invalid}"
+                  >
+                  <div class="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted">
+                    <i class="bi bi-collection"></i>
+                  </div>
+                </div>
+                <div class="form-text">
+                  <i class="bi bi-info-circle me-1"></i>
+                  Escolha um nome claro e descritivo para a categoria
+                </div>
                 <app-form-field-error [form-control]="$any(resourceForm.get('name'))"></app-form-field-error>
+              </div>
             </div>
 
-            <div class="col-md-6">
-                <label for="descricao" class="form-label">Descrição</label>
-                <input type="text" class="form-control" id="descricao" formControlName="description">
-                <small class="text-muted">Exemplo: Pagamentos de conta da casa</small>
+            <div class="col-lg-6 mb-4">
+              <div class="form-group">
+                <label class="form-label fw-semibold">
+                  <i class="bi bi-palette me-2 text-primary"></i>
+                  Ícone da Categoria
+                </label>
+                <div class="icon-selector">
+                  <div class="d-flex align-items-center mb-3">
+                    <div class="bg-primary bg-gradient rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                      <i class="bi text-white fs-5" [class]="getCategoryIcon()"></i>
+                    </div>
+                    <div class="flex-grow-1">
+                      <button 
+                        type="button" 
+                        class="btn btn-outline-primary btn-sm"
+                        (click)="showIconSelector = !showIconSelector"
+                      >
+                        <i class="bi bi-palette me-2"></i>
+                        {{ selectedIcon ? 'Alterar Ícone' : 'Escolher Ícone' }}
+                      </button>
+                      <button 
+                        type="button" 
+                        class="btn btn-outline-secondary btn-sm ms-2"
+                        (click)="resetIcon()"
+                        *ngIf="selectedIcon"
+                      >
+                        <i class="bi bi-arrow-clockwise me-2"></i>
+                        Usar Padrão
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <!-- Seletor de ícones -->
+                  <div class="icon-grid" *ngIf="showIconSelector">
+                    <div class="card border-0 shadow-sm">
+                      <div class="card-header bg-light border-0 py-2">
+                        <h6 class="mb-0 fw-semibold">
+                          <i class="bi bi-grid-3x3-gap me-2"></i>
+                          Selecione um ícone
+                        </h6>
+                      </div>
+                      <div class="card-body p-3">
+                        <!-- Campo de busca -->
+                        <div class="mb-3">
+                          <input
+                            type="text"
+                            class="form-control"
+                            placeholder="Buscar ícone por nome..."
+                            [(ngModel)]="searchTerm"
+                            (ngModelChange)="onSearchIcons($event)"
+                          />
+                        </div>
+                        <!-- Ícones populares -->
+                        <div *ngIf="!searchTerm" class="mb-2">
+                          <div class="fw-semibold text-muted small mb-1">
+                            <i class="bi bi-star-fill text-warning me-1"></i>
+                            Ícones populares
+                          </div>
+                          <div class="row g-2 mb-3">
+                            <div
+                              class="col-2 col-md-1"
+                              *ngFor="let icon of popularIcons"
+                            >
+                              <button
+                                type="button"
+                                class="btn btn-outline-secondary w-100 h-100 d-flex align-items-center justify-content-center p-2"
+                                [class.btn-primary]="selectedIcon === icon"
+                                (click)="selectIcon(icon)"
+                                title="{{ getIconName(icon) }}"
+                              >
+                                <i class="bi" [class]="icon"></i>
+                              </button>
+                            </div>
+                          </div>
+                        </div>
+                        <!-- Todos os ícones (filtrados) -->
+                        <div>
+                          <div class="fw-semibold text-muted small mb-1">
+                            <i class="bi bi-grid-3x3-gap me-1"></i>
+                            Todos os ícones
+                          </div>
+                          <div class="row g-2">
+                            <div
+                              class="col-2 col-md-1"
+                              *ngFor="let icon of filteredIcons"
+                            >
+                              <button
+                                type="button"
+                                class="btn btn-outline-secondary w-100 h-100 d-flex align-items-center justify-content-center p-2"
+                                [class.btn-primary]="selectedIcon === icon"
+                                (click)="selectIcon(icon)"
+                                title="{{ getIconName(icon) }}"
+                              >
+                                <i class="bi" [class]="icon"></i>
+                              </button>
+                            </div>
+                          </div>
+                          <div *ngIf="filteredIcons.length === 0" class="text-center text-muted mt-3">
+                            Nenhum ícone encontrado para sua busca.
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-text">
+                  <i class="bi bi-info-circle me-1"></i>
+                  Escolha um ícone personalizado ou deixe o sistema escolher automaticamente
+                </div>
+              </div>
             </div>
-            <div class="col-12">
-            <button [disabled]="submittingForm || resourceForm.invalid" class="w-25 btn btn-primary btn-lg mt-3 mb-3 float-end" type="submit">Salvar</button>
+
+            <div class="col-lg-12 mb-4">
+              <div class="form-group">
+                <label for="description" class="form-label fw-semibold">
+                  <i class="bi bi-text-paragraph me-2 text-primary"></i>
+                  Descrição
+                </label>
+                <div class="position-relative">
+                  <textarea 
+                    class="form-control form-control-lg" 
+                    id="description" 
+                    formControlName="description"
+                    rows="3"
+                    placeholder="Ex: Gastos com moradia, aluguel, contas da casa..."
+                  ></textarea>
+                  <div class="position-absolute top-0 start-0 mt-3 ms-3 text-muted">
+                    <i class="bi bi-text-paragraph"></i>
+                  </div>
+                </div>
+                <div class="form-text">
+                  <i class="bi bi-info-circle me-1"></i>
+                  Adicione uma descrição detalhada (opcional)
+                </div>
+              </div>
             </div>
+          </div>
+
+          <!-- Preview da categoria -->
+          <div class="category-preview mt-4 pt-4 border-top" *ngIf="resourceForm.get('name')?.value">
+            <h5 class="fw-semibold text-dark mb-3">
+              <i class="bi bi-eye me-2 text-info"></i>
+              Preview da Categoria
+            </h5>
+            <div class="card bg-light border-0">
+              <div class="card-body d-flex align-items-center">
+                <div class="bg-primary bg-gradient rounded-circle d-flex align-items-center justify-content-center me-3" style="width: 50px; height: 50px;">
+                  <i class="bi text-white" [class]="getCategoryIcon()"></i>
+                </div>
+                <div class="flex-grow-1">
+                  <h6 class="fw-bold text-dark mb-1">{{ resourceForm.get('name')?.value }}</h6>
+                  <p class="text-muted mb-0" *ngIf="resourceForm.get('description')?.value">
+                    {{ resourceForm.get('description')?.value }}
+                  </p>
+                  <p class="text-muted mb-0 fst-italic" *ngIf="!resourceForm.get('description')?.value">
+                    <em>Sem descrição</em>
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
+      </div>
+
+      <div class="card border-0 shadow-sm">
+        <div class="card-body p-4">
+          <div class="row align-items-center">
+            <div class="col-lg-8">
+              <h6 class="fw-semibold text-dark mb-1">
+                <i class="bi bi-gear me-2 text-primary"></i>
+                Ações
+              </h6>
+              <p class="text-muted mb-0 small">
+                {{ isEditMode ? 'Salve as alterações ou cancele a edição' : 'Crie a categoria ou cancele a operação' }}
+              </p>
+            </div>
+            <div class="col-lg-4 text-lg-end mt-3 mt-lg-0">
+              <div class="d-flex gap-2 justify-content-lg-end">
+                <button 
+                  type="button"
+                  routerLink="/categories" 
+                  class="btn btn-outline-secondary"
+                  [disabled]="submittingForm"
+                >
+                  <i class="bi bi-x-circle me-2"></i>
+                  Cancelar
+                </button>
+                <button 
+                  type="submit"
+                  class="btn btn-primary"
+                  [disabled]="submittingForm || resourceForm.invalid"
+                >
+                  <i class="bi me-2" *ngIf="!submittingForm" [class]="isEditMode ? 'bi-check-circle' : 'bi-plus-circle'"></i>
+                  <div class="spinner-border spinner-border-sm me-2" *ngIf="submittingForm" role="status">
+                    <span class="visually-hidden">Salvando...</span>
+                  </div>
+                  {{ submittingForm ? 'Salvando...' : (isEditMode ? 'Salvar Alterações' : 'Criar Categoria') }}
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
+  </div>
 </form>

@@ -5,18 +5,18 @@ import { Entry } from "./pages/entries/shared/entry.model";
 export class InMemoryDatabase implements InMemoryDbService {
     createDb() {
         const categories: Category[] = [
-            { id: 1, name: 'Moradia', description: 'Pagamentos de Contas da Casa' },
-            { id: 2, name: 'Saúde', description: 'Plano de Saúde e Remédios' },
-            { id: 3, name: 'Lazer', description: 'Cinema, parques, praia, etc' },
-            { id: 4, name: 'Salário', description: 'Recebimento de salário' },
-            { id: 5, name: 'Freelas', description: 'Trabalhos como freelancer' },
-            { id: 6, name: 'Alimentação', description: 'Supermercado, restaurantes e delivery' },
-            { id: 7, name: 'Transporte', description: 'Combustível, transporte público e manutenção' },
-            { id: 8, name: 'Educação', description: 'Cursos, livros e material didático' },
-            { id: 9, name: 'Roupas', description: 'Vestuário e calçados' },
-            { id: 10, name: 'Investimentos', description: 'Aplicações e investimentos diversos' },
-            { id: 11, name: 'Vendas', description: 'Vendas de produtos ou serviços' },
-            { id: 12, name: 'Tecnologia', description: 'Software, hardware e gadgets' }
+            { id: 1, name: 'Moradia', description: 'Pagamentos de Contas da Casa', icon: 'bi-house' },
+            { id: 2, name: 'Saúde', description: 'Plano de Saúde e Remédios', icon: 'bi-heart-pulse' },
+            { id: 3, name: 'Lazer', description: 'Cinema, parques, praia, etc', icon: 'bi-film' },
+            { id: 4, name: 'Salário', description: 'Recebimento de salário', icon: 'bi-graph-up' },
+            { id: 5, name: 'Freelas', description: 'Trabalhos como freelancer', icon: 'bi-briefcase' },
+            { id: 6, name: 'Alimentação', description: 'Supermercado, restaurantes e delivery', icon: 'bi-cup-hot' },
+            { id: 7, name: 'Transporte', description: 'Combustível, transporte público e manutenção', icon: 'bi-car-front' },
+            { id: 8, name: 'Educação', description: 'Cursos, livros e material didático', icon: 'bi-mortarboard' },
+            { id: 9, name: 'Roupas', description: 'Vestuário e calçados', icon: 'bi-bag' },
+            { id: 10, name: 'Investimentos', description: 'Aplicações e investimentos diversos', icon: 'bi-bank' },
+            { id: 11, name: 'Vendas', description: 'Vendas de produtos ou serviços', icon: 'bi-cart' },
+            { id: 12, name: 'Tecnologia', description: 'Software, hardware e gadgets', icon: 'bi-laptop' }
         ];
 
         const entries: Entry[] = [

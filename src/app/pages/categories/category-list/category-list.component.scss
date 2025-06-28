@@ -1,0 +1,15 @@
+/* 
+ * Este componente agora usa apenas classes do Bootstrap
+ * Não há necessidade de estilos customizados
+ */
+
+/* Gradiente personalizado para o header (se necessário) */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
+}
+
+/* Hover effect sutil para os cards */
+.category-card:hover {
+  transform: translateY(-2px);
+  transition: transform 0.2s ease-in-out;
+}

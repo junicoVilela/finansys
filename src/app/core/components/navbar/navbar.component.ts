@@ -1,9 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { RouterLink, RouterLinkActive } from '@angular/router';
-import { NgIf } from '@angular/common';
 import { Observable } from 'rxjs';
 import { CommonModule } from '@angular/common';
-import { RouterModule } from '@angular/router';
 
 import { AuthService } from '../../services/auth.service';
 import { User } from '../../../shared/models/user.model';
@@ -13,7 +11,7 @@ import { User } from '../../../shared/models/user.model';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, NgIf, CommonModule, RouterModule]
+  imports: [RouterLink, RouterLinkActive, CommonModule]
 })
 export class NavbarComponent implements OnInit {
   currentUser$: Observable<User | null>;
