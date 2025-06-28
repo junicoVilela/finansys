@@ -1,12 +1,35 @@
 /* Estilos para o formulário de lançamentos */
 
+/* Gradiente personalizado para o header */
+.bg-gradient-primary {
+  background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
+}
+
+.bg-gradient-light {
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+}
+
 /* Melhorar a aparência dos inputs com ícones */
 .form-control-lg {
   padding-left: 3rem;
+  border-radius: 0.75rem;
+  transition: all 0.3s ease-in-out;
+  
+  &:focus {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.15);
+  }
 }
 
 .form-select-lg {
   padding-left: 3rem;
+  border-radius: 0.75rem;
+  transition: all 0.3s ease-in-out;
+  
+  &:focus {
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(13, 110, 253, 0.15);
+  }
 }
 
 /* Estilos para os radio buttons customizados */
@@ -16,14 +39,19 @@
 
 .form-check-label {
   cursor: pointer;
-  transition: all 0.2s ease-in-out;
+  transition: all 0.3s ease-in-out;
   border: 2px solid #dee2e6;
   user-select: none;
   position: relative;
+  background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
   
   &:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 0.25rem 0.5rem rgba(0, 0, 0, 0.1);
+    transform: translateY(-2px);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  }
+  
+  &.shadow {
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.15) !important;
   }
 }
 
@@ -31,14 +59,26 @@
 .form-check-label[for="expense"] {
   &:hover {
     border-color: #dc3545;
-    background-color: rgba(220, 53, 69, 0.1);
+    background: linear-gradient(135deg, rgba(220, 53, 69, 0.1) 0%, rgba(220, 53, 69, 0.05) 100%);
+  }
+  
+  &.bg-danger {
+    background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
+    border-color: #dc3545;
+    box-shadow: 0 8px 25px rgba(220, 53, 69, 0.3);
   }
 }
 
 .form-check-label[for="revenue"] {
   &:hover {
     border-color: #198754;
-    background-color: rgba(25, 135, 84, 0.1);
+    background: linear-gradient(135deg, rgba(25, 135, 84, 0.1) 0%, rgba(25, 135, 84, 0.05) 100%);
+  }
+  
+  &.bg-success {
+    background: linear-gradient(135deg, #198754 0%, #157347 100%) !important;
+    border-color: #198754;
+    box-shadow: 0 8px 25px rgba(25, 135, 84, 0.3);
   }
 }
 
@@ -46,46 +86,72 @@
 .form-check-label[for="paidRadio"] {
   &:hover {
     border-color: #198754;
-    background-color: rgba(25, 135, 84, 0.1);
+    background: linear-gradient(135deg, rgba(25, 135, 84, 0.1) 0%, rgba(25, 135, 84, 0.05) 100%);
+  }
+  
+  &.bg-success {
+    background: linear-gradient(135deg, #198754 0%, #157347 100%) !important;
+    border-color: #198754;
+    box-shadow: 0 8px 25px rgba(25, 135, 84, 0.3);
   }
 }
 
 .form-check-label[for="pendingRadio"] {
   &:hover {
     border-color: #ffc107;
-    background-color: rgba(255, 193, 7, 0.1);
+    background: linear-gradient(135deg, rgba(255, 193, 7, 0.1) 0%, rgba(255, 193, 7, 0.05) 100%);
+  }
+  
+  &.bg-warning {
+    background: linear-gradient(135deg, #ffc107 0%, #e0a800 100%) !important;
+    border-color: #ffc107;
+    box-shadow: 0 8px 25px rgba(255, 193, 7, 0.3);
   }
 }
 
 /* Preview do lançamento */
-.entry-preview .card:hover {
-  transform: translateY(-2px);
-  transition: transform 0.2s ease-in-out;
+.entry-preview .card {
+  transition: all 0.3s ease-in-out;
+  
+  &:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.1) !important;
+  }
 }
 
-/* Estilos para o PrimeNG Calendar */
-:host ::ng-deep .p-calendar {
-  width: 100%;
-  
-  .p-inputtext {
-    padding-left: 3rem;
-    border-radius: 0.5rem;
-    border: 1px solid #dee2e6;
-    
-    &:focus {
-      border-color: #0d6efd;
-      box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
-    }
+/* Badges melhorados */
+.badge {
+  font-weight: 500;
+  letter-spacing: 0.5px;
+}
+
+/* Estados de foco melhorados */
+.form-control:focus,
+.form-select:focus {
+  border-color: #0d6efd;
+  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+}
+
+/* Campos válidos */
+.form-control.border-primary,
+.form-select.border-primary {
+  border-color: #0d6efd !important;
+  background-color: rgba(13, 110, 253, 0.02);
+}
+
+/* Animações de entrada */
+.card {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
   }
-  
-  .p-button {
-    background: transparent;
-    border: none;
-    color: #6c757d;
-    
-    &:hover {
-      background: rgba(108, 117, 125, 0.1);
-    }
+  to {
+    opacity: 1;
+    transform: translateY(0);
   }
 }
 
@@ -104,18 +170,10 @@
   .d-flex.gap-3 {
     gap: 0.5rem !important;
   }
-}
-
-/* Animações */
-.card {
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-}
-
-/* Estados de foco */
-.form-control:focus,
-.form-select:focus {
-  border-color: #0d6efd;
-  box-shadow: 0 0 0 0.2rem rgba(13, 110, 253, 0.25);
+  
+  .card-body {
+    padding: 1.5rem !important;
+  }
 }
 
 /* Estilos para campos obrigatórios */
@@ -126,4 +184,26 @@
 
 .form-label.fw-semibold:has(+ .form-text)::after {
   content: "";
+}
+
+/* Melhorar espaçamento */
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-text {
+  font-size: 0.875rem;
+  color: #6c757d;
+  margin-top: 0.5rem;
+}
+
+/* Ícones nos campos */
+.position-absolute i {
+  color: #6c757d;
+  transition: color 0.3s ease-in-out;
+}
+
+.form-control:focus + .position-absolute i,
+.form-select:focus + .position-absolute i {
+  color: #0d6efd;
 }

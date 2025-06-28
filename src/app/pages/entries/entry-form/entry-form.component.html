@@ -24,16 +24,16 @@
           </div>
         </div>
         
-        <div class="card-body p-4">
-          <div class="row">
-            <!-- Tipo de Lançamento -->
-            <div class="col-lg-6 mb-4">
+        <div class="card-body p-5">
+          <!-- Tipo de Lançamento -->
+          <div class="row mb-5">
+            <div class="col-12">
               <div class="form-group">
-                <label class="form-label fw-semibold">
+                <label class="form-label fw-bold fs-5 mb-3">
                   <i class="bi bi-arrow-up-down me-2 text-primary"></i>
                   Tipo de Lançamento
                 </label>
-                <div class="d-flex gap-3">
+                <div class="d-flex gap-4">
                   <div class="form-check form-check-inline flex-grow-1">
                     <input 
                       class="form-check-input" 
@@ -44,14 +44,17 @@
                       value="expense"
                     >
                     <label 
-                      class="form-check-label d-flex align-items-center justify-content-center p-3 border rounded-3" 
+                      class="form-check-label d-flex align-items-center justify-content-center p-4 border-2 rounded-4 h-100" 
                       for="expense" 
                       [class.border-danger]="resourceForm.get('type')?.value === 'expense'"
                       [class.bg-danger]="resourceForm.get('type')?.value === 'expense'"
                       [class.text-white]="resourceForm.get('type')?.value === 'expense'"
+                      [class.shadow]="resourceForm.get('type')?.value === 'expense'"
                     >
-                      <i class="bi bi-arrow-down me-2"></i>
-                      Despesa
+                      <div class="text-center">
+                        <i class="bi bi-arrow-down-circle fs-1 mb-2 d-block"></i>
+                        <span class="fw-bold">Despesa</span>
+                      </div>
                     </label>
                   </div>
                   <div class="form-check form-check-inline flex-grow-1">
@@ -64,24 +67,28 @@
                       value="revenue"
                     >
                     <label 
-                      class="form-check-label d-flex align-items-center justify-content-center p-3 border rounded-3" 
+                      class="form-check-label d-flex align-items-center justify-content-center p-4 border-2 rounded-4 h-100" 
                       for="revenue"
                       [class.border-success]="resourceForm.get('type')?.value === 'revenue'"
                       [class.bg-success]="resourceForm.get('type')?.value === 'revenue'"
                       [class.text-white]="resourceForm.get('type')?.value === 'revenue'"
+                      [class.shadow]="resourceForm.get('type')?.value === 'revenue'"
                     >
-                      <i class="bi bi-arrow-up me-2"></i>
-                      Receita
+                      <div class="text-center">
+                        <i class="bi bi-arrow-up-circle fs-1 mb-2 d-block"></i>
+                        <span class="fw-bold">Receita</span>
+                      </div>
                     </label>
                   </div>
                 </div>
-
                 <app-form-field-error [form-control]="$any(resourceForm.get('type'))"></app-form-field-error>
               </div>
             </div>
+          </div>
 
+          <div class="row">
             <!-- Nome do Lançamento -->
-            <div class="col-lg-6 mb-4">
+            <div class="col-lg-8 mb-4">
               <div class="form-group">
                 <label for="name" class="form-label fw-semibold">
                   <i class="bi bi-tag me-2 text-primary"></i>
@@ -90,11 +97,11 @@
                 <div class="position-relative">
                   <input 
                     type="text" 
-                    class="form-control form-control-lg" 
+                    class="form-control form-control-lg border-2" 
                     id="name" 
                     formControlName="name"
                     placeholder="Ex: Salário, Aluguel, Conta de luz..."
-                    [ngClass]="{'is-invalid': f['name'].touched && f['name'].invalid}"
+                    [ngClass]="{'is-invalid': f['name'].touched && f['name'].invalid, 'border-primary': f['name'].valid && f['name'].touched}"
                   >
                   <div class="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted">
                     <i class="bi bi-tag"></i>
@@ -118,14 +125,14 @@
                 <div class="position-relative">
                   <input 
                     type="text" 
-                    class="form-control form-control-lg text-end" 
+                    class="form-control form-control-lg text-end border-2" 
                     id="amount" 
                     formControlName="amount"
                     mask="separator.2" 
                     thousandSeparator="." 
                     decimalMarker=","
                     placeholder="0,00"
-                    [ngClass]="{'is-invalid': f['amount'].touched && f['amount'].invalid}"
+                    [ngClass]="{'is-invalid': f['amount'].touched && f['amount'].invalid, 'border-primary': f['amount'].valid && f['amount'].touched}"
                   >
                   <div class="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted">
                     <i class="bi bi-currency-dollar"></i>
@@ -150,9 +157,9 @@
                   <input 
                     type="date" 
                     id="date"
-                    class="form-control form-control-lg"
+                    class="form-control form-control-lg border-2"
                     formControlName="date"
-                    [ngClass]="{'is-invalid': f['date'].touched && f['date'].invalid}"
+                    [ngClass]="{'is-invalid': f['date'].touched && f['date'].invalid, 'border-primary': f['date'].valid && f['date'].touched}"
                   >
                   <div class="position-absolute top-50 start-0 translate-middle-y ms-3 text-muted">
                     <i class="bi bi-calendar"></i>
@@ -173,7 +180,7 @@
                   <i class="bi bi-check-circle me-2 text-primary"></i>
                   Status de Pagamento
                 </label>
-                <div class="d-flex gap-2">
+                <div class="d-flex gap-3">
                   <div class="form-check form-check-inline flex-grow-1">
                     <input 
                       class="form-check-input" 
@@ -184,11 +191,12 @@
                       (change)="setPaidStatus(true)"
                     >
                     <label 
-                      class="form-check-label d-flex align-items-center justify-content-center p-2 border rounded-3" 
+                      class="form-check-label d-flex align-items-center justify-content-center p-3 border-2 rounded-3" 
                       for="paidRadio"
                       [class.border-success]="resourceForm.get('paid')?.value === true"
                       [class.bg-success]="resourceForm.get('paid')?.value === true"
                       [class.text-white]="resourceForm.get('paid')?.value === true"
+                      [class.shadow]="resourceForm.get('paid')?.value === true"
                       (click)="setPaidStatus(true)"
                     >
                       <i class="bi bi-check-circle me-2"></i>
@@ -205,11 +213,12 @@
                       (change)="setPaidStatus(false)"
                     >
                     <label 
-                      class="form-check-label d-flex align-items-center justify-content-center p-2 border rounded-3" 
+                      class="form-check-label d-flex align-items-center justify-content-center p-3 border-2 rounded-3" 
                       for="pendingRadio"
                       [class.border-warning]="resourceForm.get('paid')?.value === false"
                       [class.bg-warning]="resourceForm.get('paid')?.value === false"
                       [class.text-white]="resourceForm.get('paid')?.value === false"
+                      [class.shadow]="resourceForm.get('paid')?.value === false"
                       (click)="setPaidStatus(false)"
                     >
                       <i class="bi bi-clock me-2"></i>
@@ -222,7 +231,7 @@
             </div>
 
             <!-- Categoria -->
-            <div class="col-lg-6 mb-4">
+            <div class="col-lg-4 mb-4">
               <div class="form-group">
                 <label for="categoryId" class="form-label fw-semibold">
                   <i class="bi bi-collection me-2 text-primary"></i>
@@ -231,9 +240,9 @@
                 <div class="position-relative">
                   <select 
                     id="categoryId" 
-                    class="form-select form-select-lg" 
+                    class="form-select form-select-lg border-2" 
                     formControlName="categoryId"
-                    [ngClass]="{'is-invalid': f['categoryId'].touched && f['categoryId'].invalid}"
+                    [ngClass]="{'is-invalid': f['categoryId'].touched && f['categoryId'].invalid, 'border-primary': f['categoryId'].valid && f['categoryId'].touched}"
                   >
                     <option value="">Selecione uma categoria</option>
                     <option *ngFor="let category of categories" [value]="category.id">
@@ -251,9 +260,11 @@
                 <app-form-field-error [form-control]="$any(resourceForm.get('categoryId'))"></app-form-field-error>
               </div>
             </div>
+          </div>
 
-            <!-- Descrição -->
-            <div class="col-lg-6 mb-4">
+          <!-- Descrição -->
+          <div class="row mb-5">
+            <div class="col-12">
               <div class="form-group">
                 <label for="description" class="form-label fw-semibold">
                   <i class="bi bi-text-paragraph me-2 text-primary"></i>
@@ -261,11 +272,12 @@
                 </label>
                 <div class="position-relative">
                   <textarea 
-                    class="form-control form-control-lg" 
+                    class="form-control form-control-lg border-2" 
                     id="description" 
                     formControlName="description"
-                    rows="3"
+                    rows="4"
                     placeholder="Adicione detalhes sobre este lançamento..."
+                    [ngClass]="{'border-primary': f['description'].valid && f['description'].touched}"
                   ></textarea>
                   <div class="position-absolute top-0 start-0 mt-3 ms-3 text-muted">
                     <i class="bi bi-text-paragraph"></i>
@@ -280,39 +292,42 @@
           </div>
 
           <!-- Preview do Lançamento -->
-          <div class="entry-preview mt-4 pt-4 border-top" *ngIf="resourceForm.get('name')?.value && resourceForm.get('amount')?.value">
-            <h5 class="fw-semibold text-dark mb-3">
+          <div class="entry-preview mt-5 pt-5 border-top" *ngIf="resourceForm.get('name')?.value && resourceForm.get('amount')?.value">
+            <h5 class="fw-bold text-dark mb-4">
               <i class="bi bi-eye me-2 text-info"></i>
               Preview do Lançamento
             </h5>
-            <div class="card bg-light border-0">
-              <div class="card-body d-flex align-items-center">
-                <div class="bg-gradient rounded-circle d-flex align-items-center justify-content-center me-3" 
-                     [class]="resourceForm.get('type')?.value === 'revenue' ? 'bg-success' : 'bg-danger'"
-                     style="width: 50px; height: 50px;">
-                  <i class="bi text-white" [class]="resourceForm.get('type')?.value === 'revenue' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
-                </div>
-                <div class="flex-grow-1">
-                  <h6 class="fw-bold text-dark mb-1">{{ resourceForm.get('name')?.value }}</h6>
-                  <p class="text-muted mb-1" *ngIf="resourceForm.get('description')?.value">
-                    {{ resourceForm.get('description')?.value }}
-                  </p>
-                  <div class="d-flex align-items-center gap-3">
-                    <span class="badge" [ngClass]="resourceForm.get('paid')?.value ? 'bg-success' : 'bg-warning'">
-                      {{ resourceForm.get('paid')?.value ? 'Pago' : 'Pendente' }}
-                    </span>
-                    <span class="text-muted small">
-                      <i class="bi bi-calendar me-1"></i>
-                      {{ resourceForm.get('date')?.value | date:'dd/MM/yyyy' }}
-                    </span>
+            <div class="card bg-gradient-light border-0 shadow-sm">
+              <div class="card-body p-4">
+                <div class="d-flex align-items-center">
+                  <div class="bg-gradient rounded-circle d-flex align-items-center justify-content-center me-4" 
+                       [class]="resourceForm.get('type')?.value === 'revenue' ? 'bg-success' : 'bg-danger'"
+                       style="width: 60px; height: 60px;">
+                    <i class="bi text-white fs-4" [class]="resourceForm.get('type')?.value === 'revenue' ? 'bi-arrow-up' : 'bi-arrow-down'"></i>
                   </div>
-                </div>
-                <div class="text-end">
-                  <h4 class="fw-bold mb-0" 
-                      [class.text-success]="resourceForm.get('type')?.value === 'revenue'"
-                      [class.text-danger]="resourceForm.get('type')?.value === 'expense'">
-                    {{ resourceForm.get('amount')?.value | currency:'BRL' }}
-                  </h4>
+                  <div class="flex-grow-1">
+                    <h5 class="fw-bold text-dark mb-2">{{ resourceForm.get('name')?.value }}</h5>
+                    <p class="text-muted mb-2" *ngIf="resourceForm.get('description')?.value">
+                      {{ resourceForm.get('description')?.value }}
+                    </p>
+                    <div class="d-flex align-items-center gap-4">
+                      <span class="badge fs-6 px-3 py-2" [ngClass]="resourceForm.get('paid')?.value ? 'bg-success' : 'bg-warning'">
+                        <i class="bi me-1" [class]="resourceForm.get('paid')?.value ? 'bi-check-circle' : 'bi-clock'"></i>
+                        {{ resourceForm.get('paid')?.value ? 'Pago' : 'Pendente' }}
+                      </span>
+                      <span class="text-muted">
+                        <i class="bi bi-calendar me-1"></i>
+                        {{ resourceForm.get('date')?.value | date:'dd/MM/yyyy' }}
+                      </span>
+                    </div>
+                  </div>
+                  <div class="text-end">
+                    <h3 class="fw-bold mb-0" 
+                        [class.text-success]="resourceForm.get('type')?.value === 'revenue'"
+                        [class.text-danger]="resourceForm.get('type')?.value === 'expense'">
+                      {{ resourceForm.get('amount')?.value | currency:'BRL' }}
+                    </h3>
+                  </div>
                 </div>
               </div>
             </div>
@@ -346,7 +361,7 @@
                 </button>
                 <button 
                   type="submit"
-                  class="btn btn-success"
+                  class="btn btn-primary"
                   [disabled]="submittingForm || resourceForm.invalid"
                 >
                   <i class="bi me-2" *ngIf="!submittingForm" [class]="isEditMode ? 'bi-check-circle' : 'bi-plus-circle'"></i>
