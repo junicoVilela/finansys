@@ -75,11 +75,7 @@
                     </label>
                   </div>
                 </div>
-                <div class="mt-2">
-                  <small class="text-muted">
-                    Valor atual: {{ resourceForm.get('type')?.value || 'Nenhum selecionado' }}
-                  </small>
-                </div>
+
                 <app-form-field-error [form-control]="$any(resourceForm.get('type'))"></app-form-field-error>
               </div>
             </div>
