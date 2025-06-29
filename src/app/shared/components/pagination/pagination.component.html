@@ -1,75 +1,69 @@
-<div class="card border-0 shadow-sm mt-4">
-  <div class="card-body py-4">
-    <div class="d-flex justify-content-between align-items-center">
-      <!-- Botão Anterior -->
-      <div class="d-flex align-items-center">
-        <button type="button" 
-                class="btn btn-sm me-2" 
-                [class]="iconColorClass"
-                (click)="previousPage()"
-                [disabled]="data.currentPage === 1">
-          <i class="bi text-white" [class]="options.iconClass"></i>
-        </button>
+<div class="pagination-container">
+  <div class="pagination-card">
+    <div class="pagination-content">
+      <!-- Seletor de Itens por Página -->
+      <div class="items-per-page-section" *ngIf="options.showItemsPerPage">
+        <div class="items-per-page-control">
+          <label class="items-per-page-label">
+            <i class="bi bi-list-ul me-1"></i>
+            Itens por página:
+          </label>
+          <select class="items-per-page-select" 
+                  (change)="changeItemsPerPage($any($event.target).value)"
+                  [value]="data.itemsPerPage">
+            <option *ngFor="let option of options.itemsPerPageOptions" [value]="option">
+              {{ option }}
+            </option>
+          </select>
+        </div>
       </div>
 
-      <!-- Informações da Paginação -->
-      <div class="d-flex align-items-center">
-        <!-- Seletor de Itens por Página -->
-        <div class="me-3" *ngIf="options.showItemsPerPage">
-          <div class="d-flex align-items-center">
-            <label class="form-label mb-0 me-2 small">Itens por página:</label>
-            <select class="form-select form-select-sm" 
-                    style="width: auto;"
-                    (change)="changeItemsPerPage($any($event.target).value)"
-                    [value]="data.itemsPerPage">
-              <option *ngFor="let option of options.itemsPerPageOptions" [value]="option">
-                {{ option }}
-              </option>
-            </select>
-          </div>
-        </div>
+      <!-- Navegação Central -->
+      <div class="navigation-section">
+        <nav class="pagination-nav" aria-label="Navegação de páginas">
+          <ul class="pagination-list">
+            <!-- Botão Anterior -->
+            <li class="pagination-item" [class.disabled]="data.currentPage === 1">
+              <button class="pagination-button pagination-prev" 
+                      (click)="previousPage()"
+                      [disabled]="data.currentPage === 1"
+                      title="Página anterior">
+                <i class="bi bi-chevron-left"></i>
+              </button>
+            </li>
 
-        <!-- Informações de Páginas -->
-        <div class="col-md-4" [class.offset-md-4]="!options.showInfo">
-          <nav aria-label="Navegação de páginas">
-            <ul class="pagination pagination-sm mb-0">
-              <!-- Botão Anterior -->
-              <li class="page-item" [class.disabled]="data.currentPage === 1">
-                <button class="page-link" 
-                        (click)="previousPage()"
-                        [disabled]="data.currentPage === 1">
-                  <i class="bi bi-chevron-left"></i>
-                </button>
-              </li>
+            <!-- Números das Páginas -->
+            <li class="pagination-item" 
+                *ngFor="let page of pageNumbers"
+                [class.active]="page === data.currentPage">
+              <button class="pagination-button pagination-number" 
+                      (click)="goToPage(page)"
+                      [class.active]="page === data.currentPage">
+                {{ page }}
+              </button>
+            </li>
 
-              <!-- Números das Páginas -->
-              <li class="page-item" 
-                  *ngFor="let page of pageNumbers"
-                  [class.active]="page === data.currentPage">
-                <button class="page-link" 
-                        (click)="goToPage(page)"
-                        [class.active]="page === data.currentPage">
-                  {{ page }}
-                </button>
-              </li>
+            <!-- Botão Próximo -->
+            <li class="pagination-item" [class.disabled]="data.currentPage === data.totalPages">
+              <button class="pagination-button pagination-next" 
+                      (click)="nextPage()"
+                      [disabled]="data.currentPage === data.totalPages"
+                      title="Próxima página">
+                <i class="bi bi-chevron-right"></i>
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </div>
 
-              <!-- Botão Próximo -->
-              <li class="page-item" [class.disabled]="data.currentPage === data.totalPages">
-                <button class="page-link" 
-                        (click)="nextPage()"
-                        [disabled]="data.currentPage === data.totalPages">
-                  <i class="bi bi-chevron-right"></i>
-                </button>
-              </li>
-            </ul>
-          </nav>
-        </div>
-
-        <!-- Informações de Contagem -->
-        <div class="ms-3" *ngIf="options.showInfo">
-          <small class="text-muted">
-            Mostrando {{ data.startItem + 1 }} a {{ data.endItem }} de {{ data.totalItems }} {{ options.itemType }}
-          </small>
+      <!-- Informações de Contagem -->
+      <div class="info-section" *ngIf="options.showInfo">
+        <div class="pagination-info">
+          <i class="bi bi-info-circle me-1"></i>
+          <span class="info-text">
+            Mostrando <strong>{{ data.startItem + 1 }}</strong> a <strong>{{ data.endItem }}</strong> 
+            de <strong>{{ data.totalItems }}</strong> {{ options.itemType }}
+          </span>
         </div>
       </div>
     </div>

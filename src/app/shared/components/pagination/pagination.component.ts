@@ -74,6 +74,12 @@ export class PaginationComponent {
     const pages: number[] = [];
     const maxVisiblePages = 5;
     
+    console.log('Debug paginação:', {
+      currentPage: this.data.currentPage,
+      totalPages: this.data.totalPages,
+      totalItems: this.data.totalItems
+    });
+    
     if (this.data.totalPages <= maxVisiblePages) {
       // Mostrar todas as páginas se houver 5 ou menos
       for (let i = 1; i <= this.data.totalPages; i++) {
@@ -94,6 +100,7 @@ export class PaginationComponent {
       }
     }
     
+    console.log('Páginas geradas:', pages);
     return pages;
   }
 
