@@ -79,7 +79,12 @@ export class CategoryListComponent extends BaseResourceListComponent<Category> {
   }
 
   public formatResourceDate(date: any): string {
-    return new Date(date).toLocaleDateString('pt-BR');
+    if (!date) return 'Data não disponível';
+    
+    const dateObj = new Date(date);
+    if (isNaN(dateObj.getTime())) return 'Data inválida';
+    
+    return dateObj.toLocaleDateString('pt-BR');
   }
 
   protected getResourceDisplayName(category: Category): string {
