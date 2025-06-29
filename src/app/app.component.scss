@@ -11,43 +11,82 @@
   }
 }
 
+// Layout principal
+.content {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding-top: 5rem; // Adiciona padding para o navbar fixo
+  
+  .row {
+    flex: 1;
+    margin: 0;
+    min-height: calc(100vh - 5rem); // Altura total menos o navbar
+    margin-top: 0; // Remove margem top pois já está no padding do content
+  }
+}
+
 // Estilos para o layout dinâmico do sidebar
 .sidebar-container {
   transition: all 0.3s ease-in-out;
+  height: calc(100vh - 5rem); // Altura total menos o navbar
+  padding: 0;
+  position: fixed; // Fixo na tela
+  top: 5rem; // Começa abaixo do navbar
+  left: 0;
+  z-index: 1038;
+  width: 280px;
   
   &.sidebar-closed {
     display: none !important;
+  }
+  
+  // Garante que o sidebar ocupe toda a altura
+  app-sidebar {
+    height: 100%;
+    display: block;
   }
 }
 
 .content-container {
   transition: all 0.3s ease-in-out;
+  min-height: calc(100vh - 5rem); // Altura total menos o navbar
+  background: #f8f9fa;
+  margin-left: 280px; // Margem para o sidebar fixo
+  margin-top: 0; // Remove margem top pois já está no padding do content
   
   // Quando o sidebar está fechado, o conteúdo ocupa toda a largura
   &.col-12 {
     width: 100% !important;
     flex: 0 0 100% !important;
     max-width: 100% !important;
+    margin-left: 0; // Remove margem quando sidebar está fechado
   }
   
-  // Quando o sidebar está aberto, o conteúdo ocupa 10/12 da largura
+  // Quando o sidebar está aberto, o conteúdo ocupa o espaço restante
   &.col-md-10 {
-    width: 83.333333% !important;
-    flex: 0 0 83.333333% !important;
-    max-width: 83.333333% !important;
+    width: calc(100% - 280px) !important;
+    flex: 0 0 calc(100% - 280px) !important;
+    max-width: calc(100% - 280px) !important;
+    margin-left: 280px; // Mantém margem para o sidebar
   }
 }
 
 // Responsividade para dispositivos móveis
 @media (max-width: 767.98px) {
+  .content {
+    padding-top: 4.5rem; // Ajusta para altura menor do navbar no mobile
+  }
+  
   .sidebar-container {
     position: fixed;
-    top: 0;
+    top: 4.5rem; // Ajusta para altura menor do navbar no mobile
     left: 0;
-    height: 100vh;
+    height: calc(100vh - 4.5rem); // Ajusta altura para mobile
     z-index: 1038;
     transform: translateX(-100%);
     transition: transform 0.3s ease-in-out;
+    width: 280px;
     
     &.sidebar-closed {
       transform: translateX(-100%);
@@ -58,6 +97,8 @@
     width: 100% !important;
     flex: 0 0 100% !important;
     max-width: 100% !important;
+    min-height: calc(100vh - 4.5rem); // Ajusta altura para mobile
+    margin-left: 0; // Remove margem no mobile
   }
   
   // Quando o sidebar está aberto em mobile, adiciona overlay
@@ -68,11 +109,25 @@
   .drawer-toggled .content-container::before {
     content: "";
     position: fixed;
-    top: 0;
+    top: 4.5rem; // Ajusta para altura menor do navbar no mobile
     left: 0;
     width: 100%;
-    height: 100%;
+    height: calc(100vh - 4.5rem); // Ajusta altura para mobile
     background: rgba(0, 0, 0, 0.5);
     z-index: 1037;
+  }
+}
+
+// Melhorias visuais para o layout
+.content-container {
+  // Adiciona um padding interno para o conteúdo
+  .router-outlet {
+    padding: 2rem;
+  }
+  
+  // Estilo para o conteúdo das páginas
+  router-outlet + * {
+    display: block;
+    height: 100%;
   }
 }

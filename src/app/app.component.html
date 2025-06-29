@@ -4,15 +4,15 @@
 
   <div class="row m-0" [ngClass]="{'auth-layout': !(isAuthenticated$ | async)}">
     <!-- Sidebar - só aparece se estiver logado e se estiver aberto -->
-    <div class="col-md-2 p-0 sidebar-container" *ngIf="isAuthenticated$ | async" [ngClass]="{'sidebar-closed': !(sidebarOpen$ | async)}">
+    <div class="sidebar-container" *ngIf="isAuthenticated$ | async" [ngClass]="{'sidebar-closed': !(sidebarOpen$ | async)}">
       <app-sidebar></app-sidebar>
     </div>
 
     <!-- Conteúdo principal - ajusta baseado se sidebar está visível -->
     <div class="content-container" 
          [ngClass]="{
-           'col-md-10 p-4': (isAuthenticated$ | async) && (sidebarOpen$ | async),
-           'col-12 p-4': !(isAuthenticated$ | async) || !(sidebarOpen$ | async)
+           'col-md-10': (isAuthenticated$ | async) && (sidebarOpen$ | async),
+           'col-12': !(isAuthenticated$ | async) || !(sidebarOpen$ | async)
          }">
       <router-outlet></router-outlet>
     </div>

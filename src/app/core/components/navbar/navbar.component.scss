@@ -165,7 +165,11 @@ $gray-900: #212529;
   padding: 0;
   height: 5rem;
   border: none;
-  position: relative;
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 1039;
   border-bottom: 3px solid $primary-color;
 }
 

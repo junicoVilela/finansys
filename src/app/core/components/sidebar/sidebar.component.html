@@ -2,64 +2,65 @@
     <!-- Layout navigation-->
     <div id="layoutDrawer_nav">
         <!-- Drawer navigation-->
-        <nav class="drawer accordion drawer-light bg-white" id="drawerAccordion">
+        <nav class="drawer drawer-light">
             <div class="drawer-menu">
                 <div class="nav">
-                    <!-- Drawer section heading (Sistema Financeiro)-->
+                    <!-- Seção Sistema Financeiro -->
                     <div class="drawer-menu-heading">Sistema Financeiro</div>
                     
                     <!-- Drawer link (Relatórios)-->
                     <a class="nav-link" routerLink="/reports" routerLinkActive="active">
-                        <div class="nav-link-icon"><i class="material-icons">assessment</i></div>
+                        <div class="nav-link-icon">
+                            <i class="material-icons">assessment</i>
+                        </div>
                         Relatórios
                     </a>
                     
                     <!-- Drawer link (Lançamentos)-->
                     <a class="nav-link" routerLink="/entries" routerLinkActive="active">
-                        <div class="nav-link-icon"><i class="material-icons">receipt</i></div>
+                        <div class="nav-link-icon">
+                            <i class="material-icons">receipt</i>
+                        </div>
                         Lançamentos
                     </a>
                     
                     <!-- Drawer link (Categorias)-->
                     <a class="nav-link" routerLink="/categories" routerLinkActive="active">
-                        <div class="nav-link-icon"><i class="material-icons">category</i></div>
+                        <div class="nav-link-icon">
+                            <i class="material-icons">category</i>
+                        </div>
                         Categorias
                     </a>
                     
-                    <!-- Divider-->
+                    <!-- Divisor -->
                     <div class="drawer-menu-divider"></div>
                     
-                    <!-- Drawer section heading (Conta)-->
+                    <!-- Seção Conta -->
                     <div class="drawer-menu-heading">Conta</div>
                     
                     <!-- Drawer link (Perfil)-->
                     <a class="nav-link" href="#!">
-                        <div class="nav-link-icon"><i class="material-icons">person</i></div>
+                        <div class="nav-link-icon">
+                            <i class="material-icons">person</i>
+                        </div>
                         Perfil
                     </a>
                     
                     <!-- Drawer link (Configurações)-->
                     <a class="nav-link" href="#!">
-                        <div class="nav-link-icon"><i class="material-icons">settings</i></div>
+                        <div class="nav-link-icon">
+                            <i class="material-icons">settings</i>
+                        </div>
                         Configurações
                     </a>
                     
                     <!-- Drawer link (Sair)-->
                     <a class="nav-link" href="javascript:void(0);" (click)="onLogout()">
-                        <div class="nav-link-icon"><i class="material-icons">logout</i></div>
+                        <div class="nav-link-icon">
+                            <i class="material-icons">logout</i>
+                        </div>
                         Sair
                     </a>
-                </div>
-            </div>
-            
-            <!-- Drawer footer -->
-            <div class="drawer-footer border-top">
-                <div class="d-flex align-items-center">
-                    <i class="material-icons text-muted">account_circle</i>
-                    <div class="ms-3">
-                        <div class="caption">Logado como:</div>
-                        <div class="small fw-500">{{ (currentUser$ | async)?.name || 'Usuário' }}</div>
-                    </div>
                 </div>
             </div>
         </nav>
