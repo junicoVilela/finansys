@@ -65,10 +65,6 @@ export class EntryListComponent extends BaseResourceListComponent<Entry> {
     );
   }
 
-  // ========================================
-  // IMPLEMENTAÇÃO DE MÉTODOS ABSTRATOS
-  // ========================================
-
   protected getResourceIcon(entry: Entry): string {
     return entry.type === 'revenue' ? 'bi-arrow-up' : 'bi-arrow-down';
   }
@@ -85,10 +81,6 @@ export class EntryListComponent extends BaseResourceListComponent<Entry> {
   protected getResourceDisplayName(entry: Entry): string {
     return entry.name || 'Lançamento sem nome';
   }
-
-  // ========================================
-  // CONFIGURAÇÕES ESPECÍFICAS
-  // ========================================
 
   override get emptyStateConfig(): EmptyStateConfig {
     return {
@@ -107,11 +99,6 @@ export class EntryListComponent extends BaseResourceListComponent<Entry> {
     };
   }
 
-  // ========================================
-  // SOBRESCRITA DE CONFIGURAÇÕES
-  // ========================================
-
-  // Sobrescrever configuração de paginação
   override get paginationOptions(): PaginationOptions {
     return {
       itemsPerPageOptions: [5, 10, 20, 50],
@@ -123,12 +110,10 @@ export class EntryListComponent extends BaseResourceListComponent<Entry> {
     };
   }
 
-  // Sobrescrever configuração de busca
   override get searchPlaceholder(): string {
     return 'Buscar lançamentos...';
   }
 
-  // Sobrescrever método de busca
   override matchesSearch(entry: Entry, searchTerm: string): boolean {
     return entry.name?.toLowerCase().includes(searchTerm) || 
            entry.description?.toLowerCase().includes(searchTerm) || 
@@ -136,16 +121,10 @@ export class EntryListComponent extends BaseResourceListComponent<Entry> {
            false;
   }
 
-  // ========================================
-  // GETTERS PARA DADOS COMPUTADOS
-  // ========================================
-
-  // Getter para compatibilidade com templates
   override get pageSubtitle(): string {
     return 'Gerencie suas receitas e despesas de forma organizada';
   }
 
-  // Getters para estatísticas
   get totalRevenue(): number {
     return this.resources
       .filter(entry => entry.type === 'revenue')
@@ -166,7 +145,6 @@ export class EntryListComponent extends BaseResourceListComponent<Entry> {
     return this.resources.length;
   }
 
-  // Sobrescrever estatísticas
   override get statisticsCards(): StatisticsCard[] {
     return [
       {

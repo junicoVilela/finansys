@@ -57,10 +57,6 @@ export abstract class BaseResourceListComponent<T extends BaseResourceModel> imp
     this.viewMode = this.viewModeConfig.defaultMode;
   }
 
-  // ========================================
-  // MÉTODOS DE CONFIGURAÇÃO
-  // ========================================
-
   // Configuração de Paginação
   get paginationConfig() {
     return {
@@ -157,11 +153,6 @@ export abstract class BaseResourceListComponent<T extends BaseResourceModel> imp
     return this.resources.length > 0;
   }
 
-  // Estatísticas
-  getStatisticsCards(): StatisticsCard[] {
-    return this.statisticsConfig?.cards || [];
-  }
-
   // Modal de Exclusão
   openDeleteModal(resource: T): void {
     this.modalData = this.deleteModalService.openDeleteModal(
@@ -196,10 +187,6 @@ export abstract class BaseResourceListComponent<T extends BaseResourceModel> imp
     this.deleteModalService.closeModal();
     this.deleteModalService.reset();
   }
-
-  // ========================================
-  // GETTERS PARA COMPATIBILIDADE COM TEMPLATES
-  // ========================================
 
   get pageSubtitle(): string {
     return 'Gerencie seus recursos de forma organizada';
@@ -250,12 +237,8 @@ export abstract class BaseResourceListComponent<T extends BaseResourceModel> imp
   }
 
   get statisticsCards(): StatisticsCard[] {
-    return this.getStatisticsCards();
+    return this.statisticsConfig?.cards || [];
   }
-
-  // ========================================
-  // MÉTODOS PRIVADOS
-  // ========================================
 
   private loadResources(): void {
     this.isLoading = true;
@@ -290,10 +273,6 @@ export abstract class BaseResourceListComponent<T extends BaseResourceModel> imp
     this.paginatedResources = this.paginationService.updatePagination(this.filteredResources);
     this.paginationData = this.paginationService.paginationData;
   }
-
-  // ========================================
-  // MÉTODOS ABSTRATOS
-  // ========================================
 
   protected abstract getResourceIcon(resource: T): string;
   protected abstract formatResourceDate(date: any): string;

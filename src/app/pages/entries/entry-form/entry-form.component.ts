@@ -42,12 +42,10 @@ export class EntryFormComponent extends BaseResourceFormComponent<Entry> impleme
   categories!: Array<Category>;
   private cd: ChangeDetectorRef;
 
-  // Propriedade para verificar se está em modo de edição
   get isEditMode(): boolean {
     return this.resource.id !== null && this.resource.id !== undefined;
   }
 
-  // Propriedade para o subtítulo da página
   get pageSubtitle(): string {
     return this.isEditMode 
       ? 'Edite as informações do lançamento' 
@@ -67,16 +65,11 @@ export class EntryFormComponent extends BaseResourceFormComponent<Entry> impleme
     this.loadCategories();
     super.ngOnInit();
     
-    // Garantir que o título seja definido
     this.setPageTitle();
     
-    // Forçar detecção de mudanças
     this.cd.detectChanges();
   }
 
-  /**
-   * Sobrescreve o patchValue do formulário para aplicar conversão de data automática
-   */
   override buildResourceForm() {
     this.resourceForm = new UntypedFormGroup({
       id: new UntypedFormControl(null),
@@ -89,7 +82,6 @@ export class EntryFormComponent extends BaseResourceFormComponent<Entry> impleme
       categoryId: new UntypedFormControl('', [Validators.required])
     });
 
-    // Intercepta o patchValue para conversão automática de data (carregamento)
     const originalPatchValue = this.resourceForm.patchValue.bind(this.resourceForm);
     this.resourceForm.patchValue = (value: any, options?: any) => {
       if (value && value.date && typeof value.date === 'string') {
@@ -120,7 +112,6 @@ export class EntryFormComponent extends BaseResourceFormComponent<Entry> impleme
 
   override submitForm() {
     if (this.resourceForm.valid) {
-      // Converter a data antes da submissão
       const formValue = this.resourceForm.getRawValue();
       if (formValue.date) {
         const convertedValue = {

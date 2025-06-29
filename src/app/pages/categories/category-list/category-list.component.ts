@@ -65,10 +65,6 @@ export class CategoryListComponent extends BaseResourceListComponent<Category> {
     );
   }
 
-  // ========================================
-  // IMPLEMENTAÇÃO DE MÉTODOS ABSTRATOS
-  // ========================================
-
   public getResourceIcon(category: Category): string {
     return this.iconService.getBestIconForCategory(category.name || '');
   }
@@ -85,10 +81,6 @@ export class CategoryListComponent extends BaseResourceListComponent<Category> {
   protected getResourceDisplayName(category: Category): string {
     return category.name || 'Categoria sem nome';
   }
-
-  // ========================================
-  // CONFIGURAÇÕES ESPECÍFICAS
-  // ========================================
 
   override get emptyStateConfig(): EmptyStateConfig {
     return {
@@ -107,11 +99,6 @@ export class CategoryListComponent extends BaseResourceListComponent<Category> {
     };
   }
 
-  // ========================================
-  // SOBRESCRITA DE CONFIGURAÇÕES
-  // ========================================
-
-  // Sobrescrever configuração de paginação
   override get paginationOptions(): PaginationOptions {
     return {
       itemsPerPageOptions: [5, 10, 20, 50],
@@ -123,28 +110,20 @@ export class CategoryListComponent extends BaseResourceListComponent<Category> {
     };
   }
 
-  // Sobrescrever configuração de busca
   override get searchPlaceholder(): string {
     return 'Buscar categorias...';
   }
 
-  // Sobrescrever método de busca
   override matchesSearch(category: Category, searchTerm: string): boolean {
     return category.name?.toLowerCase().includes(searchTerm) || 
            category.description?.toLowerCase().includes(searchTerm) || 
            false;
   }
 
-  // ========================================
-  // GETTERS PARA DADOS COMPUTADOS
-  // ========================================
-
-  // Getter para compatibilidade com templates
   override get pageSubtitle(): string {
     return 'Gerencie suas categorias de receitas e despesas';
   }
 
-  // Getters para estatísticas
   get totalCategories(): number {
     return this.resources.length;
   }
@@ -161,7 +140,6 @@ export class CategoryListComponent extends BaseResourceListComponent<Category> {
     }).length;
   }
 
-  // Sobrescrever estatísticas
   override get statisticsCards(): StatisticsCard[] {
     return [
       {
