@@ -1,89 +1,75 @@
 <div class="card border-0 shadow-sm mt-4">
   <div class="card-body py-4">
-    <div class="row align-items-center">
-      <!-- Informações de contexto -->
-      <div class="col-md-4" *ngIf="options.showInfo">
-        <div class="d-flex align-items-center">
-          <div class="bg-gradient rounded-circle d-flex align-items-center justify-content-center me-3" 
-               [class]="getIconColorClass()"
-               style="width: 40px; height: 40px;">
-            <i class="bi text-white" [class]="options.iconClass"></i>
-          </div>
-          <div>
-            <p class="text-muted mb-0 small">
-              Mostrando <strong>{{ data.startItem }}</strong> a 
-              <strong>{{ data.endItem }}</strong> 
-              de <strong>{{ data.totalItems }}</strong> {{ options.itemType }}
-            </p>
-          </div>
-        </div>
-      </div>
-      
-      <!-- Controles de navegação centralizados -->
-      <div class="col-md-4" [class.offset-md-4]="!options.showInfo">
-        <nav aria-label="Navegação de páginas" class="d-flex justify-content-center">
-          <ul class="pagination pagination-lg mb-0">
-            <!-- Botão Anterior -->
-            <li class="page-item" [class.disabled]="data.currentPage === 1">
-              <button 
-                class="page-link border-0" 
+    <div class="d-flex justify-content-between align-items-center">
+      <!-- Botão Anterior -->
+      <div class="d-flex align-items-center">
+        <button type="button" 
+                class="btn btn-sm me-2" 
+                [class]="iconColorClass"
                 (click)="previousPage()"
-                [disabled]="data.currentPage === 1"
-                title="Página anterior"
-              >
-                <i class="bi bi-chevron-left"></i>
-              </button>
-            </li>
-            
-            <!-- Números das páginas -->
-            <li 
-              *ngFor="let page of getPageNumbers()" 
-              class="page-item"
-              [class.active]="page === data.currentPage"
-            >
-              <button 
-                class="page-link border-0" 
-                (click)="goToPage(page)"
-                [class.active]="page === data.currentPage"
-              >
-                {{ page }}
-              </button>
-            </li>
-            
-            <!-- Botão Próximo -->
-            <li class="page-item" [class.disabled]="data.currentPage === data.totalPages">
-              <button 
-                class="page-link border-0" 
-                (click)="nextPage()"
-                [disabled]="data.currentPage === data.totalPages"
-                title="Próxima página"
-              >
-                <i class="bi bi-chevron-right"></i>
-              </button>
-            </li>
-          </ul>
-        </nav>
+                [disabled]="data.currentPage === 1">
+          <i class="bi text-white" [class]="options.iconClass"></i>
+        </button>
       </div>
-      
-      <!-- Seletor de itens por página -->
-      <div class="col-md-4" *ngIf="options.showItemsPerPage">
-        <div class="d-flex align-items-center justify-content-md-end">
+
+      <!-- Informações da Paginação -->
+      <div class="d-flex align-items-center">
+        <!-- Seletor de Itens por Página -->
+        <div class="me-3" *ngIf="options.showItemsPerPage">
           <div class="d-flex align-items-center">
-            <label class="form-label mb-0 me-2 small text-muted">
-              <i class="bi bi-list-ul me-1"></i>
-              Itens por página:
-            </label>
-            <select 
-              class="form-select form-select-sm border-0 bg-light" 
-              style="width: auto; min-width: 80px;"
-              [value]="data.itemsPerPage"
-              (change)="changeItemsPerPage(+($any($event.target).value))"
-            >
+            <label class="form-label mb-0 me-2 small">Itens por página:</label>
+            <select class="form-select form-select-sm" 
+                    style="width: auto;"
+                    (change)="changeItemsPerPage($any($event.target).value)"
+                    [value]="data.itemsPerPage">
               <option *ngFor="let option of options.itemsPerPageOptions" [value]="option">
                 {{ option }}
               </option>
             </select>
           </div>
+        </div>
+
+        <!-- Informações de Páginas -->
+        <div class="col-md-4" [class.offset-md-4]="!options.showInfo">
+          <nav aria-label="Navegação de páginas">
+            <ul class="pagination pagination-sm mb-0">
+              <!-- Botão Anterior -->
+              <li class="page-item" [class.disabled]="data.currentPage === 1">
+                <button class="page-link" 
+                        (click)="previousPage()"
+                        [disabled]="data.currentPage === 1">
+                  <i class="bi bi-chevron-left"></i>
+                </button>
+              </li>
+
+              <!-- Números das Páginas -->
+              <li class="page-item" 
+                  *ngFor="let page of pageNumbers"
+                  [class.active]="page === data.currentPage">
+                <button class="page-link" 
+                        (click)="goToPage(page)"
+                        [class.active]="page === data.currentPage">
+                  {{ page }}
+                </button>
+              </li>
+
+              <!-- Botão Próximo -->
+              <li class="page-item" [class.disabled]="data.currentPage === data.totalPages">
+                <button class="page-link" 
+                        (click)="nextPage()"
+                        [disabled]="data.currentPage === data.totalPages">
+                  <i class="bi bi-chevron-right"></i>
+                </button>
+              </li>
+            </ul>
+          </nav>
+        </div>
+
+        <!-- Informações de Contagem -->
+        <div class="ms-3" *ngIf="options.showInfo">
+          <small class="text-muted">
+            Mostrando {{ data.startItem + 1 }} a {{ data.endItem }} de {{ data.totalItems }} {{ options.itemType }}
+          </small>
         </div>
       </div>
     </div>

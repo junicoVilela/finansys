@@ -69,8 +69,8 @@ export class PaginationComponent {
     this.itemsPerPageChange.emit(itemsPerPage);
   }
 
-  // Método para obter array de páginas para exibição
-  getPageNumbers(): number[] {
+  // Getter para obter array de páginas para exibição
+  get pageNumbers(): number[] {
     const pages: number[] = [];
     const maxVisiblePages = 5;
     
@@ -97,8 +97,8 @@ export class PaginationComponent {
     return pages;
   }
 
-  // Método para obter a classe de cor do ícone
-  getIconColorClass(): string {
+  // Getter para obter a classe de cor do ícone
+  get iconColorClass(): string {
     const colorMap: { [key: string]: string } = {
       'primary': 'bg-primary',
       'success': 'bg-success',

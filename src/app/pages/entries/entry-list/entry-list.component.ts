@@ -2,17 +2,26 @@ import { Component, Injector } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
+import { ToastrService } from 'ngx-toastr';
 
 import { Entry } from "../shared/entry.model";
 import { EntryService } from "../shared/entry.service";
 import { BaseResourceListComponent } from "../../../shared/components/base-resource-list/base-resource-list.component";
+import { PaginationService } from "../../../shared/services/pagination.service";
+import { SearchService } from "../../../shared/services/search.service";
+import { StatisticsService, StatisticsCard } from "../../../shared/services/statistics.service";
+import { DeleteModalService } from "../../../shared/services/delete-modal.service";
+import { PaginationOptions } from "../../../shared/components/pagination/pagination.component";
 
 import { BreadCrumbComponent } from "../../../shared/components/bread-crumb/bread-crumb.component";
 import { PageHeaderComponent } from "../../../shared/components/page-header/page-header.component";
-import { ConfirmDeleteModalComponent, ConfirmDeleteData } from "../../../shared/components/confirm-delete-modal/confirm-delete-modal.component";
-import { ConfirmDeleteService } from "../../../shared/services/confirm-delete.service";
+import { ConfirmDeleteModalComponent } from "../../../shared/components/confirm-delete-modal/confirm-delete-modal.component";
 import { DateFormatPipe } from "../../../shared/pipes/date-format.pipe";
-import { PaginationComponent, PaginationData, PaginationOptions } from "../../../shared/components/pagination/pagination.component";
+import { PaginationComponent } from "../../../shared/components/pagination/pagination.component";
+import { StatisticsCardsComponent } from "../../../shared/components/statistics-cards/statistics-cards.component";
+import { EmptyStateComponent, EmptyStateConfig } from "../../../shared/components/empty-state/empty-state.component";
+import { PageLoadingComponent } from "../../../shared/components/page-loading/page-loading.component";
+import { ResourceFiltersComponent } from "../../../shared/components/resource-filters/resource-filters.component";
 
 @Component({
   selector: 'app-entry-list',
@@ -27,300 +36,192 @@ import { PaginationComponent, PaginationData, PaginationOptions } from "../../..
     RouterLink,
     ConfirmDeleteModalComponent,
     DateFormatPipe,
-    PaginationComponent
+    PaginationComponent,
+    StatisticsCardsComponent,
+    EmptyStateComponent,
+    PageLoadingComponent,
+    ResourceFiltersComponent
   ]
 })
 export class EntryListComponent extends BaseResourceListComponent<Entry> {
   
-  // Propriedades para funcionalidades da interface
-  searchTerm: string = '';
-  viewMode: 'grid' | 'list' = 'grid';
-  filteredResources: Entry[] = [];
+  // Cache para estatísticas
+  private _cachedStats: { revenue: number; expenses: number; entries: number } | null = null;
+  private _lastResourcesLength = 0;
   
-  // Propriedades para paginação
-  currentPage: number = 1;
-  itemsPerPage: number = 10;
-  totalPages: number = 0;
-  paginatedResources: Entry[] = [];
-  
-  // Propriedades para o modal de exclusão
-  entryToDelete: Entry | null = null;
-  isDeleting: boolean = false;
-  modalData: ConfirmDeleteData | null = null;
-
-  // Propriedade para o subtítulo da página
-  pageSubtitle: string = 'Gerencie suas receitas e despesas de forma organizada';
-
-  // Propriedades para o componente de paginação
-  paginationData: PaginationData = {
-    currentPage: 1,
-    totalPages: 0,
-    itemsPerPage: 10,
-    totalItems: 0,
-    startItem: 0,
-    endItem: 0
-  };
-
-  paginationOptions: PaginationOptions = {
-    itemsPerPageOptions: [5, 10, 20, 50],
-    showItemsPerPage: true,
-    showInfo: true,
-    iconClass: 'bi-cash-stack',
-    iconColor: 'primary',
-    itemType: 'lançamentos'
-  };
-
   constructor(
     private entryService: EntryService,
     protected override injector: Injector,
-    private confirmDeleteService: ConfirmDeleteService
+    protected override toastrService: ToastrService,
+    protected override paginationService: PaginationService,
+    protected override searchService: SearchService,
+    protected override statisticsService: StatisticsService,
+    protected override deleteModalService: DeleteModalService
   ) {
-    super(entryService, injector);
+    super(
+      entryService, 
+      injector, 
+      toastrService, 
+      paginationService, 
+      searchService, 
+      statisticsService, 
+      deleteModalService
+    );
   }
 
-  // Sobrescrever o método para atualizar recursos filtrados
-  override ngOnInit(): void {
-    super.ngOnInit();
-    // Inicializar filteredResources após o carregamento
-    this.updateFilteredResources();
+  // ========================================
+  // IMPLEMENTAÇÃO DE MÉTODOS ABSTRATOS
+  // ========================================
+
+  protected getResourceIcon(entry: Entry): string {
+    return entry.type === 'revenue' ? 'bi-arrow-up' : 'bi-arrow-down';
   }
 
-  // Sobrescrever loadResources para atualizar filteredResources
-  override loadResources(): void {
-    console.log('EntryListComponent: Iniciando carregamento de recursos');
-    this.isLoading = true;
-    
-    this.entryService.getAll().subscribe({
-      next: (resources) => {
-        console.log('EntryListComponent: Recursos carregados:', resources);
-        this.resources = resources.sort((a, b) => new Date(b.date!).getTime() - new Date(a.date!).getTime());
-        this.isLoading = false;
-        this.updateFilteredResources();
-      },
-      error: (error) => {
-        console.error('EntryListComponent: Erro ao carregar recursos:', error);
-        this.isLoading = false;
-        this.toastrService.error('Erro ao carregar a lista de lançamentos');
-      }
-    });
+  protected formatResourceDate(date: any): string {
+    return new Date(date).toLocaleDateString('pt-BR');
   }
 
-  // Método para atualizar recursos filtrados
-  private updateFilteredResources(): void {
-    console.log('Atualizando filteredResources. Total de recursos:', this.resources.length);
-    this.filteredResources = [...this.resources];
-    console.log('filteredResources atualizado:', this.filteredResources.length);
-    this.updatePagination();
+  protected getResourceDisplayName(entry: Entry): string {
+    return entry.name || 'Lançamento sem nome';
   }
 
-  // Método para atualizar paginação
-  private updatePagination(): void {
-    this.totalPages = Math.ceil(this.filteredResources.length / this.itemsPerPage);
-    
-    // Garantir que a página atual seja válida
-    if (this.currentPage > this.totalPages) {
-      this.currentPage = this.totalPages > 0 ? this.totalPages : 1;
-    }
-    
-    // Calcular índices de início e fim
-    const startIndex = (this.currentPage - 1) * this.itemsPerPage;
-    const endIndex = startIndex + this.itemsPerPage;
-    
-    // Obter recursos da página atual
-    this.paginatedResources = this.filteredResources.slice(startIndex, endIndex);
-    
-    // Atualizar dados de paginação para o componente reutilizável
-    this.paginationData = {
-      currentPage: this.currentPage,
-      totalPages: this.totalPages,
-      itemsPerPage: this.itemsPerPage,
-      totalItems: this.filteredResources.length,
-      startItem: this.filteredResources.length > 0 ? startIndex + 1 : 0,
-      endItem: Math.min(endIndex, this.filteredResources.length)
+  // ========================================
+  // CONFIGURAÇÕES ESPECÍFICAS
+  // ========================================
+
+  override getEmptyStateConfig(): EmptyStateConfig {
+    return {
+      icon: 'bi-cash-stack',
+      title: 'Nenhum lançamento encontrado',
+      description: 'Comece registrando suas primeiras receitas e despesas para organizar melhor suas finanças',
+      buttonText: 'Criar Primeiro Lançamento',
+      buttonLink: 'new'
     };
-    
-    console.log(`Paginação: Página ${this.currentPage} de ${this.totalPages}, mostrando ${this.paginatedResources.length} de ${this.filteredResources.length} itens`);
   }
 
-  // Método para ir para uma página específica
-  goToPage(page: number): void {
-    if (page >= 1 && page <= this.totalPages && page !== this.currentPage) {
-      this.currentPage = page;
-      this.updatePagination();
+  override getLoadingConfig() {
+    return {
+      title: 'Carregando lançamentos...',
+      description: 'Aguarde enquanto buscamos seus lançamentos'
+    };
+  }
+
+  // ========================================
+  // SOBRESCRITA DE CONFIGURAÇÕES
+  // ========================================
+
+  // Sobrescrever configuração de paginação
+  override get paginationOptions(): PaginationOptions {
+    return {
+      itemsPerPageOptions: [5, 10, 20, 50],
+      showItemsPerPage: true,
+      showInfo: true,
+      iconClass: 'bi-cash-stack',
+      iconColor: 'primary',
+      itemType: 'lançamentos'
+    };
+  }
+
+  // Sobrescrever configuração de busca
+  override get searchPlaceholder(): string {
+    return 'Buscar lançamentos...';
+  }
+
+  // Sobrescrever método de busca
+  override matchesSearch(entry: Entry, searchTerm: string): boolean {
+    return entry.name?.toLowerCase().includes(searchTerm) || 
+           entry.description?.toLowerCase().includes(searchTerm) || 
+           entry.amount?.toString().includes(searchTerm) ||
+           false;
+  }
+
+  // ========================================
+  // GETTERS PARA DADOS COMPUTADOS (OTIMIZADOS)
+  // ========================================
+
+  // Getter para compatibilidade com templates
+  override get pageSubtitle(): string {
+    return 'Gerencie suas receitas e despesas de forma organizada';
+  }
+
+  // Método privado para calcular estatísticas com cache
+  private calculateStats() {
+    // Verificar se o cache ainda é válido
+    if (this._cachedStats && this._lastResourcesLength === this.resources.length) {
+      return this._cachedStats;
     }
-  }
 
-  // Método para ir para a próxima página
-  nextPage(): void {
-    if (this.currentPage < this.totalPages) {
-      this.goToPage(this.currentPage + 1);
-    }
-  }
-
-  // Método para ir para a página anterior
-  previousPage(): void {
-    if (this.currentPage > 1) {
-      this.goToPage(this.currentPage - 1);
-    }
-  }
-
-  // Método para alterar itens por página
-  changeItemsPerPage(itemsPerPage: number): void {
-    this.itemsPerPage = itemsPerPage;
-    this.currentPage = 1; // Voltar para a primeira página
-    this.updatePagination();
-  }
-
-  // Métodos para o componente de paginação reutilizável
-  onPageChange(page: number): void {
-    this.currentPage = page;
-    this.updatePagination();
-  }
-
-  onItemsPerPageChange(itemsPerPage: number): void {
-    this.changeItemsPerPage(itemsPerPage);
-  }
-
-  // Método para obter array de páginas para exibição
-  getPageNumbers(): number[] {
-    const pages: number[] = [];
-    const maxVisiblePages = 5;
-    
-    if (this.totalPages <= maxVisiblePages) {
-      // Mostrar todas as páginas se houver 5 ou menos
-      for (let i = 1; i <= this.totalPages; i++) {
-        pages.push(i);
-      }
-    } else {
-      // Mostrar páginas ao redor da página atual
-      let startPage = Math.max(1, this.currentPage - Math.floor(maxVisiblePages / 2));
-      let endPage = Math.min(this.totalPages, startPage + maxVisiblePages - 1);
-      
-      // Ajustar se estiver no final
-      if (endPage - startPage + 1 < maxVisiblePages) {
-        startPage = Math.max(1, endPage - maxVisiblePages + 1);
-      }
-      
-      for (let i = startPage; i <= endPage; i++) {
-        pages.push(i);
-      }
-    }
-    
-    return pages;
-  }
-
-  // Método para filtrar lançamentos baseado no termo de busca
-  filterEntries(): void {
-    if (!this.searchTerm.trim()) {
-      this.filteredResources = [...this.resources];
-    } else {
-      const term = this.searchTerm.toLowerCase();
-      this.filteredResources = this.resources.filter(entry =>
-        entry.name?.toLowerCase().includes(term) ||
-        entry.description?.toLowerCase().includes(term) ||
-        entry.category?.name?.toLowerCase().includes(term)
-      );
-    }
-    
-    // Resetar para a primeira página ao filtrar
-    this.currentPage = 1;
-    this.updatePagination();
-  }
-
-  // Método para alternar entre visualizações
-  setViewMode(mode: 'grid' | 'list'): void {
-    this.viewMode = mode;
-  }
-
-  // Método para calcular total de receitas
-  getTotalRevenue(): number {
-    return this.resources
+    // Calcular estatísticas
+    const revenue = this.resources
       .filter(entry => entry.type === 'revenue')
       .reduce((total, entry) => total + (entry.amount || 0), 0);
-  }
-
-  // Método para calcular total de despesas
-  getTotalExpenses(): number {
-    return this.resources
+    
+    const expenses = this.resources
       .filter(entry => entry.type === 'expense')
       .reduce((total, entry) => total + (entry.amount || 0), 0);
+
+    // Atualizar cache
+    this._cachedStats = { revenue, expenses, entries: this.resources.length };
+    this._lastResourcesLength = this.resources.length;
+
+    return this._cachedStats;
   }
 
-  // Método para calcular saldo
-  getBalance(): number {
-    return this.getTotalRevenue() - this.getTotalExpenses();
+  // Getters para estatísticas (otimizados com cache)
+  get totalRevenue(): number {
+    return this.calculateStats().revenue;
   }
 
-  // Método para contar lançamentos pagos
-  getPaidEntries(): number {
-    return this.resources.filter(entry => entry.paid).length;
+  get totalExpenses(): number {
+    return this.calculateStats().expenses;
   }
 
-  // Método para contar lançamentos pendentes
-  getPendingEntries(): number {
-    return this.resources.filter(entry => !entry.paid).length;
+  get balance(): number {
+    const stats = this.calculateStats();
+    return stats.revenue - stats.expenses;
   }
 
-  // Método para abrir o modal de exclusão
-  openDeleteModal(entry: Entry): void {
-    this.entryToDelete = entry;
-    this.modalData = {
-      title: 'Confirmar Exclusão',
-      message: 'Tem certeza que deseja excluir o lançamento',
-      itemName: entry.name || '',
-      warningMessage: 'Esta ação não pode ser desfeita e o lançamento será removido permanentemente.',
-      icon: 'bi-exclamation-triangle'
-    };
-    
-    // Usar Bootstrap Modal API
-    const modal = new (window as any).bootstrap.Modal(document.getElementById('deleteModal'));
-    modal.show();
+  get totalEntries(): number {
+    return this.calculateStats().entries;
   }
 
-  // Método para confirmar a exclusão via modal
-  confirmDelete(): void {
-    if (!this.entryToDelete) return;
-    
-    this.isDeleting = true;
-    console.log('Iniciando exclusão do lançamento:', this.entryToDelete.id, this.entryToDelete.name);
-    
-    this.entryService.delete(this.entryToDelete.id!).subscribe({
-      next: () => {
-        console.log('Lançamento excluído com sucesso no servidor');
-        
-        // Remover da lista principal
-        const initialLength = this.resources.length;
-        this.resources = this.resources.filter(element => element.id !== this.entryToDelete!.id);
-        console.log(`Removido da lista principal: ${initialLength} -> ${this.resources.length}`);
-        
-        // Atualizar lista filtrada e paginação
-        this.updateFilteredResources();
-        this.filterEntries();
-        
-        this.isDeleting = false;
-        this.entryToDelete = null;
-        this.modalData = null;
-        
-        // Fechar o modal
-        const modal = (window as any).bootstrap.Modal.getInstance(document.getElementById('deleteModal'));
-        modal.hide();
-        
-        this.toastrService.success('Lançamento excluído com sucesso!');
-        
-        console.log('Estado final - resources:', this.resources.length, 'filteredResources:', this.filteredResources.length);
+  // Sobrescrever estatísticas
+  override get statisticsCards(): StatisticsCard[] {
+    return [
+      {
+        icon: 'bi-graph-up',
+        iconColor: 'primary',
+        value: this.totalRevenue,
+        label: 'Total de Receitas'
       },
-      error: (error) => {
-        console.error('Erro ao excluir lançamento:', error);
-        this.isDeleting = false;
-        this.toastrService.error('Erro ao excluir o lançamento');
+      {
+        icon: 'bi-graph-down',
+        iconColor: 'danger',
+        value: this.totalExpenses,
+        label: 'Total de Despesas'
+      },
+      {
+        icon: 'bi-calculator',
+        iconColor: 'primary',
+        value: this.balance,
+        label: 'Saldo'
+      },
+      {
+        icon: 'bi-list-check',
+        iconColor: 'info',
+        value: this.totalEntries,
+        label: 'Total de Lançamentos'
       }
-    });
+    ];
   }
 
-  // Método para cancelar a exclusão
-  cancelDelete(): void {
-    this.entryToDelete = null;
-    this.modalData = null;
-    this.isDeleting = false;
+  // ========================================
+  // SOBRESCRITA DE MÉTODOS PARA INVALIDAR CACHE
+  // ========================================
+
+  // Invalidar cache quando recursos são atualizados
+  override filterResources(): void {
+    this._cachedStats = null; // Invalidar cache
+    super.filterResources();
   }
 }

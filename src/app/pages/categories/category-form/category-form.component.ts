@@ -77,12 +77,12 @@ export class CategoryFormComponent extends BaseResourceFormComponent<Category> {
     return "Editar Categoria " + categoryName;
   }
 
-  getCategoryIcon(): string {
+  get categoryIcon(): string {
     if (this.selectedIcon) {
       return this.selectedIcon;
     }
     
-    return this.iconService.getDefaultIcon();
+    return this.iconService.defaultIcon;
   }
 
   public override submitForm(): void {
@@ -124,8 +124,8 @@ export class CategoryFormComponent extends BaseResourceFormComponent<Category> {
   override ngOnInit(): void {
     super.ngOnInit();
     
-    this.availableIcons = this.iconService.getAllIcons();
-    this.popularIcons = this.iconService.getPopularIcons();
+    this.availableIcons = this.iconService.allIcons;
+    this.popularIcons = this.iconService.popularIcons;
     this.filteredIcons = this.availableIcons;
     
     if (this.isEditMode && this.resource) {

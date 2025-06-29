@@ -1,10 +1,8 @@
 import { Injectable } from '@angular/core';
 import { 
-  ICON_CATEGORIES, 
   ALL_ICONS, 
   POPULAR_ICONS, 
-  DEFAULT_ICON,
-  IconCategory 
+  DEFAULT_ICON
 } from '../constants/icons.constants';
 
 @Injectable({
@@ -15,32 +13,24 @@ export class IconService {
   constructor() { }
 
   /**
-   * Obtém todas as categorias de ícones
-   */
-  getIconCategories(): IconCategory[] {
-    return ICON_CATEGORIES;
-  }
-
-  /**
    * Obtém todos os ícones disponíveis
    */
-  getAllIcons(): string[] {
+  get allIcons(): string[] {
     return ALL_ICONS;
   }
 
   /**
    * Obtém ícones populares
    */
-  getPopularIcons(): string[] {
+  get popularIcons(): string[] {
     return POPULAR_ICONS;
   }
 
   /**
-   * Obtém ícones de uma categoria específica
+   * Obtém o ícone padrão
    */
-  getIconsByCategory(categoryName: string): string[] {
-    const category = ICON_CATEGORIES.find(cat => cat.name === categoryName);
-    return category ? category.icons : [];
+  get defaultIcon(): string {
+    return DEFAULT_ICON;
   }
 
   /**
@@ -53,20 +43,6 @@ export class IconService {
       .replace('bi-', '')
       .replace(/-/g, ' ')
       .replace(/\b\w/g, l => l.toUpperCase());
-  }
-
-  /**
-   * Obtém o ícone padrão
-   */
-  getDefaultIcon(): string {
-    return DEFAULT_ICON;
-  }
-
-  /**
-   * Verifica se um ícone existe
-   */
-  isValidIcon(icon: string): boolean {
-    return ALL_ICONS.includes(icon);
   }
 
   /**
@@ -83,69 +59,10 @@ export class IconService {
   }
 
   /**
-   * Obtém ícones sugeridos baseado no nome de uma categoria
-   */
-  getSuggestedIcons(categoryName: string): string[] {
-    if (!categoryName) return POPULAR_ICONS;
-    
-    const name = categoryName.toLowerCase();
-    
-    // Mapeamento de palavras-chave para categorias
-    const keywordMap: { [key: string]: string } = {
-      'moradia': 'home',
-      'casa': 'home',
-      'aluguel': 'home',
-      'alimentação': 'food',
-      'comida': 'food',
-      'restaurante': 'food',
-      'transporte': 'transport',
-      'carro': 'transport',
-      'gasolina': 'transport',
-      'saúde': 'health',
-      'médico': 'health',
-      'farmacia': 'health',
-      'educação': 'education',
-      'escola': 'education',
-      'curso': 'education',
-      'lazer': 'entertainment',
-      'entretenimento': 'entertainment',
-      'cinema': 'entertainment',
-      'vestuário': 'clothing',
-      'roupa': 'clothing',
-      'shopping': 'clothing',
-      'salário': 'finance',
-      'receita': 'finance',
-      'renda': 'finance',
-      'investimento': 'finance',
-      'poupança': 'finance',
-      'ações': 'finance',
-      'presente': 'gifts',
-      'doação': 'gifts',
-      'caridade': 'gifts',
-      'tecnologia': 'technology',
-      'software': 'technology',
-      'hardware': 'technology',
-      'trabalho': 'work',
-      'emprego': 'work',
-      'escritório': 'work'
-    };
-
-    // Procurar por palavras-chave
-    for (const [keyword, category] of Object.entries(keywordMap)) {
-      if (name.includes(keyword)) {
-        return this.getIconsByCategory(category);
-      }
-    }
-
-    // Se não encontrar correspondência, retornar ícones populares
-    return POPULAR_ICONS;
-  }
-
-  /**
    * Obtém o ícone mais apropriado baseado no nome da categoria
    */
   getBestIconForCategory(categoryName: string): string {
-    if (!categoryName) return DEFAULT_ICON;
+    if (!categoryName) return this.defaultIcon;
     
     const name = categoryName.toLowerCase();
     
@@ -196,6 +113,6 @@ export class IconService {
       }
     }
 
-    return DEFAULT_ICON;
+    return this.defaultIcon;
   }
 } 

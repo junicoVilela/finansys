@@ -184,6 +184,283 @@ ng e2e
 - ✅ Cálculo de balanço (receitas - despesas)
 - ✅ Totalizadores formatados em moeda
 
+### Delete Modal Reutilizável
+
+O sistema agora possui um modal de confirmação de exclusão reutilizável integrado ao `BaseResourceListComponent`. Isso elimina a duplicação de código e garante consistência em toda a aplicação.
+
+#### Como usar:
+
+1. **Configuração no Componente Filho:**
+```typescript
+protected config: ResourceListConfig = {
+  // ... outras configurações
+  deleteModalConfig: {
+    title: 'Excluir Item',
+    message: 'Tem certeza que deseja excluir o item "{itemName}"?',
+    itemType: 'item',
+    deleteButtonText: 'Excluir',
+    cancelButtonText: 'Cancelar',
+    warningMessage: 'Esta ação não pode ser desfeita.',
+    icon: 'bi-exclamation-triangle'
+  }
+};
+```
+
+2. **Implementar Método Abstrato:**
+```typescript
+protected getResourceDisplayName(resource: T): string {
+  return resource.name || 'Item sem nome';
+}
+```
+
+3. **Template (automático):**
+```html
+<app-confirm-delete-modal
+  modalId="deleteModal"
+  [data]="modalData"
+  [isDeleting]="isDeleting"
+  [itemType]="deleteModalConfig.itemType"
+  [deleteButtonText]="deleteModalConfig.deleteButtonText"
+  [cancelButtonText]="deleteModalConfig.cancelButtonText"
+  (confirm)="confirmDelete()"
+  (cancel)="cancelDelete()"
+></app-confirm-delete-modal>
+```
+
+4. **Botão de Delete:**
+```html
+<button 
+  class="btn btn-outline-danger"
+  (click)="openDeleteModal(resource)"
+  title="Excluir item">
+  <i class="bi bi-trash"></i>
+</button>
+```
+
+#### Benefícios:
+- ✅ **Reutilização**: Todos os componentes herdam automaticamente
+- ✅ **Consistência**: Comportamento padronizado
+- ✅ **Manutenibilidade**: Mudanças centralizadas
+- ✅ **Flexibilidade**: Configuração via `ResourceListConfig`
+- ✅ **Menos Código**: Elimina duplicação entre componentes
+
+#### Componentes Atualizados:
+- `CategoryListComponent`
+- `EntryListComponent`
+
+## 🧹 Limpeza de Código
+
+### **Funções Removidas (Não Utilizadas):**
+
+#### **BaseResourceListComponent:**
+- ❌ `deleteResource()` - substituído pela lógica no `confirmDelete`
+- ❌ `hasFilteredResources()` - não usado em templates
+- ❌ `getTotalResources()` - não usado em templates  
+- ❌ `getFilteredResourcesCount()` - não usado em templates
+
+#### **EntryListComponent:**
+- ❌ `getPaidEntries()` - não usado em templates
+- ❌ `getPendingEntries()` - não usado em templates
+
+#### **IconService:**
+- ❌ `getIconCategories()` - não usado
+- ❌ `getIconsByCategory()` - não usado
+- ❌ `isValidIcon()` - não usado
+- ❌ `getSuggestedIcons()` - não usado
+
+#### **Serviços Removidos:**
+- ❌ `ConfirmDeleteService` - substituído pela lógica no BaseResourceListComponent
+- ❌ `ValidationService` - não usado em nenhum lugar
+- ❌ `UserService` - não usado em nenhum lugar
+
+### **Benefícios da Limpeza:**
+- ✅ **Menos Código**: ~200 linhas removidas
+- ✅ **Manutenibilidade**: Menos código para manter
+- ✅ **Performance**: Menos código para carregar
+- ✅ **Clareza**: Código mais focado e limpo
+
+## 🏗️ **Arquitetura de Componentes Base**
+
+### **Estrutura Modular com Composição de Serviços**
+
+O sistema utiliza uma arquitetura de **composição** onde cada funcionalidade é implementada através de serviços independentes, permitindo máxima flexibilidade, reutilização e testabilidade.
+
+#### **Serviços Principais:**
+- **`PaginationService`** - Funcionalidade de paginação
+- **`SearchService`** - Funcionalidade de busca e filtros
+- **`StatisticsService`** - Funcionalidade de estatísticas
+- **`DeleteModalService`** - Funcionalidade de modal de exclusão
+
+#### **Implementação no Componente Base:**
+```typescript
+export abstract class BaseResourceListComponent<T extends BaseResourceModel> implements OnInit {
+  
+  constructor(
+    protected resourceService: BaseResourceService<T>,
+    protected injector: Injector,
+    protected toastrService: ToastrService,
+    protected paginationService: PaginationService,
+    protected searchService: SearchService,
+    protected statisticsService: StatisticsService,
+    protected deleteModalService: DeleteModalService
+  ) {}
+  
+  // Apenas métodos básicos de CRUD e coordenação
+  loadResources(): void { /* ... */ }
+  filterResources(): void { /* ... */ }
+  onPageChange(page: number): void { /* ... */ }
+  openDeleteModal(resource: T): void { /* ... */ }
+}
+```
+
+#### **Implementação nos Componentes Filhos:**
+```typescript
+export class CategoryListComponent extends BaseResourceListComponent<Category> {
+  
+  constructor(
+    private categoryService: CategoryService,
+    protected override injector: Injector,
+    private iconService: IconService,
+    protected override toastrService: ToastrService,
+    protected override paginationService: PaginationService,
+    protected override searchService: SearchService,
+    protected override statisticsService: StatisticsService,
+    protected override deleteModalService: DeleteModalService
+  ) {
+    super(categoryService, injector, toastrService, paginationService, searchService, statisticsService, deleteModalService);
+  }
+
+  // ========================================
+  // IMPLEMENTAÇÃO DE MÉTODOS ABSTRATOS
+  // ========================================
+  protected getResourceIcon(category: Category): string { /* ... */ }
+  protected formatResourceDate(date: any): string { /* ... */ }
+  protected getResourceDisplayName(category: Category): string { /* ... */ }
+
+  // ========================================
+  // SOBRESCRITA DE SERVIÇOS
+  // ========================================
+  override get paginationOptions(): any { /* configuração específica */ }
+  override get searchPlaceholder(): string { /* configuração específica */ }
+  override matchesSearch(category: Category, searchTerm: string): boolean { /* lógica específica */ }
+  override get statisticsCards(): StatisticsCard[] { /* valores dinâmicos */ }
+
+  // ========================================
+  // MÉTODOS ESPECÍFICOS DE CATEGORIA
+  // ========================================
+  getActiveCategories(): number { /* lógica específica */ }
+  getRecentCategories(): number { /* lógica específica */ }
+}
+```
+
+#### **Vantagens da Abordagem com Composição:**
+- ✅ **Responsabilidade Única**: Cada serviço tem uma função específica
+- ✅ **Reutilização Máxima**: Serviços podem ser usados independentemente
+- ✅ **Testabilidade**: Cada serviço pode ser testado isoladamente
+- ✅ **Flexibilidade**: Fácil trocar implementações de serviços
+- ✅ **Manutenibilidade**: Mudanças isoladas por funcionalidade
+- ✅ **Escalabilidade**: Fácil adicionar novos serviços
+- ✅ **Desacoplamento**: Componentes não dependem de interfaces grandes
+- ✅ **Injeção de Dependência**: Serviços são injetados via DI
+- ✅ **Valores Dinâmicos**: Estatísticas calculadas em tempo real
+
+## 🏗️ Arquitetura de Configuração
+
+### **Abordagem Implementada: Interfaces Separadas por Funcionalidade**
+
+Implementamos uma **abordagem com interfaces completamente separadas**, onde cada funcionalidade é independente:
+
+#### **Interfaces de Funcionalidade:**
+```typescript
+// Cada funcionalidade tem sua própria interface
+export interface IPagination {
+  getPaginationConfig(): PaginationConfig;
+  onPageChange(page: number): void;
+  onItemsPerPageChange(itemsPerPage: number): void;
+}
+
+export interface ISearch {
+  getSearchConfig(): SearchConfig;
+  filterResources(): void;
+  matchesSearch(resource: any, searchTerm: string): boolean;
+}
+
+export interface IViewMode {
+  getViewModeConfig(): ViewModeConfig;
+  setViewMode(mode: 'grid' | 'list'): void;
+}
+
+export interface IDeleteModal {
+  getDeleteModalConfig(): DeleteModalConfig;
+  openDeleteModal(resource: any): void;
+  confirmDelete(): void;
+  cancelDelete(): void;
+}
+
+// ... outras interfaces
+```
+
+#### **Implementação no Componente Base:**
+```typescript
+export abstract class BaseResourceListComponent<T extends BaseResourceModel> 
+  implements OnInit, IPagination, ISearch, IViewMode, IEmptyState, ILoading, IStatistics, IDeleteModal {
+  
+  // Cada interface é implementada separadamente
+  getPaginationConfig(): PaginationConfig { /* ... */ }
+  getSearchConfig(): SearchConfig { /* ... */ }
+  getViewModeConfig(): ViewModeConfig { /* ... */ }
+  // ... outras implementações
+}
+```
+
+#### **Vantagens da Abordagem com Interfaces Separadas:**
+- ✅ **Independência Total**: Cada funcionalidade é completamente independente
+- ✅ **Reutilização**: Interfaces podem ser implementadas separadamente
+- ✅ **Testabilidade**: Cada funcionalidade pode ser testada isoladamente
+- ✅ **Flexibilidade**: Componentes podem implementar apenas as interfaces que precisam
+- ✅ **Manutenibilidade**: Mudanças em uma funcionalidade não afetam outras
+- ✅ **Escalabilidade**: Fácil adicionar novas funcionalidades sem afetar existentes
+
+#### **Exemplo de Uso Avançado:**
+```typescript
+// Componente que implementa apenas algumas funcionalidades
+class SimpleListComponent<T> implements IPagination, ISearch {
+  getPaginationConfig(): PaginationConfig { /* ... */ }
+  getSearchConfig(): SearchConfig { /* ... */ }
+  // Não implementa outras interfaces
+}
+
+// Componente completo
+class FullListComponent<T> implements 
+  IPagination, ISearch, IViewMode, IEmptyState, ILoading, IStatistics, IDeleteModal {
+  // Implementa todas as funcionalidades
+}
+```
+
+### **Comparação das Abordagens:**
+
+| Aspecto | Abordagem Anterior | Abordagem Atual |
+|---------|-------------------|-----------------|
+| **Configuração** | Interface unificada grande | Interfaces separadas independentes |
+| **Manutenibilidade** | Difícil de manter | Fácil de manter |
+| **Reutilização** | Limitada | Máxima |
+| **Testabilidade** | Complexa | Simples |
+| **Escalabilidade** | Limitada | Excelente |
+| **Organização** | Tudo junto | Separado por responsabilidade |
+
+### **Benefícios da Nova Abordagem:**
+- ✅ **Independência Total**: Cada funcionalidade é completamente independente
+- ✅ **Reutilização**: Interfaces podem ser implementadas separadamente
+- ✅ **Testabilidade**: Cada funcionalidade pode ser testada isoladamente
+- ✅ **Flexibilidade**: Componentes podem implementar apenas as interfaces que precisam
+- ✅ **Manutenibilidade**: Mudanças em uma funcionalidade não afetam outras
+- ✅ **Escalabilidade**: Fácil adicionar novas funcionalidades sem afetar existentes
+- ✅ **Organização**: Métodos organizados por responsabilidade nos componentes filhos
+- ✅ **Sem Configuração Unificada**: Cada interface gerencia sua própria configuração
+- ✅ **Valores Dinâmicos**: Estatísticas e dados são calculados em tempo real
+
+## Estrutura do Projeto
+
 ## 🔧 Configuração
 
 ### Ambiente de Desenvolvimento

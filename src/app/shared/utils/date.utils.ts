@@ -85,7 +85,7 @@ export class DateUtils {
     /**
      * Retorna a data atual formatada
      */
-    static getCurrentDateString(): string {
+    static get currentDateString(): string {
         return DateUtils.dateToString(new Date());
     }
     
@@ -107,7 +107,7 @@ export class DateUtils {
     /**
      * Gera lista de meses para select
      */
-    static getMonthsOptions(): { value: number, label: string }[] {
+    static get monthsOptions(): { value: number, label: string }[] {
         const months: { value: number, label: string }[] = [];
         for (let i = 0; i < 12; i++) {
             const date = new Date(2024, i, 1);
@@ -129,7 +129,7 @@ export class DateUtils {
     /**
      * Configuração de localização para PrimeNG Calendar
      */
-    static getPrimeNGLocale() {
+    static get primeNGLocale() {
         return {
             firstDayOfWeek: 0,
             dayNames: ['Domingo', 'Segunda-feira', 'Terça-feira', 'Quarta-feira', 'Quinta-feira', 'Sexta-feira', 'Sábado'],

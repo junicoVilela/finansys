@@ -1,0 +1,16 @@
+<div class="text-center py-5">
+  <div class="card border-0 shadow-sm">
+    <div class="card-body py-5">
+      <div class="bg-light rounded-circle d-inline-flex align-items-center justify-content-center mb-4" 
+           style="width: 80px; height: 80px;">
+        <i class="bi text-muted" [class]="config.icon" style="font-size: 2.5rem;"></i>
+      </div>
+      <h3 class="fw-bold text-dark mb-3">{{ config.title }}</h3>
+      <p class="text-muted mb-4">{{ config.description }}</p>
+      <button [routerLink]="config.buttonLink" class="btn btn-primary btn-lg">
+        <i class="bi bi-plus-circle me-2"></i>
+        {{ config.buttonText }}
+      </button>
+    </div>
+  </div>
+</div> 

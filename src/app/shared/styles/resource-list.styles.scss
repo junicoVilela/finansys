@@ -1,64 +1,10 @@
-// Importar estilos compartilhados
-@import '../../../shared/styles/resource-list.styles.scss';
+// Estilos compartilhados para componentes de lista de recursos
+// Este arquivo contém todos os estilos comuns entre category-list e entry-list
 
-// Estilos específicos para lançamentos
-
-/* Cards de estatísticas */
-.card {
-  transition: transform 0.2s ease-in-out, box-shadow 0.2s ease-in-out;
-  
-  &:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 0.5rem 1rem rgba(0, 0, 0, 0.15) !important;
-  }
-}
-
-/* Cards de lançamentos */
-.entry-card {
-  .card-header {
-    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
-  }
-}
-
-/* Ícones de tipo de lançamento */
-.bg-success {
-  background: linear-gradient(135deg, #198754 0%, #157347 100%) !important;
-}
-
-.bg-danger {
-  background: linear-gradient(135deg, #dc3545 0%, #c82333 100%) !important;
-}
-
-/* Badges de status */
-.badge {
-  font-size: 0.75rem;
-  padding: 0.375rem 0.75rem;
-}
-
-/* Botões de ação */
-.btn-group-sm .btn {
-  transition: all 0.2s ease-in-out;
-  
-  &:hover {
-    transform: scale(1.05);
-  }
-}
-
-/* Campo de busca */
-.form-control-lg {
-  border-radius: 0.75rem;
-  border: 1px solid #dee2e6;
-  
-  &:focus {
-    border-color: #2563eb;
-    box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25);
-  }
-}
-
-/* Botões de visualização */
+// ===== BOTÕES DE AÇÃO =====
 .btn-group .btn {
-  border-radius: 0.5rem;
   margin-right: 0.5rem;
+  border-radius: 0.5rem;
   
   &:last-child {
     margin-right: 0;
@@ -71,36 +17,79 @@
   }
 }
 
-/* Tabela responsiva */
-.table {
-  th {
-    font-weight: 600;
-    color: #495057;
-  }
+.btn-group-sm .btn {
+  transition: all 0.2s ease-in-out;
   
-  td {
-    vertical-align: middle;
+  &:hover {
+    transform: scale(1.05);
   }
 }
 
-/* Estados de loading e vazio */
+// ===== CAMPOS DE BUSCA =====
+.form-control-lg {
+  border-radius: 0.75rem;
+  border: 1px solid #dee2e6;
+  
+  &:focus {
+    border-color: #2563eb;
+    box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25);
+  }
+}
+
+// ===== ESTADOS DE LOADING =====
 .spinner-border {
   color: #2563eb;
 }
 
-/* Responsividade */
-@media (max-width: 768px) {
-  .card-body {
-    padding: 1rem;
+// ===== SELETOR DE ITENS POR PÁGINA =====
+.form-select-sm {
+  border-radius: 0.75rem;
+  border: none;
+  background-color: #f8f9fa;
+  transition: all 0.3s ease-in-out;
+  font-weight: 500;
+  padding: 0.5rem 1rem;
+  
+  &:focus {
+    border: none;
+    background-color: #e9ecef;
+    box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25);
   }
   
+  &:hover {
+    background-color: #e9ecef;
+    transform: translateY(-1px);
+  }
+}
+
+// ===== ÍCONES DE CONTEXTO =====
+.bg-primary.bg-gradient {
+  box-shadow: 0 4px 8px rgba(37, 99, 235, 0.2);
+}
+
+// ===== CARDS =====
+.category-card,
+.entry-card {
+  transition: transform 0.2s ease-in-out;
+  
+  &:hover {
+    transform: translateY(-2px);
+  }
+}
+
+// ===== RESPONSIVIDADE =====
+@media (max-width: 768px) {
   .btn-group-sm .btn {
     width: 32px;
     height: 32px;
   }
+  
+  .card-body {
+    padding: 1rem;
+  }
 }
 
-/* Controles de paginação */
+// ===== PAGINAÇÃO =====
 .pagination {
   .page-link {
     border-radius: 0.75rem;
@@ -156,28 +145,7 @@
   }
 }
 
-/* Seletor de itens por página */
-.form-select-sm {
-  border-radius: 0.75rem;
-  border: none;
-  background-color: #f8f9fa;
-  transition: all 0.3s ease-in-out;
-  font-weight: 500;
-  padding: 0.5rem 1rem;
-  
-  &:focus {
-    border: none;
-    background-color: #e9ecef;
-    box-shadow: 0 0 0 0.2rem rgba(37, 99, 235, 0.25);
-  }
-  
-  &:hover {
-    background-color: #e9ecef;
-    transform: translateY(-1px);
-  }
-}
-
-/* Informações de paginação */
+// ===== INFORMAÇÕES DE PAGINAÇÃO =====
 .text-muted.small {
   font-size: 0.875rem;
   font-weight: 500;
@@ -188,18 +156,31 @@
   }
 }
 
-/* Card de paginação */
+// ===== CARD DE PAGINAÇÃO =====
 .card-body.py-4 {
   background: linear-gradient(135deg, #f8f9fa 0%, #ffffff 100%);
   border-radius: 1rem;
 }
 
-/* Ícone de contexto */
-.bg-primary.bg-gradient {
-  box-shadow: 0 4px 8px rgba(37, 99, 235, 0.2);
+// ===== BADGES =====
+.badge {
+  font-size: 0.75rem;
+  padding: 0.375rem 0.75rem;
 }
 
-/* Estilos para os botões de ação */
+// ===== TABELA =====
+.table {
+  th {
+    font-weight: 600;
+    color: #495057;
+  }
+  
+  td {
+    vertical-align: middle;
+  }
+}
+
+// ===== EFEITOS DE HOVER =====
 .btn-action {
   transition: all 0.2s ease-in-out;
   
@@ -208,11 +189,10 @@
   }
 }
 
-/* Estilos para os botões de visualização */
 .view-mode-btn {
   transition: all 0.2s ease-in-out;
   
   &:hover {
     transform: scale(1.05);
   }
-}
+} 

@@ -65,7 +65,7 @@ export class ReportsComponent implements OnInit {
   entries: Entry[] = [];
 
   // Usando DateUtils para gerar listas de meses e anos
-  months = DateUtils.getMonthsOptions();
+  months = DateUtils.monthsOptions;
   years = DateUtils.getYearsRange(2020, 2030);
 
   @ViewChild('month') month: ElementRef | any = null;

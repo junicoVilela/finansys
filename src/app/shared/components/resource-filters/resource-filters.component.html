@@ -1,0 +1,54 @@
+<div class="card border-0 shadow-sm mb-4">
+  <div class="card-body">
+    <div class="row align-items-center">
+      <div class="col-md-6" *ngIf="config.enableSearch">
+        <div class="position-relative">
+          <i class="bi bi-search position-absolute top-50 start-0 translate-middle-y ms-3 text-muted"></i>
+          <input 
+            type="text" 
+            class="form-control form-control-lg ps-5" 
+            [placeholder]="config.searchPlaceholder || 'Buscar...'"
+            [(ngModel)]="searchTerm"
+            (input)="onSearchChange.emit(searchTerm)"
+          >
+        </div>
+      </div>
+      <div class="col-md-6 text-md-end mt-3 mt-md-0" 
+           [ngClass]="{'col-md-12': !config.enableSearch}">
+        <div class="d-flex align-items-center justify-content-md-end gap-3">
+          <!-- Seletor de itens por página -->
+          <div class="d-flex align-items-center" *ngIf="config.enableItemsPerPage">
+            <label class="form-label mb-0 me-2 small text-muted">Itens por página:</label>
+            <select 
+              class="form-select form-select-sm" 
+              style="width: auto;"
+              [value]="itemsPerPage"
+              (change)="onItemsPerPageChange.emit(+($any($event.target).value))"
+            >
+              <option *ngFor="let option of config.itemsPerPageOptions || [5, 10, 20, 50]" 
+                      [value]="option">{{ option }}</option>
+            </select>
+          </div>
+          
+          <!-- Controles de visualização -->
+          <div class="btn-group" role="group" *ngIf="config.enableViewModeToggle">
+            <button 
+              class="btn btn-outline-secondary"
+              [class.active]="viewMode === 'grid'"
+              (click)="onViewModeChange.emit('grid')"
+            >
+              <i class="bi bi-grid-3x3-gap"></i>
+            </button>
+            <button 
+              class="btn btn-outline-secondary"
+              [class.active]="viewMode === 'list'"
+              (click)="onViewModeChange.emit('list')"
+            >
+              <i class="bi bi-list-ul"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</div> 

@@ -22,36 +22,31 @@ export class FormFieldErrorComponent implements OnInit {
   }
 
   public get errorMessage(): string | null {
-    if (this.mustShowErrorMessage()) {
-      return this.getErrorMessage();
+    if (!this.formControl?.touched || !this.formControl?.invalid) {
+      return null;
     }
-    return null
-  }
 
-  private mustShowErrorMessage(): boolean | undefined {
-    return this.formControl?.touched && this.formControl?.invalid;
-  }
+    const errors = this.formControl.errors;
+    if (!errors) return null;
 
-  private getErrorMessage(): string | null {
-    if (!this.formControl?.errors || this.formControl.errors['required']) {
+    if (errors['required']) {
       return "Campo obrigatório!";
     }
 
-    if (!this.formControl?.errors || this.formControl.errors['email']) {
+    if (errors['email']) {
       return "Formato de email inválido!";
     }
 
-    if (!this.formControl?.errors || this.formControl.errors['minlength']) {
-      const requiredLength = this.formControl.errors['minlength']?.['requiredLength']
-      return `Deve conter no mínimo ${requiredLength} caracteres` ;
+    if (errors['minlength']) {
+      const requiredLength = errors['minlength']['requiredLength'];
+      return `Deve conter no mínimo ${requiredLength} caracteres`;
     }
 
-    if (!this.formControl?.errors || this.formControl.errors['maxlength']) {
-      const requiredLength = this.formControl.errors['maxlength']?.['requiredLength']
-      return `Deve conter no máximo ${requiredLength} caracteres` ;
+    if (errors['maxlength']) {
+      const requiredLength = errors['maxlength']['requiredLength'];
+      return `Deve conter no máximo ${requiredLength} caracteres`;
     }
 
     return null;
   }
-
 }
