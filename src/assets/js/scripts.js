@@ -25,13 +25,20 @@
         });
     }
 
-    // Toggle the side navigation
+    // Toggle the side navigation - Atualizado para trabalhar com Angular
     const drawerToggle = document.body.querySelector('#drawerToggle');
     if (drawerToggle) {
-        drawerToggle.addEventListener('click', event => {
-            event.preventDefault();
-            document.body.classList.toggle('drawer-toggled');
-        });
+        // Remove o event listener antigo se existir
+        drawerToggle.removeEventListener('click', handleDrawerToggle);
+        
+        // Adiciona o novo event listener
+        drawerToggle.addEventListener('click', handleDrawerToggle);
+    }
+
+    function handleDrawerToggle(event) {
+        event.preventDefault();
+        // O toggle agora é controlado pelo Angular através do LayoutService
+        // Esta função é mantida apenas para compatibilidade
     }
 
     // Close side navigation when width < LG
@@ -47,7 +54,6 @@
             }
         });
     }
-
 
     // Add active state to sidbar nav links
     let activatedPath = window.location.pathname.match(/([\w-]+\.html)/, '$1');

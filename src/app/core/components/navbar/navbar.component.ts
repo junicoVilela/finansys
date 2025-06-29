@@ -1,9 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { RouterLink, RouterLinkActive } from '@angular/router';
-import { Observable } from 'rxjs';
+import { Component } from '@angular/core';
 import { CommonModule } from '@angular/common';
-
+import { RouterModule } from '@angular/router';
 import { AuthService } from '../../services/auth.service';
+import { LayoutService } from '../../services/layout.service';
+import { Observable } from 'rxjs';
 import { User } from '../../../shared/models/user.model';
 
 @Component({
@@ -11,18 +11,24 @@ import { User } from '../../../shared/models/user.model';
   templateUrl: './navbar.component.html',
   styleUrls: ['./navbar.component.scss'],
   standalone: true,
-  imports: [RouterLink, RouterLinkActive, CommonModule]
+  imports: [CommonModule, RouterModule]
 })
-export class NavbarComponent implements OnInit {
-  currentUser$: Observable<User | null>;
+export class NavbarComponent {
   isAuthenticated$: Observable<boolean>;
+  currentUser$: Observable<User | null>;
+  sidebarOpen$: Observable<boolean>;
 
-  constructor(private authService: AuthService) {
-    this.currentUser$ = this.authService.currentUser$;
+  constructor(
+    private authService: AuthService,
+    private layoutService: LayoutService
+  ) {
     this.isAuthenticated$ = this.authService.isAuthenticated$;
+    this.currentUser$ = this.authService.currentUser$;
+    this.sidebarOpen$ = this.layoutService.sidebarOpen$;
   }
 
-  ngOnInit(): void {
+  toggleSidebar(): void {
+    this.layoutService.toggleSidebar();
   }
 
   onLogout(): void {

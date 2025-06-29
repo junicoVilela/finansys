@@ -1,7 +1,7 @@
 <nav class="modern-navbar navbar navbar-expand">
     <div class="container-fluid px-4">
         <!-- Drawer toggle button - só aparece se estiver logado -->
-        <button class="btn btn-icon drawer-toggle" id="drawerToggle" href="javascript:void(0);" *ngIf="isAuthenticated$ | async">
+        <button class="btn btn-icon drawer-toggle" id="drawerToggle" (click)="toggleSidebar()" *ngIf="isAuthenticated$ | async">
             <i class="material-icons">menu</i>
         </button>
         
