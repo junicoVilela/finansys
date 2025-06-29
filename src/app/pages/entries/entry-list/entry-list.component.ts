@@ -45,10 +45,6 @@ import { ResourceFiltersComponent } from "../../../shared/components/resource-fi
 })
 export class EntryListComponent extends BaseResourceListComponent<Entry> {
   
-  // Cache para estatísticas
-  private _cachedStats: { revenue: number; expenses: number; entries: number } | null = null;
-  private _lastResourcesLength = 0;
-  
   constructor(
     private entryService: EntryService,
     protected override injector: Injector,
@@ -141,7 +137,7 @@ export class EntryListComponent extends BaseResourceListComponent<Entry> {
   }
 
   // ========================================
-  // GETTERS PARA DADOS COMPUTADOS (OTIMIZADOS)
+  // GETTERS PARA DADOS COMPUTADOS
   // ========================================
 
   // Getter para compatibilidade com templates
@@ -149,45 +145,25 @@ export class EntryListComponent extends BaseResourceListComponent<Entry> {
     return 'Gerencie suas receitas e despesas de forma organizada';
   }
 
-  // Método privado para calcular estatísticas com cache
-  private calculateStats() {
-    // Verificar se o cache ainda é válido
-    if (this._cachedStats && this._lastResourcesLength === this.resources.length) {
-      return this._cachedStats;
-    }
-
-    // Calcular estatísticas
-    const revenue = this.resources
+  // Getters para estatísticas
+  get totalRevenue(): number {
+    return this.resources
       .filter(entry => entry.type === 'revenue')
       .reduce((total, entry) => total + (entry.amount || 0), 0);
-    
-    const expenses = this.resources
-      .filter(entry => entry.type === 'expense')
-      .reduce((total, entry) => total + (entry.amount || 0), 0);
-
-    // Atualizar cache
-    this._cachedStats = { revenue, expenses, entries: this.resources.length };
-    this._lastResourcesLength = this.resources.length;
-
-    return this._cachedStats;
-  }
-
-  // Getters para estatísticas (otimizados com cache)
-  get totalRevenue(): number {
-    return this.calculateStats().revenue;
   }
 
   get totalExpenses(): number {
-    return this.calculateStats().expenses;
+    return this.resources
+      .filter(entry => entry.type === 'expense')
+      .reduce((total, entry) => total + (entry.amount || 0), 0);
   }
 
   get balance(): number {
-    const stats = this.calculateStats();
-    return stats.revenue - stats.expenses;
+    return this.totalRevenue - this.totalExpenses;
   }
 
   get totalEntries(): number {
-    return this.calculateStats().entries;
+    return this.resources.length;
   }
 
   // Sobrescrever estatísticas
@@ -218,15 +194,5 @@ export class EntryListComponent extends BaseResourceListComponent<Entry> {
         label: 'Total de Lançamentos'
       }
     ];
-  }
-
-  // ========================================
-  // SOBRESCRITA DE MÉTODOS PARA INVALIDAR CACHE
-  // ========================================
-
-  // Invalidar cache quando recursos são atualizados
-  override filterResources(): void {
-    this._cachedStats = null; // Invalidar cache
-    super.filterResources();
   }
 }

@@ -44,11 +44,6 @@ import { ResourceFiltersComponent } from "../../../shared/components/resource-fi
 })
 export class CategoryListComponent extends BaseResourceListComponent<Category> {
   
-  // Cache para estatísticas
-  private _cachedStats: { total: number; recent: number } | null = null;
-  private _lastResourcesLength = 0;
-  private _lastResourcesHash = '';
-  
   constructor(
     private categoryService: CategoryService,
     protected override injector: Injector,
@@ -141,7 +136,7 @@ export class CategoryListComponent extends BaseResourceListComponent<Category> {
   }
 
   // ========================================
-  // GETTERS PARA DADOS COMPUTADOS (OTIMIZADOS)
+  // GETTERS PARA DADOS COMPUTADOS
   // ========================================
 
   // Getter para compatibilidade com templates
@@ -149,46 +144,21 @@ export class CategoryListComponent extends BaseResourceListComponent<Category> {
     return 'Gerencie suas categorias de receitas e despesas';
   }
 
-  // Método privado para calcular estatísticas com cache
-  private calculateStats() {
-    // Gerar hash simples dos recursos para detectar mudanças
-    const currentHash = this.resources.map(r => r.id).join(',');
-    
-    // Verificar se o cache ainda é válido
-    if (this._cachedStats && 
-        this._lastResourcesLength === this.resources.length && 
-        this._lastResourcesHash === currentHash) {
-      return this._cachedStats;
-    }
+  // Getters para estatísticas
+  get totalCategories(): number {
+    return this.resources.length;
+  }
 
-    // Calcular estatísticas
-    const total = this.resources.length;
-    
+  get recentCategories(): number {
     const currentMonth = new Date().getMonth();
     const currentYear = new Date().getFullYear();
     
-    const recent = this.resources.filter(category => {
+    return this.resources.filter(category => {
       if (!category.createdAt) return false;
       const categoryDate = new Date(category.createdAt);
       return categoryDate.getMonth() === currentMonth && 
              categoryDate.getFullYear() === currentYear;
     }).length;
-
-    // Atualizar cache
-    this._cachedStats = { total, recent };
-    this._lastResourcesLength = this.resources.length;
-    this._lastResourcesHash = currentHash;
-
-    return this._cachedStats;
-  }
-
-  // Getters para estatísticas (otimizados com cache)
-  get totalCategories(): number {
-    return this.calculateStats().total;
-  }
-
-  get recentCategories(): number {
-    return this.calculateStats().recent;
   }
 
   // Sobrescrever estatísticas
@@ -213,15 +183,5 @@ export class CategoryListComponent extends BaseResourceListComponent<Category> {
         label: 'Adicionadas este Mês'
       }
     ];
-  }
-
-  // ========================================
-  // SOBRESCRITA DE MÉTODOS PARA INVALIDAR CACHE
-  // ========================================
-
-  // Invalidar cache quando recursos são atualizados
-  override filterResources(): void {
-    this._cachedStats = null; // Invalidar cache
-    super.filterResources();
   }
 }
