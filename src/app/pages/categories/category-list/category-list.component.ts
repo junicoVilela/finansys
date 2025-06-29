@@ -90,17 +90,17 @@ export class CategoryListComponent extends BaseResourceListComponent<Category> {
   // CONFIGURAÇÕES ESPECÍFICAS
   // ========================================
 
-  override getEmptyStateConfig(): EmptyStateConfig {
+  override get emptyStateConfig(): EmptyStateConfig {
     return {
       icon: 'bi-collection',
       title: 'Nenhuma categoria encontrada',
-      description: 'Comece criando sua primeira categoria para organizar melhor suas finanças',
+      description: 'Comece criando sua primeira categoria para organizar seus lançamentos',
       buttonText: 'Criar Primeira Categoria',
       buttonLink: 'new'
     };
   }
 
-  override getLoadingConfig() {
+  override get loadingConfig() {
     return {
       title: 'Carregando categorias...',
       description: 'Aguarde enquanto buscamos suas categorias'

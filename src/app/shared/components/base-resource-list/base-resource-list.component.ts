@@ -53,8 +53,8 @@ export abstract class BaseResourceListComponent<T extends BaseResourceModel> imp
   }
 
   protected initializeComponent(): void {
-    this.viewMode = this.getViewModeConfig().defaultMode;
     this.paginationService.reset();
+    this.viewMode = this.viewModeConfig.defaultMode;
   }
 
   // ========================================
@@ -62,7 +62,7 @@ export abstract class BaseResourceListComponent<T extends BaseResourceModel> imp
   // ========================================
 
   // Configuração de Paginação
-  getPaginationConfig() {
+  get paginationConfig() {
     return {
       options: {
         itemsPerPageOptions: [5, 10, 20, 50],
@@ -78,7 +78,7 @@ export abstract class BaseResourceListComponent<T extends BaseResourceModel> imp
   }
 
   // Configuração de Busca
-  getSearchConfig() {
+  get searchConfig() {
     return {
       enabled: true,
       placeholder: 'Buscar...'
@@ -86,7 +86,7 @@ export abstract class BaseResourceListComponent<T extends BaseResourceModel> imp
   }
 
   // Configuração de Modo de Visualização
-  getViewModeConfig() {
+  get viewModeConfig() {
     return {
       defaultMode: 'grid' as const,
       enableToggle: true
@@ -94,12 +94,12 @@ export abstract class BaseResourceListComponent<T extends BaseResourceModel> imp
   }
 
   // Configuração de Estado Vazio
-  getEmptyStateConfig(): EmptyStateConfig | undefined {
+  get emptyStateConfig(): EmptyStateConfig | undefined {
     return undefined; // Deve ser sobrescrito pelos componentes filhos
   }
 
   // Configuração de Carregamento
-  getLoadingConfig() {
+  get loadingConfig() {
     return {
       title: 'Carregando...',
       description: 'Aguarde enquanto buscamos os dados'
@@ -107,14 +107,14 @@ export abstract class BaseResourceListComponent<T extends BaseResourceModel> imp
   }
 
   // Configuração de Estatísticas
-  getStatisticsConfig() {
+  get statisticsConfig() {
     return {
       cards: []
     };
   }
 
   // Configuração do Modal de Exclusão
-  getDeleteModalConfig() {
+  get deleteModalConfig() {
     return this.deleteModalService.config;
   }
 
@@ -159,7 +159,7 @@ export abstract class BaseResourceListComponent<T extends BaseResourceModel> imp
 
   // Estatísticas
   getStatisticsCards(): StatisticsCard[] {
-    return this.getStatisticsConfig()?.cards || [];
+    return this.statisticsConfig?.cards || [];
   }
 
   // Modal de Exclusão
@@ -226,15 +226,15 @@ export abstract class BaseResourceListComponent<T extends BaseResourceModel> imp
   }
 
   get enableViewModeToggle(): boolean {
-    return this.getViewModeConfig().enableToggle;
+    return this.viewModeConfig.enableToggle;
   }
 
   get enableItemsPerPage(): boolean {
-    return this.getPaginationConfig().enableItemsPerPage || false;
+    return this.paginationConfig.enableItemsPerPage || false;
   }
 
   get searchPlaceholder(): string {
-    return this.getSearchConfig().placeholder;
+    return this.searchConfig.placeholder;
   }
 
   get searchTerm(): string {
@@ -243,27 +243,6 @@ export abstract class BaseResourceListComponent<T extends BaseResourceModel> imp
 
   set searchTerm(value: string) {
     this.searchService.searchTerm = value;
-  }
-
-  get emptyStateConfig(): EmptyStateConfig {
-    return this.getEmptyStateConfig() || {
-      icon: 'bi-collection',
-      title: 'Nenhum item encontrado',
-      description: 'Comece criando seu primeiro item',
-      buttonText: 'Criar Primeiro Item',
-      buttonLink: 'new'
-    };
-  }
-
-  get loadingConfig(): PageLoadingConfig {
-    return this.getLoadingConfig() || {
-      title: 'Carregando...',
-      description: 'Aguarde enquanto buscamos os dados'
-    };
-  }
-
-  get deleteModalConfig() {
-    return this.getDeleteModalConfig();
   }
 
   get isDeleting(): boolean {

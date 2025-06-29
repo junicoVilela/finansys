@@ -89,17 +89,17 @@ export class EntryListComponent extends BaseResourceListComponent<Entry> {
   // CONFIGURAÇÕES ESPECÍFICAS
   // ========================================
 
-  override getEmptyStateConfig(): EmptyStateConfig {
+  override get emptyStateConfig(): EmptyStateConfig {
     return {
       icon: 'bi-cash-stack',
       title: 'Nenhum lançamento encontrado',
-      description: 'Comece registrando suas primeiras receitas e despesas para organizar melhor suas finanças',
+      description: 'Comece criando seu primeiro lançamento para controlar suas finanças',
       buttonText: 'Criar Primeiro Lançamento',
       buttonLink: 'new'
     };
   }
 
-  override getLoadingConfig() {
+  override get loadingConfig() {
     return {
       title: 'Carregando lançamentos...',
       description: 'Aguarde enquanto buscamos seus lançamentos'

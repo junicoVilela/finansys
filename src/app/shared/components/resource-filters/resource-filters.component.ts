@@ -33,9 +33,4 @@ export class ResourceFiltersComponent {
   @Output() searchChange = new EventEmitter<string>();
   @Output() itemsPerPageChange = new EventEmitter<number>();
   @Output() viewModeChange = new EventEmitter<'grid' | 'list'>();
-
-  // Aliases para compatibilidade
-  get onSearchChange() { return this.searchChange; }
-  get onItemsPerPageChange() { return this.itemsPerPageChange; }
-  get onViewModeChange() { return this.viewModeChange; }
 } 
