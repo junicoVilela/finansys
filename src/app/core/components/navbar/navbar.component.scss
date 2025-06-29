@@ -140,3 +140,493 @@
     font-size: 0.75rem;
   }
 }
+
+// Variáveis de cores do sistema
+$primary-color: #2563eb;
+$secondary-color: #3b82f6;
+$dark-color: #212121;
+$light-color: #f5f5f5;
+$white: #ffffff;
+$gray-50: #f9fafb;
+$gray-100: #f8f9fa;
+$gray-200: #e9ecef;
+$gray-300: #dee2e6;
+$gray-400: #ced4da;
+$gray-500: #adb5bd;
+$gray-600: #6c757d;
+$gray-700: #495057;
+$gray-800: #343a40;
+$gray-900: #212529;
+
+// Navbar principal - Versão corporativa profissional
+.modern-navbar {
+  background: $white;
+  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06);
+  padding: 0;
+  height: 5rem;
+  border: none;
+  position: relative;
+  border-bottom: 3px solid $primary-color;
+}
+
+// Container
+.container-fluid {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 100%;
+  padding: 0 2rem;
+}
+
+// Botão do drawer
+.drawer-toggle {
+  background: $gray-100;
+  border: 1px solid $gray-300;
+  color: $gray-800;
+  border-radius: 4px;
+  padding: 0.75rem;
+  margin-right: 2rem;
+  transition: all 0.2s ease;
+  
+  &:hover {
+    background: $primary-color;
+    border-color: $primary-color;
+    color: $white;
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+  }
+  
+  .material-icons {
+    font-size: 1.25rem;
+  }
+}
+
+// Brand/Logo - NOVA ABORDAGEM MODERNA
+.navbar-brand {
+  display: flex;
+  align-items: center;
+  text-decoration: none;
+  margin-right: 4rem;
+  
+  .brand-content {
+    display: flex;
+    align-items: center;
+    gap: 1.25rem;
+    
+    .brand-icon-container {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 3.5rem;
+      height: 3.5rem;
+      background: linear-gradient(135deg, $primary-color, $secondary-color);
+      border-radius: 12px;
+      box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+      transition: all 0.3s ease;
+      overflow: hidden;
+      
+      .brand-icon {
+        color: $white;
+        font-size: 1.75rem;
+        z-index: 2;
+        position: relative;
+        transition: all 0.3s ease;
+      }
+      
+      .icon-glow {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+        width: 100%;
+        height: 100%;
+        background: radial-gradient(circle, rgba(255, 255, 255, 0.2) 0%, transparent 70%);
+        border-radius: 50%;
+        opacity: 0;
+        transition: opacity 0.3s ease;
+      }
+      
+      &::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(45deg, transparent 30%, rgba(255, 255, 255, 0.1) 50%, transparent 70%);
+        transform: translateX(-100%);
+        transition: transform 0.6s ease;
+      }
+    }
+    
+    .brand-text-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.125rem;
+      
+      .brand-text {
+        color: $gray-900;
+        font-size: 1.875rem;
+        font-weight: 800;
+        letter-spacing: -0.025em;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        background: linear-gradient(135deg, $gray-900 0%, $primary-color 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        background-clip: text;
+        transition: all 0.3s ease;
+        line-height: 1.2;
+      }
+      
+      .brand-subtitle {
+        color: $gray-500;
+        font-size: 0.75rem;
+        font-weight: 500;
+        letter-spacing: 0.5px;
+        text-transform: uppercase;
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        transition: all 0.3s ease;
+        line-height: 1;
+      }
+    }
+  }
+  
+  &:hover {
+    .brand-content {
+      .brand-icon-container {
+        transform: scale(1.05) rotate(2deg);
+        box-shadow: 0 6px 20px rgba(37, 99, 235, 0.4);
+        
+        .brand-icon {
+          transform: scale(1.1);
+        }
+        
+        .icon-glow {
+          opacity: 1;
+        }
+        
+        &::before {
+          transform: translateX(100%);
+        }
+      }
+      
+      .brand-text-container {
+        .brand-text {
+          background: linear-gradient(135deg, $primary-color 0%, $secondary-color 100%);
+          -webkit-background-clip: text;
+          -webkit-text-fill-color: transparent;
+          background-clip: text;
+        }
+        
+        .brand-subtitle {
+          color: $primary-color;
+          font-weight: 600;
+        }
+      }
+    }
+  }
+}
+
+// Navegação principal - ABORDAGEM ULTRA MINIMALISTA
+.navbar-nav-left {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  
+  .navbar-nav {
+    display: flex;
+    align-items: center;
+    gap: 3rem;
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+  
+  .nav-item {
+    position: relative;
+    
+    .nav-link {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+      color: $gray-500;
+      text-decoration: none;
+      padding: 0.5rem 0;
+      font-weight: 400;
+      font-size: 0.875rem;
+      transition: all 0.2s ease;
+      position: relative;
+      
+      &:hover {
+        color: $primary-color;
+        
+        .material-icons {
+          color: $primary-color;
+          transform: translateY(-2px);
+        }
+        
+        span {
+          color: $primary-color;
+        }
+      }
+      
+      .material-icons {
+        font-size: 1.5rem;
+        color: $gray-400;
+        transition: all 0.2s ease;
+      }
+      
+      span {
+        font-size: 0.75rem;
+        font-weight: 400;
+        color: $gray-500;
+        transition: color 0.2s ease;
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+      }
+    }
+    
+    &.active .nav-link {
+      color: $primary-color;
+      font-weight: 500;
+      
+      .material-icons {
+        color: $primary-color;
+        transform: translateY(-2px);
+      }
+      
+      span {
+        color: $primary-color;
+        font-weight: 500;
+      }
+      
+      &::after {
+        content: '';
+        position: absolute;
+        bottom: -0.5rem;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 4px;
+        height: 4px;
+        background: $primary-color;
+        border-radius: 50%;
+        box-shadow: 0 0 0 2px rgba(37, 99, 235, 0.2);
+      }
+    }
+  }
+}
+
+// Seção do usuário
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 1.5rem;
+  
+  .user-greeting {
+    color: $gray-800;
+    font-size: 0.9rem;
+    font-weight: 500;
+    padding: 0.75rem 1.25rem;
+    background: $gray-100;
+    border-radius: 4px;
+    border: 1px solid $gray-300;
+    transition: all 0.2s ease;
+    position: relative;
+    
+    &::before {
+      content: '👋';
+      margin-right: 0.5rem;
+    }
+    
+    &:hover {
+      background: $primary-color;
+      color: $white;
+      border-color: $primary-color;
+    }
+  }
+  
+  .btn-logout {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: $gray-100;
+    border: 1px solid $gray-300;
+    color: $gray-800;
+    padding: 0.75rem 1.25rem;
+    border-radius: 4px;
+    font-weight: 500;
+    font-size: 0.9rem;
+    transition: all 0.2s ease;
+    
+    &:hover {
+      background: #dc3545;
+      border-color: #dc3545;
+      color: $white;
+      box-shadow: 0 2px 4px rgba(220, 53, 69, 0.2);
+    }
+    
+    .material-icons {
+      font-size: 1.125rem;
+      color: inherit;
+    }
+    
+    span {
+      font-size: 0.9rem;
+      color: inherit;
+    }
+  }
+}
+
+// Seção de autenticação
+.auth-section {
+  .btn-login {
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    background: $primary-color;
+    color: $white;
+    border: none;
+    padding: 0.875rem 1.75rem;
+    border-radius: 4px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    transition: all 0.2s ease;
+    box-shadow: 0 2px 4px rgba(37, 99, 235, 0.2);
+    
+    &:hover {
+      background: $secondary-color;
+      box-shadow: 0 4px 8px rgba(37, 99, 235, 0.3);
+      transform: translateY(-1px);
+    }
+    
+    .material-icons {
+      font-size: 1.125rem;
+      color: $white;
+    }
+    
+    span {
+      font-size: 0.95rem;
+      color: $white;
+    }
+  }
+}
+
+// Responsividade
+@media (max-width: 991.98px) {
+  .navbar-nav-left {
+    display: none !important;
+  }
+  
+  .user-greeting {
+    display: none !important;
+  }
+  
+  .brand-content {
+    gap: 1rem !important;
+    
+    .brand-icon-container {
+      width: 3rem !important;
+      height: 3rem !important;
+      
+      .brand-icon {
+        font-size: 1.5rem !important;
+      }
+    }
+    
+    .brand-text-container {
+      .brand-text {
+        font-size: 1.625rem !important;
+      }
+      
+      .brand-subtitle {
+        font-size: 0.7rem !important;
+      }
+    }
+  }
+}
+
+@media (max-width: 768px) {
+  .modern-navbar {
+    height: 4.5rem;
+  }
+  
+  .container-fluid {
+    padding: 0 1rem;
+  }
+  
+  .drawer-toggle {
+    padding: 0.625rem;
+    margin-right: 1.5rem;
+    
+    .material-icons {
+      font-size: 1.125rem;
+    }
+  }
+  
+  .brand-content {
+    gap: 0.875rem !important;
+    
+    .brand-icon-container {
+      width: 2.75rem !important;
+      height: 2.75rem !important;
+      
+      .brand-icon {
+        font-size: 1.375rem !important;
+      }
+    }
+    
+    .brand-text-container {
+      .brand-text {
+        font-size: 1.5rem !important;
+      }
+      
+      .brand-subtitle {
+        font-size: 0.65rem !important;
+      }
+    }
+  }
+  
+  .btn-logout {
+    padding: 0.625rem 1rem;
+    
+    .material-icons {
+      font-size: 1rem;
+    }
+  }
+  
+  .btn-login {
+    padding: 0.75rem 1.5rem;
+    
+    .material-icons {
+      font-size: 1rem;
+    }
+  }
+}
+
+// Animações
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.navbar-nav-left .nav-item {
+  animation: fadeInUp 0.3s ease forwards;
+  
+  &:nth-child(1) { animation-delay: 0.1s; }
+  &:nth-child(2) { animation-delay: 0.2s; }
+  &:nth-child(3) { animation-delay: 0.3s; }
+}
+
+// Efeitos de glassmorphism
+.user-greeting,
+.btn-logout {
+  backdrop-filter: blur(10px);
+  -webkit-backdrop-filter: blur(10px);
+}
